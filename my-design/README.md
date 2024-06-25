@@ -14,8 +14,14 @@ TypeScript cannot handle type information for `.vue` imports by default, so we r
 
 See [Vite Configuration Reference](https://vitejs.dev/config/).
 
-## Project Setup
+## Instructions
+Switch to the my-design directory
+```sh
+cd my-design
+```
 
+## Project Setup
+Once you are in my-design, run the next two commands to run it in your machine
 ```sh
 npm install
 ```
