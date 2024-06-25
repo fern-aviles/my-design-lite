@@ -3,8 +3,7 @@
 
 <template>
   <h1>canvas</h1>
-  <canvas ref="canvas" @click="addRotor"></canvas>
-
+  <canvas ref="canvas"></canvas>
 </template>
 
 <script setup lnag="ts">
@@ -15,10 +14,22 @@ import { ref, onMounted } from 'vue'
   let c = null
   const width = ref(window.innerWidth)
   const height = ref(window.innerHeight)
+  let onRotor = false
+
+  const changeOnRotor = (options, on) =>{
+    onRotor = on
+  }
 
   const addRotor = (event) => {
-    // addRotor function is still in development
+    // addRotor function should add a circle on the canvas. 
+    // The circle that is added should not be resizable but can be moved around
+    // Selecting multiple circles should not make another circle
+    // Group selecting should not be allow the user to resize circles
+    // 
     const radius = 10
+    if (onRotor){
+      return
+    }
     const circle = new fabric.Circle({
       left: event.offsetX - (radius),
       top: event.offsetY - (radius),
@@ -37,7 +48,14 @@ import { ref, onMounted } from 'vue'
       tr: false,
       mtr: false,
     })
-      c.add(circle)
+
+    circle.on('mouseover', (options) => {
+      changeOnRotor(options, true)
+    })
+    circle.on('mouseout', (options) => {
+      changeOnRotor(options, false)
+    })
+    c.add(circle)
   }
 
   onMounted(() => {
