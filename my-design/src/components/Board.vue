@@ -22,10 +22,10 @@ import { ref, onMounted } from 'vue'
 
   const addRotor = (event) => {
     // addRotor function should add a circle on the canvas. 
-    // The circle that is added should not be resizable but can be moved around
-    // Selecting multiple circles should not make another circle
-    // Group selecting should not be allow the user to resize circles
-    // 
+    // The circle that is added should be draggable but not resizable
+    // Selecting multiple circles should not make another circle?
+    // Group selecting should not be allow the user to resize circles?
+
     const radius = 10
     if (onRotor){
       return
@@ -68,5 +68,6 @@ import { ref, onMounted } from 'vue'
     c.on('mouse:down', (options) => {
       addRotor(options.e);
     })
+    
   })
 </script>
