@@ -1,7 +1,7 @@
 <!-- This file contains the canvas the user will be using to design
  their sprinkler layout  -->
 
-<template>
+ <template>
   <h1>canvas</h1>
   <canvas ref="canvas"></canvas>
 </template>
@@ -15,18 +15,47 @@
   const width = ref(window.innerWidth);
   const height = ref(window.innerHeight);
 
+  const onChange = (obj) => {
+    console.log(obj)
+    // console.log("radius", obj.target.item(0))
+    // console.log("rotor", obj.target.item(1))
+    var circle = obj.target.item(1),
+        group = obj.target;
+    circle.scaleX = 1 / group.scaleX;
+    circle.scaleY = 1 / group.scaleY;
+  }
+
+  const afterChange = (obj) => {
+    console.log("after change")
+    var circle = obj.target.item(1),
+        radius = obj.target.item(0),
+        group = obj.target;
+    // group.set({
+    //   scalex: 1,
+    //   scaleY: 1
+    // });
+    // circle.set({
+    //   left: 0,
+    //   top: 0,
+    // });
+    // radius.set({
+    //   left: 0,
+    //   top: 0,
+    // });
+  }
   /**
    * Adds a rotor to the canvas.
    * @param event : event
    * @returns null
    */
   const addRotor = (event) => {
-    const radius = 10;
     const circle = new fabric.Circle({
-      left: event.offsetX - (radius),
-      top: event.offsetY - (radius),
+      left: event.offsetX,
+      top: event.offsetY,
+      originX: 'center',
+      originY: 'center',
       fill: 'black',
-      radius: radius,
+      radius: 7,
     });
 
     circle.setControlsVisibility({
@@ -40,7 +69,24 @@
       tr: false,
       mtr: false,
     });
-    c.add(circle);
+
+    const rotorRadius = new fabric.Circle({
+      left: event.offsetX,
+      top: event.offsetY,
+      originX: 'center',
+      originY: 'center',
+      fill: 'skyblue',
+      radius: 20,
+    });
+
+    const rotor = new fabric.Group([rotorRadius, circle], {
+      left: event.offsetX,
+      top: event.offsetY,
+      originX: 'center',
+      originY: 'center',
+    });
+    c.add(rotor);
+    console.log(rotor)
   };
 
   /**
@@ -54,11 +100,12 @@
     c.setHeight(height.value);
     c.on({
       'mouse:up': (options) => {
-        console.log(options);
         if(options.isClick && !options.target){
           addRotor(options.e);
         }
       },
+      'object:scaling': onChange,
+      'object:modified': afterChange,
     });
   });
 </script>
