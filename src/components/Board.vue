@@ -16,42 +16,49 @@
   const height = ref(window.innerHeight);
 
   const onChange = (obj) => {
-    console.log(obj)
-    // console.log("radius", obj.target.item(0))
-    // console.log("rotor", obj.target.item(1))
     var circle = obj.target.item(1),
         group = obj.target;
     circle.scaleX = 1 / group.scaleX;
     circle.scaleY = 1 / group.scaleY;
   }
-
-  const afterChange = (obj) => {
-    console.log("after change")
-    var circle = obj.target.item(1),
-        radius = obj.target.item(0),
-        group = obj.target;
-    // group.set({
-    //   scalex: 1,
-    //   scaleY: 1
-    // });
-    // circle.set({
-    //   left: 0,
-    //   top: 0,
-    // });
-    // radius.set({
-    //   left: 0,
-    //   top: 0,
-    // });
+  
+  /**
+   * Checks to see if all selected elements are rotors.
+   * If they're all rotors, the user can't scale the
+   * rotors.
+   * Else, they selected an individual rotor and can
+   * change its size.
+   */
+  const checkRotors = () => {
+    var group = c.getActiveObject();
+    let allRotors = true;
+    group.forEachObject((obj) => {
+      allRotors = allRotors && obj.rotor;
+    })
+    if (allRotors){
+      group.setControlsVisibility({
+        bl: false,
+        br: false,
+        mb: false,
+        ml: false,
+        mr: false,
+        mt: false,
+        tl: false,
+        tr: false,
+        mtr: false,
+      });      
+    }
   }
+
   /**
    * Adds a rotor to the canvas.
    * @param event : event
    * @returns null
    */
-  const addRotor = (event) => {
+  const addRotor = (object) => {
     const circle = new fabric.Circle({
-      left: event.offsetX,
-      top: event.offsetY,
+      left: object.offsetX,
+      top: object.offsetY,
       originX: 'center',
       originY: 'center',
       fill: 'black',
@@ -71,8 +78,8 @@
     });
 
     const rotorRadius = new fabric.Circle({
-      left: event.offsetX,
-      top: event.offsetY,
+      left: object.offsetX,
+      top: object.offsetY,
       originX: 'center',
       originY: 'center',
       fill: 'skyblue',
@@ -80,13 +87,15 @@
     });
 
     const rotor = new fabric.Group([rotorRadius, circle], {
-      left: event.offsetX,
-      top: event.offsetY,
+      left: object.offsetX,
+      top: object.offsetY,
       originX: 'center',
       originY: 'center',
     });
+    rotor.set({
+      rotor: true,
+    })
     c.add(rotor);
-    console.log(rotor)
   };
 
   /**
@@ -104,8 +113,8 @@
           addRotor(options.e);
         }
       },
+      'selection:created': checkRotors,
       'object:scaling': onChange,
-      'object:modified': afterChange,
     });
   });
 </script>
