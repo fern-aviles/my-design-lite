@@ -475,10 +475,12 @@
     const boundingCircle = new fabric.Circle({
       left: 200, 
       top: 200,
+      selectable: false,
       originX: 'center',
       originY: 'center',
-      fill:'rgba(0,0,0,0)',
+      fill:'rgba(0,0,150,0)',
       radius: radius,
+      boundingCircle: true,
     });
     let group = new fabric.Group([boundingCircle, filledArc], {
       left: object.left, 
@@ -501,6 +503,7 @@
       startControl: null,
       midControl: null,
       endControl: null,
+      isRadius: true,
     });
     rotors += 1;
     c.add(group);
@@ -548,7 +551,7 @@
     c.setHeight(height.value);
     c.on({
       'mouse:up': (options) => {
-        if(options.isClick && !options.target){
+        if(options.isClick && (!options.target || options.target.isRadius)){
           addRotor(options.e);
         }
       },
