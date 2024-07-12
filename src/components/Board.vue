@@ -3,17 +3,15 @@
 
  <template>
   <h1>canvas</h1>
-  <canvas ref="canvas"></canvas>
+  <canvas ref="canvas" height="1000" width="2000"></canvas>
 </template>
 
 <script setup lnag="ts">
-  import { fabric } from 'fabric';
+  import { Canvas, Circle, Path, Group, util } from 'fabric';
   import { ref, onMounted } from 'vue';
 
   const canvas = ref(null);
   let c = null;
-  const width = ref(window.innerWidth);
-  const height = ref(window.innerHeight);
   const radius = 200;
   const RADIUS = 200;
   const STARTANGLE = 315;
@@ -22,9 +20,10 @@
 
   /**
    * Gets the sweep angle beteween 2 points
-   * @param startAngle: radians
-   * @param endAngle: radians
-   * @returns sweep
+   * @param {number} startAngle: radians
+   * @param {number} endAngle: radians
+   * 
+   * @returns {number} sweep
    */
   const getSweepAngle = (startAngle, endAngle) => {
     let sweep = endAngle - startAngle;
@@ -38,14 +37,15 @@
 
   /**
    * The function is used for setting the points on the circumference of the 
-   * @param radius: the radius of the rotor
-   * @param angleInRadians: the angle (in radians) of where the point is at
-   * @returns circle object
+   * @param {number} radius: the radius of the rotor
+   * @param {number} angleInRadians: the angle (in radians) of where the point is at
+   * 
+   * @returns {Circle} controller
    */
   const getPointOnCircumference = (radius, angleInRadians) => {
     const x = radius * Math.cos(angleInRadians);
     const y = radius * Math.sin(angleInRadians);
-    return new fabric.Circle({
+    return new Circle({
       left: x,
       top: y,
       originX: 'center',
@@ -59,8 +59,9 @@
   /**
    * Used for setting the angle between 0 and Math.PI * 2
    * or 0 and 360 depending if the angle is in radians
-   * @param angle: in radians
-   * @returns an angle between 0 and 2* PI or 0 and 360
+   * @param {number} angle: in radians
+   * 
+   * @returns {number} an angle between 0 and 2* PI or 0 and 360
    */
   const normalizeAngle = (angle, radians=true) => {
     if (radians){
@@ -85,7 +86,9 @@
 
  /**
  * This function redraws the rotor whenever it is called.
- * @param radius: the radius of the rotor
+ * @param {circle} radius: the radius of the rotor
+ * 
+ * @returns {null}
  */
   const updateArc = (radius) => {
     let arc = radius.getObjects()[1],
@@ -101,17 +104,19 @@
       startAngleRadians: startAngle * (Math.PI / 180),
       endAngleDegrees: endAngle,
       endAngleRadians: endAngle * (Math.PI / 180),
-      path: new fabric.Path(newPath).path}),
+      path: new Path(newPath).path}),
     arc.setCoords();
     c.renderAll();
   };
 
   /**
    * Finds the distance from (x1, y2) and (x2, y2).
-   * @param x1 
-   * @param y1 
-   * @param x2 
-   * @param y2 
+   * @param {number} x1 
+   * @param {number} y1 
+   * @param {number} x2 
+   * @param {number} y2 
+   * 
+   * @returns {number}
    */
   const findDistancefromPoint = (x1, y1, x2, y2) => {
     const x_dif = x2-x1;
@@ -124,7 +129,8 @@
    * Calculates the rotation of the radius in turn, changes control 
    * angles so it reflects the changes properly anytime the radius
    * is being rotated.
-   * @param midControl 
+   * @param {Circle} midControl 
+   * @returns {null}
    */
   const getRotation = (midControl) => {
     const rotor = midControl.parent,
@@ -178,7 +184,9 @@
 
   /**
    * Used for calculating the angle for the selected controller
-   * @param controller: One of the circles that control the arc
+   * @param {Circle} controller: One of the circles that control the arc
+   * 
+   * @returns {number}
    */
   const calculateAngle = (controller) => {
     let px = controller.left,
@@ -204,8 +212,10 @@
   /**
    * Changes the position of the middle controller whenever one of the arc
    * controllers change positions
-   * @param midController: controller that changes the arc's radius
-   * @param arc 
+   * @param {Circle} midController: controller that changes the arc's radius
+   * @param {Group} arc 
+   * 
+   * @returns {null}
    */
   const changeMidControllerPos = (midController, arc) => {
     const angleInRadians = computeMidAngle(arc.startAngleRadians, arc.endAngleRadians);
@@ -225,8 +235,10 @@
   /**
    * Makes sure the controller is bound to only the circumference
    * of the circle
-   * @param controller: Selected controller
-   * @param arc: Arc that belongs to the controller
+   * @param {Circle} controller: Selected controller
+   * @param {Circle} arc: Arc that belongs to the controller
+   * 
+   * @returns {null}
    */
   const boundToCircumference = (controller, arc) =>{
     const x = arc.scaleX * (arc.radius * Math.cos(controller.angleInRadians));
@@ -242,7 +254,9 @@
    * This handles changes for moving a controller and
    * moving the rotor
    * Use obj.target to select desired object
-   * @param obj: Event that occurs
+   * @param {event} obj: Event that occurs
+   * 
+   * @returns {null}
    */
   const moveControls = (obj) => {
     // Moving the rotor
@@ -276,38 +290,38 @@
           startController = radius.startControl,
           endController = radius.endControl;
       // If the controller is on the ends, recalculate angles and positions
-      if(controller.type === 'start' || controller.type === 'end'){
+      if(controller.controlType === 'start' || controller.controlType === 'end'){
         calculateAngle(startController);
-        calculateAngle(endController)
+        calculateAngle(endController);
         radius.startAngleRadians = normalizeAngle(startController.angleInRadians);
         radius.startAngleDegrees = normalizeAngle(startController.angleInDegrees, false);
         radius.endAngleRadians = normalizeAngle(endController.angleInRadians);
         radius.endAngleDegrees = normalizeAngle(endController.angleInDegrees, false);
         boundToCircumference(startController, radius);
-        boundToCircumference(endController, radius)
+        boundToCircumference(endController, radius);
         changeMidControllerPos(midController, radius);
       }
       // Changes rotation of the radius and how large it is based on the middle controller
-      if(controller.type === 'middle'){
+      if(controller.controlType === 'middle'){
         calculateAngle(controller);
         getRotation(controller);
         radius.scale(findDistancefromPoint(controller.left, controller.top, radius.left, radius.top)/200);
       }
-      updateArc(radius)
-      startController.bringToFront();
-      midController.bringToFront();
-      endController.bringToFront();
-      radius.rotor.bringToFront();
+      updateArc(radius);
+      // startController.bringToFront();
+      // midController.bringToFront();
+      // endController.bringToFront();
+      // radius.rotor.bringToFront();
     }
     else return;
   };
 
   /**
    * Used for getting the angle of the middle controller
-   * @param startAngle: in radians
-   * @param endAngle: in radians
+   * @param {number} startAngle: in radians
+   * @param {number} endAngle: in radians
    * 
-   * @returns midAngle: in radians
+   * @returns {number} midAngle: in radians
    */
   const computeMidAngle = (startAngle, endAngle) => {
     startAngle = normalizeAngle(startAngle);
@@ -327,7 +341,9 @@
    * not been created, it creates it.
    * If not or the target is not a rotor, it returns.
    * Use obj.target to select desired object
-   * @param obj: obj is the event that happend
+   * @param {event} obj: obj is the event that happend
+   * 
+   * @returns {null}
    */
   const createControls = (obj) => {
     if(obj == null || obj.controlsCreated || !obj.rotorRadius){
@@ -337,10 +353,10 @@
     const cX = rotorRadius.getCenterPoint().x;
     const cY = rotorRadius.getCenterPoint().y;
     const arc = obj.getObjects()[1];
-    const startDeg = fabric.util.degreesToRadians(arc.startAngleDegrees);
+    const startDeg = util.degreesToRadians(arc.startAngleDegrees);
     const startControl = getPointOnCircumference(radius, startDeg);
     startControl.set({
-      type: 'start',
+      controlType: 'start',
       left: startControl.left + cX,
       top: startControl.top + cY,
       rotor: arc.id,
@@ -355,10 +371,10 @@
       originY: 'center',
       parent: obj,
     });
-    const endDegree = fabric.util.degreesToRadians(arc.endAngleDegrees);
+    const endDegree = util.degreesToRadians(arc.endAngleDegrees);
     const endControl = getPointOnCircumference(radius, endDegree);
     endControl.set({
-      type: 'end',
+      controlType: 'end',
       left: endControl.left + cX,
       top: endControl.top + cY,
       rotor: arc.id,
@@ -376,7 +392,7 @@
     const midleAngle = computeMidAngle(arc.startAngleRadians, arc.endAngleRadians);
     const midControl = getPointOnCircumference(radius, midleAngle);
     midControl.set({
-      type: 'middle',
+      controlType: 'middle',
       left: midControl.left + cX,
       top: midControl.top + cY,
       originX: 'center',
@@ -398,13 +414,25 @@
       startControl: startControl,
       midControl: midControl,
       endControl: endControl,
-    })
-    startControl.bringToFront();
-    midControl.bringToFront();
-    endControl.bringToFront();
+    });
+    // startControl.bringToFront();
+    // midControl.bringToFront();
+    // endControl.bringToFront();
     rotorRadius.controlsCreated = true;
   };
 
+  /**
+   * Creates the new pathdata anytime the arc is being modified using a controller.
+   * 
+   * @param {number} startAngle: radians
+   * @param {number} endAngle: radians
+   * @param {number} cx 
+   * @param {number} cy 
+   * @param {number} radius 
+   * @param {number} sweep: radians
+   * 
+   * @returns {string} PathData
+   */
   const createPiePath = (startAngle, endAngle, cx, cy, radius, sweep) => {
     const startX = cx + radius * Math.cos(startAngle);
     const startY = cy + radius * Math.sin(startAngle);
@@ -421,17 +449,19 @@
 
   /**
    * Creates an arc to be used for the rotor
-   * @param left 
-   * @param top 
-   * @param startAngle 
-   * @param endAngle 
-   * @param radius 
-   * @param options 
+   * @param {number} left 
+   * @param {number} top 
+   * @param {number} startAngle 
+   * @param {number} endAngle 
+   * @param {number} radius 
+   * @param {[key: string]: number | boolean} options 
+   * 
+   * @returns {Path}
    */
   const createFilledArc = (left, top, startAngle, endAngle, radius, options) => {
     // Convert degrees to radians
-    const start = fabric.util.degreesToRadians(startAngle);
-    const end = fabric.util.degreesToRadians(endAngle);
+    const start = util.degreesToRadians(startAngle);
+    const end = util.degreesToRadians(endAngle);
 
     // Define the path for the filled arc
     const pathData = [
@@ -449,7 +479,7 @@
       left + radius * Math.cos(end), 
       top + radius * Math.sin(end), // Arc to end angle
     ].join(' ');
-    const rad = new fabric.Path(pathData, options);
+    const rad = new Path(pathData, options);
     rad.set({
       radius: radius,
       startAngleDegrees: startAngle,
@@ -465,24 +495,26 @@
 
   /**
    * Used for creating the arc object.
-   * @param object 
+   * @param {Circle} object 
+   * 
+   * @returns {Group}
    */
   const createRadius = (object) => {
     // Create a filled arc
     const filledArc = createFilledArc(200, 200, STARTANGLE, ENDANGLE, radius, {
       fill: 'rgba(0, 0, 0, .2)', 
     });
-    const boundingCircle = new fabric.Circle({
+    const boundingCircle = new Circle({
       left: 200, 
       top: 200,
       selectable: false,
       originX: 'center',
       originY: 'center',
-      fill:'rgba(0,0,150,0)',
-      radius: radius,
+      fill:'rgba(0,0,250,0.0)',
+      radius: RADIUS,
       boundingCircle: true,
     });
-    let group = new fabric.Group([boundingCircle, filledArc], {
+    let group = new Group([boundingCircle, filledArc], {
       left: object.left, 
       top: object.top,
       originX: 'center',
@@ -491,7 +523,6 @@
       hasBorders: false,
       selectable: false,
       rotorRadius: true,
-      radius: RADIUS,
       controlsCreated: false,
       rotorId: filledArc.id,
       radius: radius,
@@ -507,20 +538,22 @@
     });
     rotors += 1;
     c.add(group);
+    // bringToFront(group)
     createControls(group);
-    group.startControl.bringToFront();
-    group.midControl.bringToFront();
-    group.endControl.bringToFront();
+    // group.startControl.bringToFront();
+    // group.midControl.bringToFront();
+    // group.endControl.bringToFront();
     return group
   };
 
   /**
    * Adds a rotor to the canvas.
-   * @param event : event
-   * @returns null
+   * @param {event} event: event
+   * 
+   * @returns {null}
    */
   const addRotor = (object) => {
-    const rotor = new fabric.Circle({
+    const rotor = new Circle({
       left: object.offsetX,
       top: object.offsetY,
       originX: 'center',
@@ -533,9 +566,9 @@
       isRotor: true,
       radiusObject: null,
     });
-    c.add(rotor);
     rotor.radiusObject = createRadius(rotor);
-    rotor.bringToFront();
+    c.add(rotor);
+    // bringToFront(rotor)
   };
 
   /**
@@ -544,13 +577,12 @@
    */
   onMounted(() => {
     const canvasValue = canvas.value;
-    c = new fabric.Canvas(canvasValue, {
+    c = new Canvas(canvasValue, {
       preserveObjectStacking: false,
     });
-    c.setWidth(width.value);
-    c.setHeight(height.value);
     c.on({
       'mouse:up': (options) => {
+        console.log(options)
         if(options.isClick && (!options.target || options.target.isRadius)){
           addRotor(options.e);
         }
