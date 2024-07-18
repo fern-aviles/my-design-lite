@@ -1,10 +1,14 @@
 import {Path, Circle, Canvas, util} from 'fabric'
-
+/**
+ * Water and water controls of a product
+ * 
+ * @extends Path
+ */
 export class Water extends Path {
   startController: Circle;
   endController: Circle;
   midController: Circle;
-  rotor: Circle;
+  product: Circle;
   startAngle: number;
   endAngle: number;
   selected: boolean;
@@ -12,8 +16,13 @@ export class Water extends Path {
   centerY: number;
   radius: number;
   declare canvas: Canvas;
-
-  constructor(options: any, rotor: Circle) {
+  /**
+   * Constructs a Water object with it's controllers
+   * 
+   * @param {any} options - The options object for Water.
+   * @param {Circle} product 
+   */
+  constructor(options: any, product: Circle) {
     const startAngle = options.startAngle;
     const endAngle = options.endAngle;
     const centerX = options.centerX;
@@ -34,12 +43,12 @@ export class Water extends Path {
     super(pathData, options);
 
     // Set instance variables
-    this.rotor = rotor;
+    this.product = product;
     this.selected = selected;
     this.startAngle = startAngle;
     this.endAngle = endAngle;
-    this.centerX = rotor.getCenterPoint().x;
-    this.centerY = rotor.getCenterPoint().y;
+    this.centerX = product.getCenterPoint().x;
+    this.centerY = product.getCenterPoint().y;
     this.radius = radius;
     this.canvas = canvas;
     this.set({left: centerX, top: centerY});
@@ -89,7 +98,7 @@ export class Water extends Path {
     });
 
     // Add water and the control circles to the canvas
-    this.canvas.insertAt(0, this) // This line is used to put the water in the back - used to make rotors always clickable
+    this.canvas.insertAt(0, this) // This line is used to put the water in the back - used to make products always clickable
     this.canvas.add(this.endController);
     this.canvas.add(this.startController);
     this.canvas.add(this.midController);
@@ -104,8 +113,8 @@ export class Water extends Path {
     this.midController.on({'moving': (e) => {this.getRotation(e)},
                            'deselected': (e) => {this.showControls(false)},
                           });
-    this.rotor.on({
-      'moving': (e) => {this.set({left: this.rotor.left, top: this.rotor.top}), this.handleWaterMoving(e), this.updateBoundingBox()},
+    this.product.on({
+      'moving': (e) => {this.set({left: this.product.left, top: this.product.top}), this.handleWaterMoving(e), this.updateBoundingBox()},
       'selected': (e) => {this.showControls(true)},
       'deselected': (e) => {this.showControls(false)},
     });
@@ -283,7 +292,7 @@ export class Water extends Path {
 
   /**
    * The function is used for getting the points on the circumference of the 
-   * @param {number} radius: the radius of the rotor
+   * @param {number} radius: the radius of the product
    * @param {number} angle: the angle (in radians) of where the point is at
    * 
    * @returns {x: number, y: number} x and y coordinate of the point
