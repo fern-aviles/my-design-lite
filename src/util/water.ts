@@ -7,10 +7,18 @@ export class Water extends Path {
   rotor: Circle;
   startAngle: number;
   endAngle: number;
+  midAngle: number;
+  sweepAngle: number;
   selected: boolean;
   centerX: number;
   centerY: number;
   radius: number;
+  minArc: number;
+  maxArc: number;
+  minRadius: number;
+  maxRadius: number;
+  fixedArc: boolean;
+
   declare canvas: Canvas;
 
   constructor(options: any, rotor: Circle) {
@@ -20,6 +28,7 @@ export class Water extends Path {
     const centerY = options.centerY;
     const radius = options.radius;
     const canvas = options.canvas;
+    
     let selected = true;
     options.hasBorder = false;
     options.hasControls = false;
@@ -28,11 +37,11 @@ export class Water extends Path {
     options.originY = 'center';
     options.centeredScaling = true;
     options.selectable = false;
-
+    
     // Generate the path data for the pie slice
     const pathData = Water.generatePathData(centerX, centerY, radius, startAngle, endAngle);
     super(pathData, options);
-
+    
     // Set instance variables
     this.rotor = rotor;
     this.selected = selected;
@@ -42,8 +51,15 @@ export class Water extends Path {
     this.centerY = rotor.getCenterPoint().y;
     this.radius = radius;
     this.canvas = canvas;
-    this.set({left: centerX, top: centerY})
-
+    this.minArc = options.minArc;
+    this.maxArc = options.maxArc;
+    this.minRadius = options.minRadius;
+    this.maxRadius = options.maxRadius;
+    this.fixedArc = options.fixedArc;
+    this.midAngle = 0;
+    this.sweepAngle = this.getSweepAngle(startAngle, endAngle);
+    this.set({left: centerX, top: centerY});
+    console.log(options)
     // Add control circles
     const endControlXY = this.getPointOnCircumference(this.radius, util.degreesToRadians(endAngle));
     this.endController = new Circle({
@@ -74,6 +90,7 @@ export class Water extends Path {
     });
 
     const midAngle = this.computeMidAngle(startAngle, endAngle);
+    this.midAngle = util.radiansToDegrees(midAngle);
     const midControllerXY = this.getPointOnCircumference(this.radius, util.degreesToRadians(midAngle));
     this.midController = new Circle({
       left: midControllerXY.x + centerX,
@@ -154,6 +171,16 @@ export class Water extends Path {
    * @param {evemt} e 
    */
   onControlCircleMoving(e: any) {
+    console.log(this.sweepAngle * (180/Math.PI))
+    // if(util.radiansToDegrees(this.sweepAngle) > this.maxArc){
+    //   this.sweepAngle = util.degreesToRadians(this.maxArc)
+    //   console.log("Returning")
+    //   return
+    // }
+    if(this.handleMaxArc()){
+      console.log("returning........")
+      return
+    }
     const control = e.transform.target;
     const { x, y } = e.pointer;
     const centerX = this.getCenterPoint().x,
@@ -164,13 +191,18 @@ export class Water extends Path {
     if (control.controllerType === 'end'){
       this.endAngle = angle >= 0 ? angle : 360 + angle; // Normalize angle
       angle = this.endAngle;
+
     }
     else if (control.controllerType === 'start'){
       this.startAngle = angle >= 0 ? angle : 360 + angle; // Normalize angle
       angle = this.startAngle;
     }
-
+    this.sweepAngle = this.getSweepAngle(this.startAngle, this.endAngle)
     // Update the path data based on the new control circle position
+    if (this.handleMaxArc()){
+      console.log("true")
+      return
+    }
     const pathData = Water.generatePathData(this.centerX, this.centerY, this.radius, this.startAngle, this.endAngle);
     this.set({ path: new Path(pathData).path });
     
@@ -240,6 +272,8 @@ export class Water extends Path {
     this.setPointOnCircumference(this.startController, this.startAngle);
     this.setPointOnCircumference(this.endController, this.endAngle);
     this.changeMidControllerPos(this.midController);
+    const pathData = Water.generatePathData(this.centerX, this.centerY, this.radius, this.startAngle, this.endAngle);
+    this.set({ path: new Path(pathData).path });
     this.canvas.renderAll();
   }
 
@@ -262,6 +296,23 @@ export class Water extends Path {
     this.startController.set({visible: show});
     this.endController.set({visible: show});
     this.midController.set({visible: show});
+  }
+/**
+ * handleMaxArc makes sure the arc is not modified it 
+ * the sweepAngle is bigger than the maxArc (returns true)
+ * If the sweepAngle is within the maxArc, then the arc
+ * can be modified.
+ */
+  handleMaxArc(){
+    const sweepAngle = util.radiansToDegrees(this.sweepAngle);
+    // console.log(sweepAngle)
+    if(sweepAngle > this.maxArc){
+      this.setPointOnCircumference(this.startController, this.startAngle);
+      this.setPointOnCircumference(this.endController, this.endAngle);
+      this.sweepAngle = util.degreesToRadians(this.maxArc)
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -342,6 +393,7 @@ export class Water extends Path {
     const startAngle = util.degreesToRadians(this.startAngle); 
     const endAngle = util.degreesToRadians(this.endAngle);
     const angle = this.computeMidAngle(startAngle, endAngle);
+    this.midAngle = util.radiansToDegrees(angle);
     const cx = this.getCenterPoint().x;
     const cy = this.getCenterPoint().y;
     const x = ((this.scaleX * this.radius) * Math.cos(angle)) + cx;

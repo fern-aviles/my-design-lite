@@ -1,0 +1,1002 @@
+{
+  "892" : {
+    "name": "PGP Ultra",
+    "fixedArc": false,
+    "minArc": 50,
+    "maxArc": 270,
+    "minRadius": 17,
+    "maxRadius": 46,
+    "nozzles" : [
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 1.5,
+      "Color": "Blue",
+      "Pressure": 25,
+      "Radius": 29,
+      "Flow": 1.2,
+      "Precip in/hr (low)": 0.27,
+      "Precip in/hr (high)": 0.32
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 1.5,
+      "Color": "Blue",
+      "Pressure": 35,
+      "Radius": 31,
+      "Flow": 1.4,
+      "Precip in/hr (low)": 0.28,
+      "Precip in/hr (high)": 0.32
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 1.5,
+      "Color": "Blue",
+      "Pressure": 45,
+      "Radius": 31,
+      "Flow": 1.5,
+      "Precip in/hr (low)": 0.3,
+      "Precip in/hr (high)": 0.35
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 1.5,
+      "Color": "Blue",
+      "Pressure": 55,
+      "Radius": 32,
+      "Flow": 1.8,
+      "Precip in/hr (low)": 0.34,
+      "Precip in/hr (high)": 0.39
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 1.5,
+      "Color": "Blue",
+      "Pressure": 65,
+      "Radius": 32,
+      "Flow": 1.9,
+      "Precip in/hr (low)": 0.36,
+      "Precip in/hr (high)": 0.41
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 2,
+      "Color": "Blue",
+      "Pressure": 25,
+      "Radius": 33,
+      "Flow": 1.4,
+      "Precip in/hr (low)": 0.25,
+      "Precip in/hr (high)": 0.29
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 2,
+      "Color": "Blue",
+      "Pressure": 35,
+      "Radius": 33,
+      "Flow": 1.7,
+      "Precip in/hr (low)": 0.3,
+      "Precip in/hr (high)": 0.35
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 2,
+      "Color": "Blue",
+      "Pressure": 45,
+      "Radius": 34,
+      "Flow": 2,
+      "Precip in/hr (low)": 0.33,
+      "Precip in/hr (high)": 0.38
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 2,
+      "Color": "Blue",
+      "Pressure": 55,
+      "Radius": 34,
+      "Flow": 2.1,
+      "Precip in/hr (low)": 0.35,
+      "Precip in/hr (high)": 0.4
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 2,
+      "Color": "Blue",
+      "Pressure": 65,
+      "Radius": 34,
+      "Flow": 2.3,
+      "Precip in/hr (low)": 0.38,
+      "Precip in/hr (high)": 0.44
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 2.5,
+      "Color": "Blue",
+      "Pressure": 25,
+      "Radius": 33,
+      "Flow": 1.7,
+      "Precip in/hr (low)": 0.3,
+      "Precip in/hr (high)": 0.35
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 2.5,
+      "Color": "Blue",
+      "Pressure": 35,
+      "Radius": 35,
+      "Flow": 2.1,
+      "Precip in/hr (low)": 0.33,
+      "Precip in/hr (high)": 0.38
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 2.5,
+      "Color": "Blue",
+      "Pressure": 45,
+      "Radius": 35,
+      "Flow": 2.5,
+      "Precip in/hr (low)": 0.39,
+      "Precip in/hr (high)": 0.45
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 2.5,
+      "Color": "Blue",
+      "Pressure": 55,
+      "Radius": 35,
+      "Flow": 2.6,
+      "Precip in/hr (low)": 0.41,
+      "Precip in/hr (high)": 0.47
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 2.5,
+      "Color": "Blue",
+      "Pressure": 65,
+      "Radius": 35,
+      "Flow": 2.9,
+      "Precip in/hr (low)": 0.46,
+      "Precip in/hr (high)": 0.53
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 3,
+      "Color": "Blue",
+      "Pressure": 25,
+      "Radius": 35,
+      "Flow": 2.2,
+      "Precip in/hr (low)": 0.35,
+      "Precip in/hr (high)": 0.4
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 3,
+      "Color": "Blue",
+      "Pressure": 35,
+      "Radius": 36,
+      "Flow": 2.7,
+      "Precip in/hr (low)": 0.4,
+      "Precip in/hr (high)": 0.46
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 3,
+      "Color": "Blue",
+      "Pressure": 45,
+      "Radius": 38,
+      "Flow": 3,
+      "Precip in/hr (low)": 0.4,
+      "Precip in/hr (high)": 0.46
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 3,
+      "Color": "Blue",
+      "Pressure": 55,
+      "Radius": 39,
+      "Flow": 3.4,
+      "Precip in/hr (low)": 0.43,
+      "Precip in/hr (high)": 0.5
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 3,
+      "Color": "Blue",
+      "Pressure": 65,
+      "Radius": 39,
+      "Flow": 3.7,
+      "Precip in/hr (low)": 0.47,
+      "Precip in/hr (high)": 0.54
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 4,
+      "Color": "Blue",
+      "Pressure": 25,
+      "Radius": 37,
+      "Flow": 3,
+      "Precip in/hr (low)": 0.42,
+      "Precip in/hr (high)": 0.49
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 4,
+      "Color": "Blue",
+      "Pressure": 35,
+      "Radius": 39,
+      "Flow": 3.5,
+      "Precip in/hr (low)": 0.44,
+      "Precip in/hr (high)": 0.51
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 4,
+      "Color": "Blue",
+      "Pressure": 45,
+      "Radius": 40,
+      "Flow": 4,
+      "Precip in/hr (low)": 0.48,
+      "Precip in/hr (high)": 0.56
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 4,
+      "Color": "Blue",
+      "Pressure": 55,
+      "Radius": 41,
+      "Flow": 4.5,
+      "Precip in/hr (low)": 0.52,
+      "Precip in/hr (high)": 0.6
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 4,
+      "Color": "Blue",
+      "Pressure": 65,
+      "Radius": 41,
+      "Flow": 4.8,
+      "Precip in/hr (low)": 0.55,
+      "Precip in/hr (high)": 0.63
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 5,
+      "Color": "Blue",
+      "Pressure": 25,
+      "Radius": 37,
+      "Flow": 3.7,
+      "Precip in/hr (low)": 0.52,
+      "Precip in/hr (high)": 0.6
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 5,
+      "Color": "Blue",
+      "Pressure": 35,
+      "Radius": 39,
+      "Flow": 4.5,
+      "Precip in/hr (low)": 0.57,
+      "Precip in/hr (high)": 0.66
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 5,
+      "Color": "Blue",
+      "Pressure": 45,
+      "Radius": 42,
+      "Flow": 5,
+      "Precip in/hr (low)": 0.55,
+      "Precip in/hr (high)": 0.63
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 5,
+      "Color": "Blue",
+      "Pressure": 55,
+      "Radius": 42,
+      "Flow": 5.7,
+      "Precip in/hr (low)": 0.62,
+      "Precip in/hr (high)": 0.72
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 5,
+      "Color": "Blue",
+      "Pressure": 65,
+      "Radius": 42,
+      "Flow": 6.2,
+      "Precip in/hr (low)": 0.68,
+      "Precip in/hr (high)": 0.78
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 6,
+      "Color": "Blue",
+      "Pressure": 25,
+      "Radius": 38,
+      "Flow": 4.3,
+      "Precip in/hr (low)": 0.57,
+      "Precip in/hr (high)": 0.66
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 6,
+      "Color": "Blue",
+      "Pressure": 35,
+      "Radius": 40,
+      "Flow": 5.6,
+      "Precip in/hr (low)": 0.67,
+      "Precip in/hr (high)": 0.78
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 6,
+      "Color": "Blue",
+      "Pressure": 45,
+      "Radius": 43,
+      "Flow": 6,
+      "Precip in/hr (low)": 0.62,
+      "Precip in/hr (high)": 0.72
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 6,
+      "Color": "Blue",
+      "Pressure": 55,
+      "Radius": 44,
+      "Flow": 6.7,
+      "Precip in/hr (low)": 0.67,
+      "Precip in/hr (high)": 0.77
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 6,
+      "Color": "Blue",
+      "Pressure": 65,
+      "Radius": 44,
+      "Flow": 7.3,
+      "Precip in/hr (low)": 0.73,
+      "Precip in/hr (high)": 0.84
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 8,
+      "Color": "Blue",
+      "Pressure": 25,
+      "Radius": 37,
+      "Flow": 6,
+      "Precip in/hr (low)": 0.84,
+      "Precip in/hr (high)": 0.97
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 8,
+      "Color": "Blue",
+      "Pressure": 35,
+      "Radius": 41,
+      "Flow": 7,
+      "Precip in/hr (low)": 0.8,
+      "Precip in/hr (high)": 0.93
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 8,
+      "Color": "Blue",
+      "Pressure": 45,
+      "Radius": 44,
+      "Flow": 8,
+      "Precip in/hr (low)": 0.8,
+      "Precip in/hr (high)": 0.92
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 8,
+      "Color": "Blue",
+      "Pressure": 55,
+      "Radius": 46,
+      "Flow": 9,
+      "Precip in/hr (low)": 0.82,
+      "Precip in/hr (high)": 0.95
+      },
+    {
+      "Product": "Blue Standard Nozzle Performance Data",
+      "Nozzle": 8,
+      "Color": "Blue",
+      "Pressure": 65,
+      "Radius": 46,
+      "Flow": 9.8,
+      "Precip in/hr (low)": 0.89,
+      "Precip in/hr (high)": 1.03
+      },
+    {
+      "Product": "Grey Low Angle Nozzle Performance Data",
+      "Nozzle": 2,
+      "Color": "Grey",
+      "Pressure": 30,
+      "Radius": 25,
+      "Flow": 1.6,
+      "Precip in/hr (low)": 0.49,
+      "Precip in/hr (high)": 0.57
+      },
+    {
+      "Product": "Grey Low Angle Nozzle Performance Data",
+      "Nozzle": 2,
+      "Color": "Grey",
+      "Pressure": 40,
+      "Radius": 27,
+      "Flow": 1.9,
+      "Precip in/hr (low)": 0.5,
+      "Precip in/hr (high)": 0.58
+      },
+    {
+      "Product": "Grey Low Angle Nozzle Performance Data",
+      "Nozzle": 2,
+      "Color": "Grey",
+      "Pressure": 50,
+      "Radius": 28,
+      "Flow": 2.1,
+      "Precip in/hr (low)": 0.52,
+      "Precip in/hr (high)": 0.6
+      },
+    {
+      "Product": "Grey Low Angle Nozzle Performance Data",
+      "Nozzle": 2,
+      "Color": "Grey",
+      "Pressure": 60,
+      "Radius": 30,
+      "Flow": 2.3,
+      "Precip in/hr (low)": 0.49,
+      "Precip in/hr (high)": 0.57
+      },
+    {
+      "Product": "Grey Low Angle Nozzle Performance Data",
+      "Nozzle": 2.5,
+      "Color": "Grey",
+      "Pressure": 30,
+      "Radius": 27,
+      "Flow": 2.1,
+      "Precip in/hr (low)": 0.55,
+      "Precip in/hr (high)": 0.64
+      },
+    {
+      "Product": "Grey Low Angle Nozzle Performance Data",
+      "Nozzle": 2.5,
+      "Color": "Grey",
+      "Pressure": 40,
+      "Radius": 30,
+      "Flow": 2.5,
+      "Precip in/hr (low)": 0.53,
+      "Precip in/hr (high)": 0.62
+      },
+    {
+      "Product": "Grey Low Angle Nozzle Performance Data",
+      "Nozzle": 2.5,
+      "Color": "Grey",
+      "Pressure": 50,
+      "Radius": 33,
+      "Flow": 2.8,
+      "Precip in/hr (low)": 0.49,
+      "Precip in/hr (high)": 0.57
+      },
+    {
+      "Product": "Grey Low Angle Nozzle Performance Data",
+      "Nozzle": 2.5,
+      "Color": "Grey",
+      "Pressure": 60,
+      "Radius": 35,
+      "Flow": 3,
+      "Precip in/hr (low)": 0.47,
+      "Precip in/hr (high)": 0.54
+      },
+    {
+      "Product": "Grey Low Angle Nozzle Performance Data",
+      "Nozzle": 3.5,
+      "Color": "Grey",
+      "Pressure": 30,
+      "Radius": 29,
+      "Flow": 2.8,
+      "Precip in/hr (low)": 0.64,
+      "Precip in/hr (high)": 0.74
+      },
+    {
+      "Product": "Grey Low Angle Nozzle Performance Data",
+      "Nozzle": 3.5,
+      "Color": "Grey",
+      "Pressure": 40,
+      "Radius": 32,
+      "Flow": 3.1,
+      "Precip in/hr (low)": 0.58,
+      "Precip in/hr (high)": 0.67
+      },
+    {
+      "Product": "Grey Low Angle Nozzle Performance Data",
+      "Nozzle": 3.5,
+      "Color": "Grey",
+      "Pressure": 50,
+      "Radius": 35,
+      "Flow": 3.5,
+      "Precip in/hr (low)": 0.55,
+      "Precip in/hr (high)": 0.64
+      },
+    {
+      "Product": "Grey Low Angle Nozzle Performance Data",
+      "Nozzle": 4.5,
+      "Color": "Grey",
+      "Pressure": 30,
+      "Radius": 29,
+      "Flow": 3.4,
+      "Precip in/hr (low)": 0.78,
+      "Precip in/hr (high)": 0.9
+      },
+    {
+      "Product": "Grey Low Angle Nozzle Performance Data",
+      "Nozzle": 4.5,
+      "Color": "Grey",
+      "Pressure": 40,
+      "Radius": 32,
+      "Flow": 3.9,
+      "Precip in/hr (low)": 0.73,
+      "Precip in/hr (high)": 0.85
+      },
+    {
+      "Product": "Grey Low Angle Nozzle Performance Data",
+      "Nozzle": 4.5,
+      "Color": "Grey",
+      "Pressure": 50,
+      "Radius": 35,
+      "Flow": 4.4,
+      "Precip in/hr (low)": 0.69,
+      "Precip in/hr (high)": 0.8
+      },
+    {
+      "Product": "Grey Low Angle Nozzle Performance Data",
+      "Nozzle": 4.5,
+      "Color": "Grey",
+      "Pressure": 60,
+      "Radius": 37,
+      "Flow": 4.7,
+      "Precip in/hr (low)": 0.66,
+      "Precip in/hr (high)": 0.76
+      },
+    {
+      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
+      "Nozzle": 10,
+      "Color": "Dk Green",
+      "Pressure": 40,
+      "Radius": 42,
+      "Flow": 8.4,
+      "Precip in/hr (low)": 0.92,
+      "Precip in/hr (high)": 1.06
+      },
+    {
+      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
+      "Nozzle": 10,
+      "Color": "Dk Green",
+      "Pressure": 50,
+      "Radius": 43,
+      "Flow": 9.5,
+      "Precip in/hr (low)": 0.99,
+      "Precip in/hr (high)": 1.14
+      },
+    {
+      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
+      "Nozzle": 10,
+      "Color": "Dk Green",
+      "Pressure": 60,
+      "Radius": 45,
+      "Flow": 10.5,
+      "Precip in/hr (low)": 1,
+      "Precip in/hr (high)": 1.15
+      },
+    {
+      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
+      "Nozzle": 10,
+      "Color": "Dk Green",
+      "Pressure": 70,
+      "Radius": 47,
+      "Flow": 11.4,
+      "Precip in/hr (low)": 0.99,
+      "Precip in/hr (high)": 1.15
+      },
+    {
+      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
+      "Nozzle": 10,
+      "Color": "Dk Green",
+      "Pressure": 40,
+      "Radius": 43,
+      "Flow": 10.9,
+      "Precip in/hr (low)": 1.13,
+      "Precip in/hr (high)": 1.31
+      },
+    {
+      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
+      "Nozzle": 10,
+      "Color": "Dk Green",
+      "Pressure": 50,
+      "Radius": 44,
+      "Flow": 12.3,
+      "Precip in/hr (low)": 1.22,
+      "Precip in/hr (high)": 1.41
+      },
+    {
+      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
+      "Nozzle": 10,
+      "Color": "Dk Green",
+      "Pressure": 60,
+      "Radius": 45,
+      "Flow": 13.6,
+      "Precip in/hr (low)": 1.29,
+      "Precip in/hr (high)": 1.49
+      },
+    {
+      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
+      "Nozzle": 10,
+      "Color": "Dk Green",
+      "Pressure": 70,
+      "Radius": 47,
+      "Flow": 14.8,
+      "Precip in/hr (low)": 1.29,
+      "Precip in/hr (high)": 1.49
+      },
+    {
+      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
+      "Nozzle": 13,
+      "Color": "Dk Green",
+      "Pressure": 40,
+      "Radius": 43,
+      "Flow": 10.9,
+      "Precip in/hr (low)": 1.13,
+      "Precip in/hr (high)": 1.31
+      },
+    {
+      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
+      "Nozzle": 13,
+      "Color": "Dk Green",
+      "Pressure": 50,
+      "Radius": 44,
+      "Flow": 12.3,
+      "Precip in/hr (low)": 1.22,
+      "Precip in/hr (high)": 1.41
+      },
+    {
+      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
+      "Nozzle": 13,
+      "Color": "Dk Green",
+      "Pressure": 60,
+      "Radius": 45,
+      "Flow": 13.6,
+      "Precip in/hr (low)": 1.29,
+      "Precip in/hr (high)": 1.49
+      },
+    {
+      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
+      "Nozzle": 13,
+      "Color": "Dk Green",
+      "Pressure": 70,
+      "Radius": 47,
+      "Flow": 14.8,
+      "Precip in/hr (low)": 1.29,
+      "Precip in/hr (high)": 1.49
+      },
+    {
+      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
+      "Nozzle": 6,
+      "Color": "LA Dk. Green",
+      "Pressure": 30,
+      "Radius": 31,
+      "Flow": 4.2,
+      "Precip in/hr (low)": 0.84,
+      "Precip in/hr (high)": 0.97
+      },
+    {
+      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
+      "Nozzle": 6,
+      "Color": "LA Dk. Green",
+      "Pressure": 40,
+      "Radius": 35,
+      "Flow": 5,
+      "Precip in/hr (low)": 0.79,
+      "Precip in/hr (high)": 0.91
+      },
+    {
+      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
+      "Nozzle": 6,
+      "Color": "LA Dk. Green",
+      "Pressure": 50,
+      "Radius": 37,
+      "Flow": 5.8,
+      "Precip in/hr (low)": 0.82,
+      "Precip in/hr (high)": 0.94
+      },
+    {
+      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
+      "Nozzle": 6,
+      "Color": "LA Dk. Green",
+      "Pressure": 60,
+      "Radius": 39,
+      "Flow": 6.3,
+      "Precip in/hr (low)": 0.8,
+      "Precip in/hr (high)": 0.92
+      },
+    {
+      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
+      "Nozzle": 8,
+      "Color": "LA Dk. Green",
+      "Pressure": 40,
+      "Radius": 37,
+      "Flow": 6.7,
+      "Precip in/hr (low)": 0.94,
+      "Precip in/hr (high)": 1.09
+      },
+    {
+      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
+      "Nozzle": 8,
+      "Color": "LA Dk. Green",
+      "Pressure": 50,
+      "Radius": 39,
+      "Flow": 7.7,
+      "Precip in/hr (low)": 0.97,
+      "Precip in/hr (high)": 1.13
+      },
+    {
+      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
+      "Nozzle": 8,
+      "Color": "LA Dk. Green",
+      "Pressure": 60,
+      "Radius": 41,
+      "Flow": 8.5,
+      "Precip in/hr (low)": 0.97,
+      "Precip in/hr (high)": 1.12
+      },
+    {
+      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
+      "Nozzle": 8,
+      "Color": "LA Dk. Green",
+      "Pressure": 70,
+      "Radius": 41,
+      "Flow": 9.2,
+      "Precip in/hr (low)": 1.05,
+      "Precip in/hr (high)": 1.22
+      },
+    {
+      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
+      "Nozzle": 0.5,
+      "Color": "SR Black",
+      "Pressure": 30,
+      "Radius": 17,
+      "Flow": 0.36,
+      "Precip in/hr (low)": 0.24,
+      "Precip in/hr (high)": 0.28
+      },
+    {
+      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
+      "Nozzle": 0.5,
+      "Color": "SR Black",
+      "Pressure": 40,
+      "Radius": 17,
+      "Flow": 0.43,
+      "Precip in/hr (low)": 0.29,
+      "Precip in/hr (high)": 0.33
+      },
+    {
+      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
+      "Nozzle": 0.5,
+      "Color": "SR Black",
+      "Pressure": 50,
+      "Radius": 18,
+      "Flow": 0.5,
+      "Precip in/hr (low)": 0.3,
+      "Precip in/hr (high)": 0.34
+      },
+    {
+      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
+      "Nozzle": 0.5,
+      "Color": "SR Black",
+      "Pressure": 60,
+      "Radius": 19,
+      "Flow": 0.57,
+      "Precip in/hr (low)": 0.3,
+      "Precip in/hr (high)": 0.35
+      },
+    {
+      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
+      "Nozzle": 1,
+      "Color": "SR Black",
+      "Pressure": 30,
+      "Radius": 17,
+      "Flow": 0.78,
+      "Precip in/hr (low)": 0.52,
+      "Precip in/hr (high)": 0.6
+      },
+    {
+      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
+      "Nozzle": 1,
+      "Color": "SR Black",
+      "Pressure": 40,
+      "Radius": 17,
+      "Flow": 0.9,
+      "Precip in/hr (low)": 0.6,
+      "Precip in/hr (high)": 0.69
+      },
+    {
+      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
+      "Nozzle": 1,
+      "Color": "SR Black",
+      "Pressure": 50,
+      "Radius": 18,
+      "Flow": 1,
+      "Precip in/hr (low)": 0.59,
+      "Precip in/hr (high)": 0.69
+      },
+    {
+      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
+      "Nozzle": 1,
+      "Color": "SR Black",
+      "Pressure": 60,
+      "Radius": 19,
+      "Flow": 1.1,
+      "Precip in/hr (low)": 0.59,
+      "Precip in/hr (high)": 0.68
+      },
+    {
+      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
+      "Nozzle": 2,
+      "Color": "SR Black",
+      "Pressure": 30,
+      "Radius": 17,
+      "Flow": 1.4,
+      "Precip in/hr (low)": 0.93,
+      "Precip in/hr (high)": 1.08
+      },
+    {
+      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
+      "Nozzle": 2,
+      "Color": "SR Black",
+      "Pressure": 40,
+      "Radius": 17,
+      "Flow": 1.7,
+      "Precip in/hr (low)": 1.13,
+      "Precip in/hr (high)": 1.31
+      },
+    {
+      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
+      "Nozzle": 2,
+      "Color": "SR Black",
+      "Pressure": 50,
+      "Radius": 18,
+      "Flow": 2,
+      "Precip in/hr (low)": 1.19,
+      "Precip in/hr (high)": 1.37
+      },
+    {
+      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
+      "Nozzle": 2,
+      "Color": "SR Black",
+      "Pressure": 60,
+      "Radius": 19,
+      "Flow": 2.2,
+      "Precip in/hr (low)": 1.17,
+      "Precip in/hr (high)": 1.35
+      },
+    {
+      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
+      "Nozzle": 0.75,
+      "Color": "SR Black",
+      "Pressure": 30,
+      "Radius": 23,
+      "Flow": 0.58,
+      "Precip in/hr (low)": 0.21,
+      "Precip in/hr (high)": 0.24
+      },
+    {
+      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
+      "Nozzle": 0.75,
+      "Color": "SR Black",
+      "Pressure": 40,
+      "Radius": 24,
+      "Flow": 0.68,
+      "Precip in/hr (low)": 0.23,
+      "Precip in/hr (high)": 0.26
+      },
+    {
+      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
+      "Nozzle": 0.75,
+      "Color": "SR Black",
+      "Pressure": 50,
+      "Radius": 25,
+      "Flow": 0.75,
+      "Precip in/hr (low)": 0.23,
+      "Precip in/hr (high)": 0.27
+      },
+    {
+      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
+      "Nozzle": 0.75,
+      "Color": "SR Black",
+      "Pressure": 60,
+      "Radius": 26,
+      "Flow": 0.83,
+      "Precip in/hr (low)": 0.24,
+      "Precip in/hr (high)": 0.27
+      },
+    {
+      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
+      "Nozzle": 1.5,
+      "Color": "SR Black",
+      "Pressure": 30,
+      "Radius": 23,
+      "Flow": 1.1,
+      "Precip in/hr (low)": 0.4,
+      "Precip in/hr (high)": 0.46
+      },
+    {
+      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
+      "Nozzle": 1.5,
+      "Color": "SR Black",
+      "Pressure": 40,
+      "Radius": 24,
+      "Flow": 1.3,
+      "Precip in/hr (low)": 0.43,
+      "Precip in/hr (high)": 0.5
+      },
+    {
+      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
+      "Nozzle": 1.5,
+      "Color": "SR Black",
+      "Pressure": 50,
+      "Radius": 25,
+      "Flow": 1.5,
+      "Precip in/hr (low)": 0.46,
+      "Precip in/hr (high)": 0.53
+      },
+    {
+      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
+      "Nozzle": 1.5,
+      "Color": "SR Black",
+      "Pressure": 60,
+      "Radius": 26,
+      "Flow": 1.6,
+      "Precip in/hr (low)": 0.46,
+      "Precip in/hr (high)": 0.53
+      },
+    {
+      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
+      "Nozzle": 3,
+      "Color": "SR Black",
+      "Pressure": 30,
+      "Radius": 23,
+      "Flow": 2.5,
+      "Precip in/hr (low)": 0.91,
+      "Precip in/hr (high)": 1.05
+      },
+    {
+      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
+      "Nozzle": 3,
+      "Color": "SR Black",
+      "Pressure": 40,
+      "Radius": 24,
+      "Flow": 2.7,
+      "Precip in/hr (low)": 0.9,
+      "Precip in/hr (high)": 1.04
+      },
+    {
+      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
+      "Nozzle": 3,
+      "Color": "SR Black",
+      "Pressure": 50,
+      "Radius": 25,
+      "Flow": 3,
+      "Precip in/hr (low)": 0.92,
+      "Precip in/hr (high)": 1.07
+      },
+    {
+      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
+      "Nozzle": 3,
+      "Color": "SR Black",
+      "Pressure": 60,
+      "Radius": 26,
+      "Flow": 3.1,
+      "Precip in/hr (low)": 0.88,
+      "Precip in/hr (high)": 1.02
+      }
+    ]
+  }
+}

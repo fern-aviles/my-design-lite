@@ -8,6 +8,7 @@
   import { Canvas, Circle } from 'fabric';
   import { ref, onMounted } from 'vue';
   import { Water } from '@/util/water.ts'
+  import { Product } from '@/util/product.ts'
   const canvas = ref(null);
   let c = null;
   const RADIUS = 100,
@@ -15,27 +16,34 @@
         END_ANGLE = 270;
 
   const createRotor = (e) => {
-    const rotor = new Circle({
-    left: e.offsetX,
-    top: e.offsetY, 
-    originX: 'center',
-    originY: 'center',
-    radius: 7,
-    fill: 'gray',
-    hasControls: false,
-    });
+  //   const rotor = new Circle({
+  //   left: e.offsetX,
+  //   top: e.offsetY, 
+  //   originX: 'center',
+  //   originY: 'center',
+  //   radius: 7,
+  //   fill: 'gray',
+  //   hasControls: false,
+  //   });
 
-    const water = new Water({
-      startAngle: START_ANGLE,
-      endAngle: END_ANGLE,
-      centerX: rotor.left,
-      centerY: rotor.top,
-      radius: RADIUS,
-      canvas: c,
-      fill: 'rgba(255, 0, 0, .2)',
-    }, rotor);
+  //   const water = new Water({
+  //     startAngle: START_ANGLE,
+  //     endAngle: END_ANGLE,
+  //     centerX: rotor.left,
+  //     centerY: rotor.top,
+  //     radius: RADIUS,
+  //     canvas: c,
+  //     fill: 'rgba(255, 0, 0, .2)',
+  //   }, rotor);
     // Assign the water instance to rotor.water after creation
-    rotor.water = water;
+    // rotor.water = water;
+
+    const rotor = new Product({
+      productID: '892',
+      left: e.offsetX,
+      top: e.offsetY,
+      canvas: c,
+    })
     c.add(rotor);
     c.setActiveObject(rotor);
 
