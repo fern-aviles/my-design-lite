@@ -42,7 +42,7 @@ export class Water extends Path {
     this.centerY = rotor.getCenterPoint().y;
     this.radius = radius;
     this.canvas = canvas;
-    this.set({left: centerX, top: centerY})
+    this.set({left: centerX, top: centerY});
 
     // Add control circles
     const endControlXY = this.getPointOnCircumference(this.radius, util.degreesToRadians(endAngle));
@@ -109,7 +109,7 @@ export class Water extends Path {
       'selected': (e) => {this.showControls(true)},
       'deselected': (e) => {this.showControls(false)},
     });
-    this.canvas.renderAll()
+    this.canvas.renderAll();
   }
 
 /**

@@ -16,13 +16,13 @@
 
   const createRotor = (e) => {
     const rotor = new Circle({
-    left: e.offsetX,
-    top: e.offsetY, 
-    originX: 'center',
-    originY: 'center',
-    radius: 7,
-    fill: 'gray',
-    hasControls: false,
+      left: e.offsetX,
+      top: e.offsetY, 
+      originX: 'center',
+      originY: 'center',
+      radius: 7,
+      fill: 'gray',
+      hasControls: false,
     });
 
     const water = new Water({
@@ -34,6 +34,7 @@
       canvas: c,
       fill: 'rgba(255, 0, 0, .2)',
     }, rotor);
+    console.log(e)
     // Assign the water instance to rotor.water after creation
     rotor.water = water;
     c.add(rotor);
@@ -42,15 +43,16 @@
   }
 
   onMounted(() => {
-  const canvasValue = canvas.value;
-  c = new Canvas(canvasValue, {
-    preserveObjectStacking: false,
-  });
-  c.on('mouse:up', (options) => {
-      if(options.isClick && (!options.target)){
-        createRotor(options.e);
-    }
-  });
-  c.renderAll();
+    const canvasValue = canvas.value;
+    c = new Canvas(canvasValue, {
+      preserveObjectStacking: false,
+    });
+    c.on('mouse:up', (options) => {
+      console.log(options.target )
+        if(options.isClick && (!options.target || typeof options.target === Water)){
+          createRotor(options.e);
+      }
+    });
+    c.renderAll();
   });
 </script>
