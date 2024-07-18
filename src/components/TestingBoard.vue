@@ -48,8 +48,7 @@
       preserveObjectStacking: false,
     });
     c.on('mouse:up', (options) => {
-      console.log(options.target )
-        if(options.isClick && (!options.target || typeof options.target === Water)){
+        if(options.isClick && (!options.target || options.target instanceof Water)){
           createRotor(options.e);
       }
     });
