@@ -60,8 +60,9 @@ export class Water extends Path {
     this.centerY = rotor.getCenterPoint().y;
     this.radius = radius;
     this.canvas = canvas;
-    this.minArc = options.minArc;
-    this.maxArc = options.maxArc;
+    // Added constraints, +- .01 was added due to rounding
+    this.minArc = options.minArc + .01;
+    this.maxArc = options.maxArc - .01;
     this.minRadius = options.minRadius;
     this.maxRadius = options.maxRadius;
     this.fixedArc = options.fixedArc;
@@ -194,25 +195,31 @@ export class Water extends Path {
       const newEndAngle = angle;
       this.sweepAngle = util.radiansToDegrees(this.getSweepAngle(this.startAngle, newEndAngle));
 
-      // Check if the new sweep angle is within the allowed range
-      if (this.sweepAngle <= this.maxArc) {
-        this.endAngle = this.normalizeAngle(newEndAngle, false);
+      // Check if the new angle is within the allowed range
+      if (this.sweepAngle > this.maxArc) {
+        this.endAngle = this.normalizeAngle(this.startAngle + this.maxArc, false);
+      }
+      else if (this.sweepAngle < this.minArc){
+        this.endAngle = this.normalizeAngle(this.startAngle + this.minArc, false);
       }
       else {
-        // Adjust the end angle to keep it within the valid range
-        this.endAngle = this.normalizeAngle(this.startAngle + this.maxArc, false);
+        this.endAngle = this.normalizeAngle(newEndAngle, false);
       }
     }
     else if (control.controllerType === 'start'){
       const newStartAngle = angle;
       this.sweepAngle = util.radiansToDegrees(this.getSweepAngle(newStartAngle, this.endAngle));
-      // Check if the new sweep angle is within the allowed range
-      if (this.sweepAngle <= this.maxArc) {
-        this.startAngle = this.normalizeAngle(newStartAngle, false);
+
+      // Check if the new angle is within the allowed range
+      if (this.sweepAngle > this.maxArc) {
+        // 
+        this.startAngle = this.normalizeAngle(this.endAngle - this.maxArc, false);
+      }
+      else if (this.sweepAngle < this.minArc){
+        this.startAngle = this.normalizeAngle(this.endAngle - this.minArc, false);
       }
       else {
-        // Adjust the end angle to keep it within the valid range
-        this.startAngle = this.normalizeAngle(this.endAngle - this.maxArc, false);
+        this.startAngle = this.normalizeAngle(newStartAngle, false);
       }
     }
     this.sweepAngle = this.getSweepAngle(this.startAngle, this.endAngle);
@@ -343,17 +350,19 @@ export class Water extends Path {
   /**
    * The function is used for setting the points on the circumference
    * of the circle
-   * @param {number} controller: the radius of the rotor
+   * @param {any} controller: the radius of the rotor
    * @param {number} angle: the angle (in radians) of where the point is at
    * 
    * @returns {null}
    */
-  setPointOnCircumference(controller: Circle, angle: number){
+  setPointOnCircumference(controller: any, angle: number){
     angle = util.degreesToRadians(angle);
     const centerX = this.getCenterPoint().x,
           centerY = this.getCenterPoint().y,
           controllerType = controller.controllerType;
     
+    // Check if the position of the controller is within
+    // the sweep angle for startController or endController
     if(util.radiansToDegrees(this.sweepAngle) >= this.maxArc){
       if(controllerType === 'end'){
         let newAngle = this.startAngle + this.maxArc;
@@ -366,6 +375,19 @@ export class Water extends Path {
         angle = util.degreesToRadians(newAngle);
       }
     }
+    else if(util.radiansToDegrees(this.sweepAngle) <= this.minArc){
+      if(controllerType === 'end'){
+        let newAngle = this.startAngle + this.minArc;
+        newAngle = this.normalizeAngle(newAngle, false);
+        angle = util.degreesToRadians(newAngle);
+      }
+      else if ( controllerType === 'start'){
+        let newAngle = this.endAngle - this.minArc;
+        newAngle = this.normalizeAngle(newAngle, false);
+        angle = util.degreesToRadians(newAngle);
+      }
+    }
+
     const x = centerX + ((this.scaleX * this.radius) * Math.cos(angle));
     const y = centerY + ((this.scaleX * this.radius) * Math.sin(angle));
     controller.set({ left: x, top: y });
