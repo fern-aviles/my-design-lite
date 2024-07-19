@@ -45,25 +45,25 @@ export class Product extends Circle {
       radius: 7,
       fill: 'gray',
       hasControls: false,
-    }
+    };
 
     super(options);
 
-    this.productID = waterOptions.productID
-    this.data = data
-    this.name = this.data[this.productID].name
+    this.productID = waterOptions.productID;
+    this.data = data;
+    this.name = this.data[this.productID].name;
     this.minRadius = this.data[this.productID].minRadius;
     this.maxRadius = this.data[this.productID].maxRadius;
     this.minArc = this.data[this.productID].minArc;
     this.maxArc = this.data[this.productID].maxArc;
     this.fixedArc = this.data[this.productID].fixedArc;
-    console.log(this.name)
-    waterOptions.minRadius = this.minRadius
-    waterOptions.maxRadius = this.maxRadius
-    waterOptions.minArc = this.minArc
-    waterOptions.maxArc = this.maxArc
-    waterOptions.fixedArc = this.fixedArc
-    console.log(this)
+    console.log(this.name);
+    waterOptions.minRadius = this.minRadius;
+    waterOptions.maxRadius = this.maxRadius;
+    waterOptions.minArc = this.minArc;
+    waterOptions.maxArc = this.maxArc;
+    waterOptions.fixedArc = this.fixedArc;
+    console.log(this);
     const temp = {
             startAngle: 0,
             endAngle: 270,
@@ -77,26 +77,8 @@ export class Product extends Circle {
             minArc: this.minArc,
             maxArc: this.maxArc,
             fixedArc: this.fixedArc,
-    }
+    };
     // Create the Water instance
     this.water = new Water(temp, this);
-    this.water.startController.on('moving', (e) => {this.handleAngles(e)})
-    this.water.endController.on('moving', (e) => {this.handleAngles(e)})
-  }
-
-  handleAngles(e: any){
-    const controller = e.transform.target;
-    const sweepAngle = util.radiansToDegrees(this.water.sweepAngle)
-    if (controller.controllerType === 'end' && sweepAngle > this.maxArc){
-      // console.log("End and Max.")
-      this.water.endAngle = this.water.startAngle + this.maxArc
-      // this.water.setPointOnCircumference(this.water.endController, this.water.endAngle)
-    }
-    else if (controller.controllerType === 'start' && sweepAngle > this.maxArc){
-      // console.log("Start and Max")
-      this.water.startAngle = this.water.endAngle - this.maxArc
-      this.water.setPointOnCircumference(this.water.startController, this.water.startAngle)
-    }
-    // console.log(this.water.sweepAngle * (180/Math.PI))
   }
 }
