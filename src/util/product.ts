@@ -69,7 +69,7 @@ export class Product extends Circle {
             endAngle: 270,
             centerX: waterOptions.left,
             centerY: waterOptions.top,
-            radius: 100,
+            radius: waterOptions.minRadius,
             canvas: waterOptions.canvas,
             fill: 'rgba(0, 0, 255, .2)',
             minRadius: this.minRadius,
