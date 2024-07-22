@@ -34,13 +34,13 @@
     left: 10,
     top: 10,
     stroke: 'black',
-  })
+  });
   const scaleText = new FabricText(`${feetScale/waterScale} feet`, {
     left: (10 + feetScale) * .5,
     top: line.top,
     originX: 'center',
     fontSize: 15,
-  })
+  });
   c.add(line, scaleText)
   c.on('mouse:up', (options) => {
       if(options.isClick && (!options.target || options.target instanceof Water)){
