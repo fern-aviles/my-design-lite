@@ -14,8 +14,8 @@
   let c = null;
   const radius = 200;
   const RADIUS = 200;
-  const STARTANGLE = 315;
-  const ENDANGLE = 45;
+  const STARTANGLE = 0;
+  const ENDANGLE = 270;
   let rotors = 0;
 
   /**
@@ -444,6 +444,7 @@
       "L", startX, startY,
       "A", radius, radius, 0, largeArcFlag,1,endX, endY,
     ].join(" ");
+    // console.log(startAngle, endAngle, cx, cy, radius, sweep)
     return pathData;
   };
 
@@ -582,7 +583,7 @@
     });
     c.on({
       'mouse:up': (options) => {
-        console.log(options)
+        // console.log(options)
         if(options.isClick && (!options.target || options.target.isRadius)){
           addRotor(options.e);
         }
