@@ -168,11 +168,11 @@ export class Water extends Path {
     // Add water and the control circles to the canvas
     // This line is used to put the water in the back - used to make products always clickable
     this.canvas.insertAt(0, this); 
+    this.canvas.add(this.infoLine);
+    this.canvas.add(this.infoText);
     this.canvas.add(this.endController);
     this.canvas.add(this.startController);
     this.canvas.add(this.midController);
-    this.canvas.add(this.infoLine);
-    this.canvas.add(this.infoText);
 
     // Bind the event handlers to the control circles
     this.endController.on({'moving': (e) => {this.onControlCircleMoving(e)},
@@ -241,7 +241,9 @@ export class Water extends Path {
     const centerX = this.getCenterPoint().x,
           centerY = this.getCenterPoint().y;
     let angle = Math.atan2(y - centerY, x - centerX) * (180 / Math.PI);
-    angle = angle >= 0 ? angle : 360 + angle; // Normalize angle
+
+    // Normalize angle
+    angle = angle >= 0 ? angle : 360 + angle;
 
     // Check what controller is being used based on the controllerType
     // and make sure it's within the specifications
