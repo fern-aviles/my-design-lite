@@ -34,6 +34,13 @@ export class Water extends Path {
    * @param {Circle} product 
    */
   constructor(options: any, product: Circle) {
+  /**
+   * Constructs a Water object with it's controllers
+   * 
+   * @param {any} options - The options object for Water.
+   * @param {Circle} product 
+   */
+  constructor(options: any, product: Circle) {
     const startAngle = options.startAngle;
     const endAngle = options.endAngle;
     const centerX = options.centerX;
@@ -59,6 +66,7 @@ export class Water extends Path {
     super(pathData, options);
     
     // Set instance variables
+    this.product = product;
     this.product = product;
     this.selected = selected;
     this.startAngle = startAngle;
