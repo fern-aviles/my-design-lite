@@ -582,6 +582,7 @@ export class Water extends Path {
    * or 0 and 360 depending if the angle is in radians
    * @param {number} angle: in radians
    * @param {boolean} radians: true if radians, false if not
+   * 
    * @returns {number} an angle between 0 and 2* PI or 0 and 360
    */
    normalizeAngle(angle: number, radians=true){

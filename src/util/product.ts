@@ -32,6 +32,14 @@ export interface ProductData {
   [productId: string]: ProductInfo;
 }
 
+
+/**
+ * Creates a Product object which filters data and
+ * allows users to customize the object's water radius
+ * and arc angle
+ * 
+ * @extends Circle
+ */
 export class Product extends Circle {
   text: FabricText;
   data: ProductData;
@@ -48,6 +56,13 @@ export class Product extends Circle {
   pressure: number;
   nozzleInfo: string;
 
+  /**
+   * Constructs the Product object and is using 
+   * waterOptions to create a Water object to allow for
+   * customization
+   * 
+   * @param {any} waterOptions 
+   */
   constructor(waterOptions: any) {
     const options = {
       left: waterOptions.left,
@@ -110,7 +125,7 @@ export class Product extends Circle {
         },
         'modified': () => {
           console.log(this.nozzleInfo);
-        }
+        },
       });
     this.on({
       'mousedblclick': () => {
@@ -120,13 +135,15 @@ export class Product extends Circle {
           maxRadius: this.maxRadius,
           minRadius: this.minRadius
         });
-      }
+      },
     });
   }
 
   /**
    * Iterates through the data to make a nozzles dictionary
-   * @param data 
+   * @param {ProductData} data 
+   * 
+   * @returns {null}
    */
   createNozzlesDictionary(data: ProductData){
     let xOffset = 0;
@@ -152,7 +169,8 @@ export class Product extends Circle {
                 lockMovementX: true,
                 lockMovementY: true,
                 hasControls: false,
-              })};
+              })
+            };
               yOffset += 15;
               if(yOffset+30 > this.water.canvas.getHeight()) {
                 yOffset = 0;
@@ -182,8 +200,10 @@ export class Product extends Circle {
 
   /**
    * Iterates through the data to find the nozzles available to use
-   * @param data 
-   * @param targetRadius 
+   * @param {ProductData} data 
+   * @param {number} targetRadius 
+   * 
+   * @returns {null}
    */
   findNozzlesWithRadius(data: ProductData, targetRadius: number): void {
     for (const productId in data) {
@@ -231,7 +251,10 @@ export class Product extends Circle {
   /**
    * Deselects the selected nozzle once it's no longer
    * within its range.
-   * @param radius 
+   * 
+   * @param {number} radius 
+   * 
+   * @returns {null}
    */
   deselectNozzle(radius: number){
     const nozzleRadius = this.nozzleOptions[this.selectedNozzle]?.data.radius;
@@ -243,9 +266,8 @@ export class Product extends Circle {
         maxRadius: this.maxRadius,
         minRadius: this.minRadius
       });
-      this.nozzleInfo = "No nozzle selected"
+      this.nozzleInfo = "No nozzle selected";
     }
-    // console.log(`Current Nozzle: ${this.selectedNozzle}`);
   }
 
 }
