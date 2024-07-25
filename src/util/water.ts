@@ -25,6 +25,7 @@ export class Water extends Path {
   maxRadius: number;
   fixedArc: boolean;
   waterScale: number;
+  distance: number;
 
   declare canvas: Canvas;
   /**
@@ -68,6 +69,7 @@ export class Water extends Path {
     this.centerY = product.getCenterPoint().y;
     this.waterScale = waterScale;
     this.radius = radius * this.waterScale;
+    this.distance = this.radius;
     this.canvas = canvas;
 
     // Added constraints
@@ -85,7 +87,7 @@ export class Water extends Path {
     this.endController = new Circle({
       left: endControlXY.x + centerX,
       top: endControlXY.y + centerY,
-      radius: 5,
+      radius: 7,
       fill: 'red',
       originX: 'center',
       originY: 'center',
@@ -99,7 +101,7 @@ export class Water extends Path {
     this.startController = new Circle({
       left: startControlXY.x + centerX,
       top: startControlXY.y + centerY,
-      radius: 5,
+      radius: 7,
       fill: 'red',
       originX: 'center',
       originY: 'center',
@@ -115,7 +117,7 @@ export class Water extends Path {
     this.midController = new Circle({
       left: midControllerXY.x + centerX,
       top: midControllerXY.y + centerY,
-      radius: 5,
+      radius: 7,
       fill: 'red',
       originX: 'center',
       originY: 'center',
@@ -340,12 +342,13 @@ export class Water extends Path {
                                                    waterCoords.y);
     this.scale(distanceApart/this.radius);
     distanceApart = distanceApart/this.waterScale;
+    let radiusScale = (this.radius/this.waterScale);
     if(distanceApart < this.minRadius * .75){
-      this.scale(.75);
+      this.scale((.75*this.minRadius)/radiusScale);
       this.changeMidControllerPos(this.midController);
     } 
     else if(distanceApart > this.maxRadius){
-      this.scale(this.maxRadius/this.minRadius);
+      this.scale(this.maxRadius/radiusScale);
       this.changeMidControllerPos(this.midController);
     }
     
@@ -404,11 +407,12 @@ export class Water extends Path {
       this.infoLine.x2,
       this.infoLine.y2);
     this.infoText.set({
-      text: `${Math.round(distance/this.waterScale)} ft, ${Math.round(util.radiansToDegrees(this.sweepAngle))}°`,
+      text: `${(distance/this.waterScale).toFixed(2)} ft, ${Math.round(util.radiansToDegrees(this.sweepAngle))}°`,
       left: mid.x,
       top: mid.y,
       angle: textAngle,
     });
+    this.distance = parseFloat((distance/this.waterScale).toFixed(2));
   }
 
   /**
@@ -631,6 +635,55 @@ export class Water extends Path {
     const x_mid = x_sum / 2;
     const y_mid = y_sum / 2;
     return {x: x_mid, y: y_mid};
+  }
+
+  /**
+   * Returns the start angle of the water object
+   * 
+   * @returns {number} start angle (in degrees)
+   */
+  getStartAngle(){
+    return this.startAngle;
+  }
+
+  /**
+   * Returns the end angle of the water object
+   * 
+   * @returns {number} end angle (in degrees)
+   */
+  getEndAngle(){
+    return this.endAngle;
+  }
+
+  /**
+   * Returns the radius of the water object
+   * 
+   * @returns {number} angle (in degrees)
+   */
+  getRadius(){
+    return this.distance;
+  }
+
+  /**
+   * Returns the arc angle of the water object
+   * 
+   * @returns {number} arc angle (in degrees)
+   */
+  getArcAngle(){
+    return Math.round(util.radiansToDegrees(this.sweepAngle));
+  }
+
+  /**
+   * Changes the min and max arc and radius of the water
+   * object
+   * 
+   * @returns {null}
+   */
+  setConstraints(constraints: any){
+    this.maxArc = constraints.maxArc;
+    this.minArc = constraints.minArc;
+    this.maxRadius = constraints.maxRadius;
+    this.minRadius = constraints.minRadius;
   }
 }
 export default Water;
