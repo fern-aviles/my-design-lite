@@ -247,6 +247,24 @@ export class Water extends Path {
     // Normalize angle
     angle = angle >= 0 ? angle : 360 + angle;
 
+    // Snap to full circle
+    let sweepAngle = util.radiansToDegrees(this.sweepAngle);
+    let prevAngle = angle;
+    if((0 <= sweepAngle && sweepAngle <= 5) || (sweepAngle <= 360 && sweepAngle >= 355)){
+      if(control.controllerType === 'end'){
+        angle = this.startAngle-.01;
+        if(Math.abs(prevAngle - this.startAngle) >= 5 && Math.abs(prevAngle - this.startAngle) <= 355){
+          angle = prevAngle;
+        }
+      }
+      else{
+        angle = this.endAngle+.01;
+        if(Math.abs(prevAngle - this.endAngle) >= 5 && Math.abs(prevAngle - this.endAngle) <= 355){
+          angle = prevAngle;
+        }
+      }
+    }
+
     // Check what controller is being used based on the controllerType
     // and make sure it's within the specifications
     if (control.controllerType === 'end'){
