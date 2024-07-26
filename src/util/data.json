@@ -1,1002 +1,1024 @@
 {
-  "862" : {
-    "name": "PGP Ultra",
-    "fixedArc": false,
-    "minArc": 50,
-    "maxArc": 270,
-    "minRadius": 17,
-    "maxRadius": 46,
-    "nozzles" : [
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 1.5,
-      "Color": "Blue",
-      "Pressure": 25,
-      "Radius": 29,
-      "Flow": 1.2,
-      "Precip in/hr (low)": 0.27,
-      "Precip in/hr (high)": 0.32
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 1.5,
-      "Color": "Blue",
-      "Pressure": 35,
-      "Radius": 31,
-      "Flow": 1.4,
-      "Precip in/hr (low)": 0.28,
-      "Precip in/hr (high)": 0.32
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 1.5,
-      "Color": "Blue",
-      "Pressure": 45,
-      "Radius": 31,
-      "Flow": 1.5,
-      "Precip in/hr (low)": 0.3,
-      "Precip in/hr (high)": 0.35
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 1.5,
-      "Color": "Blue",
-      "Pressure": 55,
-      "Radius": 32,
-      "Flow": 1.8,
-      "Precip in/hr (low)": 0.34,
-      "Precip in/hr (high)": 0.39
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 1.5,
-      "Color": "Blue",
-      "Pressure": 65,
-      "Radius": 32,
-      "Flow": 1.9,
-      "Precip in/hr (low)": 0.36,
-      "Precip in/hr (high)": 0.41
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 2,
-      "Color": "Blue",
-      "Pressure": 25,
-      "Radius": 33,
-      "Flow": 1.4,
-      "Precip in/hr (low)": 0.25,
-      "Precip in/hr (high)": 0.29
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 2,
-      "Color": "Blue",
-      "Pressure": 35,
-      "Radius": 33,
-      "Flow": 1.7,
-      "Precip in/hr (low)": 0.3,
-      "Precip in/hr (high)": 0.35
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 2,
-      "Color": "Blue",
-      "Pressure": 45,
-      "Radius": 34,
-      "Flow": 2,
-      "Precip in/hr (low)": 0.33,
-      "Precip in/hr (high)": 0.38
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 2,
-      "Color": "Blue",
-      "Pressure": 55,
-      "Radius": 34,
-      "Flow": 2.1,
-      "Precip in/hr (low)": 0.35,
-      "Precip in/hr (high)": 0.4
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 2,
-      "Color": "Blue",
-      "Pressure": 65,
-      "Radius": 34,
-      "Flow": 2.3,
-      "Precip in/hr (low)": 0.38,
-      "Precip in/hr (high)": 0.44
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 2.5,
-      "Color": "Blue",
-      "Pressure": 25,
-      "Radius": 33,
-      "Flow": 1.7,
-      "Precip in/hr (low)": 0.3,
-      "Precip in/hr (high)": 0.35
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 2.5,
-      "Color": "Blue",
-      "Pressure": 35,
-      "Radius": 35,
-      "Flow": 2.1,
-      "Precip in/hr (low)": 0.33,
-      "Precip in/hr (high)": 0.38
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 2.5,
-      "Color": "Blue",
-      "Pressure": 45,
-      "Radius": 35,
-      "Flow": 2.5,
-      "Precip in/hr (low)": 0.39,
-      "Precip in/hr (high)": 0.45
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 2.5,
-      "Color": "Blue",
-      "Pressure": 55,
-      "Radius": 35,
-      "Flow": 2.6,
-      "Precip in/hr (low)": 0.41,
-      "Precip in/hr (high)": 0.47
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 2.5,
-      "Color": "Blue",
-      "Pressure": 65,
-      "Radius": 35,
-      "Flow": 2.9,
-      "Precip in/hr (low)": 0.46,
-      "Precip in/hr (high)": 0.53
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 3,
-      "Color": "Blue",
-      "Pressure": 25,
-      "Radius": 35,
-      "Flow": 2.2,
-      "Precip in/hr (low)": 0.35,
-      "Precip in/hr (high)": 0.4
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 3,
-      "Color": "Blue",
-      "Pressure": 35,
-      "Radius": 36,
-      "Flow": 2.7,
-      "Precip in/hr (low)": 0.4,
-      "Precip in/hr (high)": 0.46
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 3,
-      "Color": "Blue",
-      "Pressure": 45,
-      "Radius": 38,
-      "Flow": 3,
-      "Precip in/hr (low)": 0.4,
-      "Precip in/hr (high)": 0.46
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 3,
-      "Color": "Blue",
-      "Pressure": 55,
-      "Radius": 39,
-      "Flow": 3.4,
-      "Precip in/hr (low)": 0.43,
-      "Precip in/hr (high)": 0.5
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 3,
-      "Color": "Blue",
-      "Pressure": 65,
-      "Radius": 39,
-      "Flow": 3.7,
-      "Precip in/hr (low)": 0.47,
-      "Precip in/hr (high)": 0.54
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 4,
-      "Color": "Blue",
-      "Pressure": 25,
-      "Radius": 37,
-      "Flow": 3,
-      "Precip in/hr (low)": 0.42,
-      "Precip in/hr (high)": 0.49
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 4,
-      "Color": "Blue",
-      "Pressure": 35,
-      "Radius": 39,
-      "Flow": 3.5,
-      "Precip in/hr (low)": 0.44,
-      "Precip in/hr (high)": 0.51
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 4,
-      "Color": "Blue",
-      "Pressure": 45,
-      "Radius": 40,
-      "Flow": 4,
-      "Precip in/hr (low)": 0.48,
-      "Precip in/hr (high)": 0.56
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 4,
-      "Color": "Blue",
-      "Pressure": 55,
-      "Radius": 41,
-      "Flow": 4.5,
-      "Precip in/hr (low)": 0.52,
-      "Precip in/hr (high)": 0.6
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 4,
-      "Color": "Blue",
-      "Pressure": 65,
-      "Radius": 41,
-      "Flow": 4.8,
-      "Precip in/hr (low)": 0.55,
-      "Precip in/hr (high)": 0.63
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 5,
-      "Color": "Blue",
-      "Pressure": 25,
-      "Radius": 37,
-      "Flow": 3.7,
-      "Precip in/hr (low)": 0.52,
-      "Precip in/hr (high)": 0.6
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 5,
-      "Color": "Blue",
-      "Pressure": 35,
-      "Radius": 39,
-      "Flow": 4.5,
-      "Precip in/hr (low)": 0.57,
-      "Precip in/hr (high)": 0.66
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 5,
-      "Color": "Blue",
-      "Pressure": 45,
-      "Radius": 42,
-      "Flow": 5,
-      "Precip in/hr (low)": 0.55,
-      "Precip in/hr (high)": 0.63
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 5,
-      "Color": "Blue",
-      "Pressure": 55,
-      "Radius": 42,
-      "Flow": 5.7,
-      "Precip in/hr (low)": 0.62,
-      "Precip in/hr (high)": 0.72
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 5,
-      "Color": "Blue",
-      "Pressure": 65,
-      "Radius": 42,
-      "Flow": 6.2,
-      "Precip in/hr (low)": 0.68,
-      "Precip in/hr (high)": 0.78
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 6,
-      "Color": "Blue",
-      "Pressure": 25,
-      "Radius": 38,
-      "Flow": 4.3,
-      "Precip in/hr (low)": 0.57,
-      "Precip in/hr (high)": 0.66
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 6,
-      "Color": "Blue",
-      "Pressure": 35,
-      "Radius": 40,
-      "Flow": 5.6,
-      "Precip in/hr (low)": 0.67,
-      "Precip in/hr (high)": 0.78
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 6,
-      "Color": "Blue",
-      "Pressure": 45,
-      "Radius": 43,
-      "Flow": 6,
-      "Precip in/hr (low)": 0.62,
-      "Precip in/hr (high)": 0.72
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 6,
-      "Color": "Blue",
-      "Pressure": 55,
-      "Radius": 44,
-      "Flow": 6.7,
-      "Precip in/hr (low)": 0.67,
-      "Precip in/hr (high)": 0.77
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 6,
-      "Color": "Blue",
-      "Pressure": 65,
-      "Radius": 44,
-      "Flow": 7.3,
-      "Precip in/hr (low)": 0.73,
-      "Precip in/hr (high)": 0.84
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 8,
-      "Color": "Blue",
-      "Pressure": 25,
-      "Radius": 37,
-      "Flow": 6,
-      "Precip in/hr (low)": 0.84,
-      "Precip in/hr (high)": 0.97
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 8,
-      "Color": "Blue",
-      "Pressure": 35,
-      "Radius": 41,
-      "Flow": 7,
-      "Precip in/hr (low)": 0.8,
-      "Precip in/hr (high)": 0.93
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 8,
-      "Color": "Blue",
-      "Pressure": 45,
-      "Radius": 44,
-      "Flow": 8,
-      "Precip in/hr (low)": 0.8,
-      "Precip in/hr (high)": 0.92
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 8,
-      "Color": "Blue",
-      "Pressure": 55,
-      "Radius": 46,
-      "Flow": 9,
-      "Precip in/hr (low)": 0.82,
-      "Precip in/hr (high)": 0.95
-      },
-    {
-      "Product": "Blue Standard Nozzle Performance Data",
-      "Nozzle": 8,
-      "Color": "Blue",
-      "Pressure": 65,
-      "Radius": 46,
-      "Flow": 9.8,
-      "Precip in/hr (low)": 0.89,
-      "Precip in/hr (high)": 1.03
-      },
-    {
-      "Product": "Grey Low Angle Nozzle Performance Data",
-      "Nozzle": 2,
-      "Color": "Grey",
-      "Pressure": 30,
-      "Radius": 25,
-      "Flow": 1.6,
-      "Precip in/hr (low)": 0.49,
-      "Precip in/hr (high)": 0.57
-      },
-    {
-      "Product": "Grey Low Angle Nozzle Performance Data",
-      "Nozzle": 2,
-      "Color": "Grey",
-      "Pressure": 40,
-      "Radius": 27,
-      "Flow": 1.9,
-      "Precip in/hr (low)": 0.5,
-      "Precip in/hr (high)": 0.58
-      },
-    {
-      "Product": "Grey Low Angle Nozzle Performance Data",
-      "Nozzle": 2,
-      "Color": "Grey",
-      "Pressure": 50,
-      "Radius": 28,
-      "Flow": 2.1,
-      "Precip in/hr (low)": 0.52,
-      "Precip in/hr (high)": 0.6
-      },
-    {
-      "Product": "Grey Low Angle Nozzle Performance Data",
-      "Nozzle": 2,
-      "Color": "Grey",
-      "Pressure": 60,
-      "Radius": 30,
-      "Flow": 2.3,
-      "Precip in/hr (low)": 0.49,
-      "Precip in/hr (high)": 0.57
-      },
-    {
-      "Product": "Grey Low Angle Nozzle Performance Data",
-      "Nozzle": 2.5,
-      "Color": "Grey",
-      "Pressure": 30,
-      "Radius": 27,
-      "Flow": 2.1,
-      "Precip in/hr (low)": 0.55,
-      "Precip in/hr (high)": 0.64
-      },
-    {
-      "Product": "Grey Low Angle Nozzle Performance Data",
-      "Nozzle": 2.5,
-      "Color": "Grey",
-      "Pressure": 40,
-      "Radius": 30,
-      "Flow": 2.5,
-      "Precip in/hr (low)": 0.53,
-      "Precip in/hr (high)": 0.62
-      },
-    {
-      "Product": "Grey Low Angle Nozzle Performance Data",
-      "Nozzle": 2.5,
-      "Color": "Grey",
-      "Pressure": 50,
-      "Radius": 33,
-      "Flow": 2.8,
-      "Precip in/hr (low)": 0.49,
-      "Precip in/hr (high)": 0.57
-      },
-    {
-      "Product": "Grey Low Angle Nozzle Performance Data",
-      "Nozzle": 2.5,
-      "Color": "Grey",
-      "Pressure": 60,
-      "Radius": 35,
-      "Flow": 3,
-      "Precip in/hr (low)": 0.47,
-      "Precip in/hr (high)": 0.54
-      },
-    {
-      "Product": "Grey Low Angle Nozzle Performance Data",
-      "Nozzle": 3.5,
-      "Color": "Grey",
-      "Pressure": 30,
-      "Radius": 29,
-      "Flow": 2.8,
-      "Precip in/hr (low)": 0.64,
-      "Precip in/hr (high)": 0.74
-      },
-    {
-      "Product": "Grey Low Angle Nozzle Performance Data",
-      "Nozzle": 3.5,
-      "Color": "Grey",
-      "Pressure": 40,
-      "Radius": 32,
-      "Flow": 3.1,
-      "Precip in/hr (low)": 0.58,
-      "Precip in/hr (high)": 0.67
-      },
-    {
-      "Product": "Grey Low Angle Nozzle Performance Data",
-      "Nozzle": 3.5,
-      "Color": "Grey",
-      "Pressure": 50,
-      "Radius": 35,
-      "Flow": 3.5,
-      "Precip in/hr (low)": 0.55,
-      "Precip in/hr (high)": 0.64
-      },
-    {
-      "Product": "Grey Low Angle Nozzle Performance Data",
-      "Nozzle": 4.5,
-      "Color": "Grey",
-      "Pressure": 30,
-      "Radius": 29,
-      "Flow": 3.4,
-      "Precip in/hr (low)": 0.78,
-      "Precip in/hr (high)": 0.9
-      },
-    {
-      "Product": "Grey Low Angle Nozzle Performance Data",
-      "Nozzle": 4.5,
-      "Color": "Grey",
-      "Pressure": 40,
-      "Radius": 32,
-      "Flow": 3.9,
-      "Precip in/hr (low)": 0.73,
-      "Precip in/hr (high)": 0.85
-      },
-    {
-      "Product": "Grey Low Angle Nozzle Performance Data",
-      "Nozzle": 4.5,
-      "Color": "Grey",
-      "Pressure": 50,
-      "Radius": 35,
-      "Flow": 4.4,
-      "Precip in/hr (low)": 0.69,
-      "Precip in/hr (high)": 0.8
-      },
-    {
-      "Product": "Grey Low Angle Nozzle Performance Data",
-      "Nozzle": 4.5,
-      "Color": "Grey",
-      "Pressure": 60,
-      "Radius": 37,
-      "Flow": 4.7,
-      "Precip in/hr (low)": 0.66,
-      "Precip in/hr (high)": 0.76
-      },
-    {
-      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
-      "Nozzle": 10,
-      "Color": "Dk Green",
-      "Pressure": 40,
-      "Radius": 42,
-      "Flow": 8.4,
-      "Precip in/hr (low)": 0.92,
-      "Precip in/hr (high)": 1.06
-      },
-    {
-      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
-      "Nozzle": 10,
-      "Color": "Dk Green",
-      "Pressure": 50,
-      "Radius": 43,
-      "Flow": 9.5,
-      "Precip in/hr (low)": 0.99,
-      "Precip in/hr (high)": 1.14
-      },
-    {
-      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
-      "Nozzle": 10,
-      "Color": "Dk Green",
-      "Pressure": 60,
-      "Radius": 45,
-      "Flow": 10.5,
-      "Precip in/hr (low)": 1,
-      "Precip in/hr (high)": 1.15
-      },
-    {
-      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
-      "Nozzle": 10,
-      "Color": "Dk Green",
-      "Pressure": 70,
-      "Radius": 47,
-      "Flow": 11.4,
-      "Precip in/hr (low)": 0.99,
-      "Precip in/hr (high)": 1.15
-      },
-    {
-      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
-      "Nozzle": 10,
-      "Color": "Dk Green",
-      "Pressure": 40,
-      "Radius": 43,
-      "Flow": 10.9,
-      "Precip in/hr (low)": 1.13,
-      "Precip in/hr (high)": 1.31
-      },
-    {
-      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
-      "Nozzle": 10,
-      "Color": "Dk Green",
-      "Pressure": 50,
-      "Radius": 44,
-      "Flow": 12.3,
-      "Precip in/hr (low)": 1.22,
-      "Precip in/hr (high)": 1.41
-      },
-    {
-      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
-      "Nozzle": 10,
-      "Color": "Dk Green",
-      "Pressure": 60,
-      "Radius": 45,
-      "Flow": 13.6,
-      "Precip in/hr (low)": 1.29,
-      "Precip in/hr (high)": 1.49
-      },
-    {
-      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
-      "Nozzle": 10,
-      "Color": "Dk Green",
-      "Pressure": 70,
-      "Radius": 47,
-      "Flow": 14.8,
-      "Precip in/hr (low)": 1.29,
-      "Precip in/hr (high)": 1.49
-      },
-    {
-      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
-      "Nozzle": 13,
-      "Color": "Dk Green",
-      "Pressure": 40,
-      "Radius": 43,
-      "Flow": 10.9,
-      "Precip in/hr (low)": 1.13,
-      "Precip in/hr (high)": 1.31
-      },
-    {
-      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
-      "Nozzle": 13,
-      "Color": "Dk Green",
-      "Pressure": 50,
-      "Radius": 44,
-      "Flow": 12.3,
-      "Precip in/hr (low)": 1.22,
-      "Precip in/hr (high)": 1.41
-      },
-    {
-      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
-      "Nozzle": 13,
-      "Color": "Dk Green",
-      "Pressure": 60,
-      "Radius": 45,
-      "Flow": 13.6,
-      "Precip in/hr (low)": 1.29,
-      "Precip in/hr (high)": 1.49
-      },
-    {
-      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
-      "Nozzle": 13,
-      "Color": "Dk Green",
-      "Pressure": 70,
-      "Radius": 47,
-      "Flow": 14.8,
-      "Precip in/hr (low)": 1.29,
-      "Precip in/hr (high)": 1.49
-      },
-    {
-      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
-      "Nozzle": 6,
-      "Color": "LA Dk. Green",
-      "Pressure": 30,
-      "Radius": 31,
-      "Flow": 4.2,
-      "Precip in/hr (low)": 0.84,
-      "Precip in/hr (high)": 0.97
-      },
-    {
-      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
-      "Nozzle": 6,
-      "Color": "LA Dk. Green",
-      "Pressure": 40,
-      "Radius": 35,
-      "Flow": 5,
-      "Precip in/hr (low)": 0.79,
-      "Precip in/hr (high)": 0.91
-      },
-    {
-      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
-      "Nozzle": 6,
-      "Color": "LA Dk. Green",
-      "Pressure": 50,
-      "Radius": 37,
-      "Flow": 5.8,
-      "Precip in/hr (low)": 0.82,
-      "Precip in/hr (high)": 0.94
-      },
-    {
-      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
-      "Nozzle": 6,
-      "Color": "LA Dk. Green",
-      "Pressure": 60,
-      "Radius": 39,
-      "Flow": 6.3,
-      "Precip in/hr (low)": 0.8,
-      "Precip in/hr (high)": 0.92
-      },
-    {
-      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
-      "Nozzle": 8,
-      "Color": "LA Dk. Green",
-      "Pressure": 40,
-      "Radius": 37,
-      "Flow": 6.7,
-      "Precip in/hr (low)": 0.94,
-      "Precip in/hr (high)": 1.09
-      },
-    {
-      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
-      "Nozzle": 8,
-      "Color": "LA Dk. Green",
-      "Pressure": 50,
-      "Radius": 39,
-      "Flow": 7.7,
-      "Precip in/hr (low)": 0.97,
-      "Precip in/hr (high)": 1.13
-      },
-    {
-      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
-      "Nozzle": 8,
-      "Color": "LA Dk. Green",
-      "Pressure": 60,
-      "Radius": 41,
-      "Flow": 8.5,
-      "Precip in/hr (low)": 0.97,
-      "Precip in/hr (high)": 1.12
-      },
-    {
-      "Product": "PGP ULTRA / I-20 HIGH FLOW NOZZLE PERFORMANCE DATA",
-      "Nozzle": 8,
-      "Color": "LA Dk. Green",
-      "Pressure": 70,
-      "Radius": 41,
-      "Flow": 9.2,
-      "Precip in/hr (low)": 1.05,
-      "Precip in/hr (high)": 1.22
-      },
-    {
-      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
-      "Nozzle": 0.5,
-      "Color": "SR Black",
-      "Pressure": 30,
-      "Radius": 17,
-      "Flow": 0.36,
-      "Precip in/hr (low)": 0.24,
-      "Precip in/hr (high)": 0.28
-      },
-    {
-      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
-      "Nozzle": 0.5,
-      "Color": "SR Black",
-      "Pressure": 40,
-      "Radius": 17,
-      "Flow": 0.43,
-      "Precip in/hr (low)": 0.29,
-      "Precip in/hr (high)": 0.33
-      },
-    {
-      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
-      "Nozzle": 0.5,
-      "Color": "SR Black",
-      "Pressure": 50,
-      "Radius": 18,
-      "Flow": 0.5,
-      "Precip in/hr (low)": 0.3,
-      "Precip in/hr (high)": 0.34
-      },
-    {
-      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
-      "Nozzle": 0.5,
-      "Color": "SR Black",
-      "Pressure": 60,
-      "Radius": 19,
-      "Flow": 0.57,
-      "Precip in/hr (low)": 0.3,
-      "Precip in/hr (high)": 0.35
-      },
-    {
-      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
-      "Nozzle": 1,
-      "Color": "SR Black",
-      "Pressure": 30,
-      "Radius": 17,
-      "Flow": 0.78,
-      "Precip in/hr (low)": 0.52,
-      "Precip in/hr (high)": 0.6
-      },
-    {
-      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
-      "Nozzle": 1,
-      "Color": "SR Black",
-      "Pressure": 40,
-      "Radius": 17,
-      "Flow": 0.9,
-      "Precip in/hr (low)": 0.6,
-      "Precip in/hr (high)": 0.69
-      },
-    {
-      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
-      "Nozzle": 1,
-      "Color": "SR Black",
-      "Pressure": 50,
-      "Radius": 18,
-      "Flow": 1,
-      "Precip in/hr (low)": 0.59,
-      "Precip in/hr (high)": 0.69
-      },
-    {
-      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
-      "Nozzle": 1,
-      "Color": "SR Black",
-      "Pressure": 60,
-      "Radius": 19,
-      "Flow": 1.1,
-      "Precip in/hr (low)": 0.59,
-      "Precip in/hr (high)": 0.68
-      },
-    {
-      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
-      "Nozzle": 2,
-      "Color": "SR Black",
-      "Pressure": 30,
-      "Radius": 17,
-      "Flow": 1.4,
-      "Precip in/hr (low)": 0.93,
-      "Precip in/hr (high)": 1.08
-      },
-    {
-      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
-      "Nozzle": 2,
-      "Color": "SR Black",
-      "Pressure": 40,
-      "Radius": 17,
-      "Flow": 1.7,
-      "Precip in/hr (low)": 1.13,
-      "Precip in/hr (high)": 1.31
-      },
-    {
-      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
-      "Nozzle": 2,
-      "Color": "SR Black",
-      "Pressure": 50,
-      "Radius": 18,
-      "Flow": 2,
-      "Precip in/hr (low)": 1.19,
-      "Precip in/hr (high)": 1.37
-      },
-    {
-      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
-      "Nozzle": 2,
-      "Color": "SR Black",
-      "Pressure": 60,
-      "Radius": 19,
-      "Flow": 2.2,
-      "Precip in/hr (low)": 1.17,
-      "Precip in/hr (high)": 1.35
-      },
-    {
-      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
-      "Nozzle": 0.75,
-      "Color": "SR Black",
-      "Pressure": 30,
-      "Radius": 23,
-      "Flow": 0.58,
-      "Precip in/hr (low)": 0.21,
-      "Precip in/hr (high)": 0.24
-      },
-    {
-      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
-      "Nozzle": 0.75,
-      "Color": "SR Black",
-      "Pressure": 40,
-      "Radius": 24,
-      "Flow": 0.68,
-      "Precip in/hr (low)": 0.23,
-      "Precip in/hr (high)": 0.26
-      },
-    {
-      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
-      "Nozzle": 0.75,
-      "Color": "SR Black",
-      "Pressure": 50,
-      "Radius": 25,
-      "Flow": 0.75,
-      "Precip in/hr (low)": 0.23,
-      "Precip in/hr (high)": 0.27
-      },
-    {
-      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
-      "Nozzle": 0.75,
-      "Color": "SR Black",
-      "Pressure": 60,
-      "Radius": 26,
-      "Flow": 0.83,
-      "Precip in/hr (low)": 0.24,
-      "Precip in/hr (high)": 0.27
-      },
-    {
-      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
-      "Nozzle": 1.5,
-      "Color": "SR Black",
-      "Pressure": 30,
-      "Radius": 23,
-      "Flow": 1.1,
-      "Precip in/hr (low)": 0.4,
-      "Precip in/hr (high)": 0.46
-      },
-    {
-      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
-      "Nozzle": 1.5,
-      "Color": "SR Black",
-      "Pressure": 40,
-      "Radius": 24,
-      "Flow": 1.3,
-      "Precip in/hr (low)": 0.43,
-      "Precip in/hr (high)": 0.5
-      },
-    {
-      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
-      "Nozzle": 1.5,
-      "Color": "SR Black",
-      "Pressure": 50,
-      "Radius": 25,
-      "Flow": 1.5,
-      "Precip in/hr (low)": 0.46,
-      "Precip in/hr (high)": 0.53
-      },
-    {
-      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
-      "Nozzle": 1.5,
-      "Color": "SR Black",
-      "Pressure": 60,
-      "Radius": 26,
-      "Flow": 1.6,
-      "Precip in/hr (low)": 0.46,
-      "Precip in/hr (high)": 0.53
-      },
-    {
-      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
-      "Nozzle": 3,
-      "Color": "SR Black",
-      "Pressure": 30,
-      "Radius": 23,
-      "Flow": 2.5,
-      "Precip in/hr (low)": 0.91,
-      "Precip in/hr (high)": 1.05
-      },
-    {
-      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
-      "Nozzle": 3,
-      "Color": "SR Black",
-      "Pressure": 40,
-      "Radius": 24,
-      "Flow": 2.7,
-      "Precip in/hr (low)": 0.9,
-      "Precip in/hr (high)": 1.04
-      },
-    {
-      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
-      "Nozzle": 3,
-      "Color": "SR Black",
-      "Pressure": 50,
-      "Radius": 25,
-      "Flow": 3,
-      "Precip in/hr (low)": 0.92,
-      "Precip in/hr (high)": 1.07
-      },
-    {
-      "Product": "PGP ULTRA / I-20 BLACK SHORT RADIUS NOZZLE PERFORMANCE DATA",
-      "Nozzle": 3,
-      "Color": "SR Black",
-      "Pressure": 60,
-      "Radius": 26,
-      "Flow": 3.1,
-      "Precip in/hr (low)": 0.88,
-      "Precip in/hr (high)": 1.02
-      }
-    ]
-  }
+    "862": {
+        "name": "PGP Ultra",
+        "fixedArc": false,
+        "minArc": 50,
+        "maxArc": 360,
+        "minRadius": 17,
+        "maxRadius": 46,
+        "performanceData": {
+            "standard": {
+                "1.5": {
+                    "25PSI": {
+                        "radius": 29,
+                        "flow": 1.2,
+                        "precip_sq": 0.27,
+                        "precip_tri": 0.32
+                    },
+                    "35PSI": {
+                        "radius": 31,
+                        "flow": 1.4,
+                        "precip_sq": 0.28,
+                        "precip_tri": 0.32
+                    },
+                    "45PSI": {
+                        "radius": 31,
+                        "flow": 1.5,
+                        "precip_sq": 0.3,
+                        "precip_tri": 0.35
+                    },
+                    "55PSI": {
+                        "radius": 32,
+                        "flow": 1.8,
+                        "precip_sq": 0.34,
+                        "precip_tri": 0.39
+                    },
+                    "65PSI": {
+                        "radius": 32,
+                        "flow": 1.9,
+                        "precip_sq": 0.36,
+                        "precip_tri": 0.41
+                    }
+                },
+                "2": {
+                    "25PSI": {
+                        "radius": 33,
+                        "flow": 1.4,
+                        "precip_sq": 0.25,
+                        "precip_tri": 0.29
+                    },
+                    "35PSI": {
+                        "radius": 33,
+                        "flow": 1.7,
+                        "precip_sq": 0.3,
+                        "precip_tri": 0.35
+                    },
+                    "45PSI": {
+                        "radius": 34,
+                        "flow": 2,
+                        "precip_sq": 0.33,
+                        "precip_tri": 0.38
+                    },
+                    "55PSI": {
+                        "radius": 34,
+                        "flow": 2.1,
+                        "precip_sq": 0.35,
+                        "precip_tri": 0.4
+                    },
+                    "65PSI": {
+                        "radius": 34,
+                        "flow": 2.3,
+                        "precip_sq": 0.38,
+                        "precip_tri": 0.44
+                    }
+                },
+                "2.5": {
+                    "25PSI": {
+                        "radius": 33,
+                        "flow": 1.7,
+                        "precip_sq": 0.3,
+                        "precip_tri": 0.35
+                    },
+                    "35PSI": {
+                        "radius": 35,
+                        "flow": 2.1,
+                        "precip_sq": 0.33,
+                        "precip_tri": 0.38
+                    },
+                    "45PSI": {
+                        "radius": 35,
+                        "flow": 2.5,
+                        "precip_sq": 0.39,
+                        "precip_tri": 0.45
+                    },
+                    "55PSI": {
+                        "radius": 35,
+                        "flow": 2.6,
+                        "precip_sq": 0.41,
+                        "precip_tri": 0.47
+                    },
+                    "65PSI": {
+                        "radius": 35,
+                        "flow": 2.9,
+                        "precip_sq": 0.46,
+                        "precip_tri": 0.53
+                    }
+                },
+                "3": {
+                    "25PSI": {
+                        "radius": 35,
+                        "flow": 2.2,
+                        "precip_sq": 0.35,
+                        "precip_tri": 0.4
+                    },
+                    "35PSI": {
+                        "radius": 36,
+                        "flow": 2.7,
+                        "precip_sq": 0.4,
+                        "precip_tri": 0.46
+                    },
+                    "45PSI": {
+                        "radius": 38,
+                        "flow": 3,
+                        "precip_sq": 0.4,
+                        "precip_tri": 0.46
+                    },
+                    "55PSI": {
+                        "radius": 39,
+                        "flow": 3.4,
+                        "precip_sq": 0.43,
+                        "precip_tri": 0.5
+                    },
+                    "65PSI": {
+                        "radius": 39,
+                        "flow": 3.7,
+                        "precip_sq": 0.47,
+                        "precip_tri": 0.54
+                    }
+                },
+                "4": {
+                    "25PSI": {
+                        "radius": 37,
+                        "flow": 3,
+                        "precip_sq": 0.42,
+                        "precip_tri": 0.49
+                    },
+                    "35PSI": {
+                        "radius": 39,
+                        "flow": 3.5,
+                        "precip_sq": 0.44,
+                        "precip_tri": 0.51
+                    },
+                    "45PSI": {
+                        "radius": 40,
+                        "flow": 4,
+                        "precip_sq": 0.48,
+                        "precip_tri": 0.56
+                    },
+                    "55PSI": {
+                        "radius": 41,
+                        "flow": 4.5,
+                        "precip_sq": 0.52,
+                        "precip_tri": 0.6
+                    },
+                    "65PSI": {
+                        "radius": 41,
+                        "flow": 4.8,
+                        "precip_sq": 0.55,
+                        "precip_tri": 0.63
+                    }
+                },
+                "5": {
+                    "25PSI": {
+                        "radius": 37,
+                        "flow": 3.7,
+                        "precip_sq": 0.52,
+                        "precip_tri": 0.6
+                    },
+                    "35PSI": {
+                        "radius": 39,
+                        "flow": 4.5,
+                        "precip_sq": 0.57,
+                        "precip_tri": 0.66
+                    },
+                    "45PSI": {
+                        "radius": 42,
+                        "flow": 5,
+                        "precip_sq": 0.55,
+                        "precip_tri": 0.63
+                    },
+                    "55PSI": {
+                        "radius": 42,
+                        "flow": 5.7,
+                        "precip_sq": 0.62,
+                        "precip_tri": 0.72
+                    },
+                    "65PSI": {
+                        "radius": 42,
+                        "flow": 6.2,
+                        "precip_sq": 0.68,
+                        "precip_tri": 0.78
+                    }
+                },
+                "6": {
+                    "25PSI": {
+                        "radius": 38,
+                        "flow": 4.3,
+                        "precip_sq": 0.57,
+                        "precip_tri": 0.66
+                    },
+                    "35PSI": {
+                        "radius": 40,
+                        "flow": 5.6,
+                        "precip_sq": 0.67,
+                        "precip_tri": 0.78
+                    },
+                    "45PSI": {
+                        "radius": 43,
+                        "flow": 6,
+                        "precip_sq": 0.62,
+                        "precip_tri": 0.72
+                    },
+                    "55PSI": {
+                        "radius": 44,
+                        "flow": 6.7,
+                        "precip_sq": 0.67,
+                        "precip_tri": 0.77
+                    },
+                    "65PSI": {
+                        "radius": 44,
+                        "flow": 7.3,
+                        "precip_sq": 0.73,
+                        "precip_tri": 0.84
+                    }
+                },
+                "8": {
+                    "25PSI": {
+                        "radius": 37,
+                        "flow": 6,
+                        "precip_sq": 0.84,
+                        "precip_tri": 0.97
+                    },
+                    "35PSI": {
+                        "radius": 41,
+                        "flow": 7,
+                        "precip_sq": 0.8,
+                        "precip_tri": 0.93
+                    },
+                    "45PSI": {
+                        "radius": 44,
+                        "flow": 8,
+                        "precip_sq": 0.8,
+                        "precip_tri": 0.92
+                    },
+                    "55PSI": {
+                        "radius": 46,
+                        "flow": 9,
+                        "precip_sq": 0.82,
+                        "precip_tri": 0.95
+                    },
+                    "65PSI": {
+                        "radius": 46,
+                        "flow": 9.8,
+                        "precip_sq": 0.89,
+                        "precip_tri": 1.03
+                    }
+                }
+            },
+            "low angle": {
+                "2": {
+                    "30PSI": {
+                        "radius": 25,
+                        "flow": 1.6,
+                        "precip_sq": 0.49,
+                        "precip_tri": 0.57
+                    },
+                    "40PSI": {
+                        "radius": 27,
+                        "flow": 1.9,
+                        "precip_sq": 0.5,
+                        "precip_tri": 0.58
+                    },
+                    "50PSI": {
+                        "radius": 28,
+                        "flow": 2.1,
+                        "precip_sq": 0.52,
+                        "precip_tri": 0.6
+                    },
+                    "60PSI": {
+                        "radius": 30,
+                        "flow": 2.3,
+                        "precip_sq": 0.49,
+                        "precip_tri": 0.57
+                    }
+                },
+                "2.5": {
+                    "30PSI": {
+                        "radius": 27,
+                        "flow": 2.1,
+                        "precip_sq": 0.55,
+                        "precip_tri": 0.64
+                    },
+                    "40PSI": {
+                        "radius": 30,
+                        "flow": 2.5,
+                        "precip_sq": 0.53,
+                        "precip_tri": 0.62
+                    },
+                    "50PSI": {
+                        "radius": 33,
+                        "flow": 2.8,
+                        "precip_sq": 0.49,
+                        "precip_tri": 0.57
+                    },
+                    "60PSI": {
+                        "radius": 35,
+                        "flow": 3,
+                        "precip_sq": 0.47,
+                        "precip_tri": 0.54
+                    }
+                },
+                "3.5": {
+                    "30PSI": {
+                        "radius": 29,
+                        "flow": 2.8,
+                        "precip_sq": 0.64,
+                        "precip_tri": 0.74
+                    },
+                    "40PSI": {
+                        "radius": 32,
+                        "flow": 3.1,
+                        "precip_sq": 0.58,
+                        "precip_tri": 0.67
+                    },
+                    "50PSI": {
+                        "radius": 35,
+                        "flow": 3.5,
+                        "precip_sq": 0.55,
+                        "precip_tri": 0.64
+                    }
+                },
+                "4.5": {
+                    "30PSI": {
+                        "radius": 29,
+                        "flow": 3.4,
+                        "precip_sq": 0.78,
+                        "precip_tri": 0.9
+                    },
+                    "40PSI": {
+                        "radius": 32,
+                        "flow": 3.9,
+                        "precip_sq": 0.73,
+                        "precip_tri": 0.85
+                    },
+                    "50PSI": {
+                        "radius": 35,
+                        "flow": 4.4,
+                        "precip_sq": 0.69,
+                        "precip_tri": 0.8
+                    },
+                    "60PSI": {
+                        "radius": 37,
+                        "flow": 4.7,
+                        "precip_sq": 0.66,
+                        "precip_tri": 0.76
+                    }
+                }
+            },
+            "high flow": {
+                "10": {
+                    "40PSI": {
+                        "radius": 43,
+                        "flow": 10.9,
+                        "precip_sq": 1.13,
+                        "precip_tri": 1.31
+                    },
+                    "50PSI": {
+                        "radius": 44,
+                        "flow": 12.3,
+                        "precip_sq": 1.22,
+                        "precip_tri": 1.41
+                    },
+                    "60PSI": {
+                        "radius": 45,
+                        "flow": 13.6,
+                        "precip_sq": 1.29,
+                        "precip_tri": 1.49
+                    },
+                    "70PSI": {
+                        "radius": 47,
+                        "flow": 14.8,
+                        "precip_sq": 1.29,
+                        "precip_tri": 1.49
+                    }
+                },
+                "13": {
+                    "40PSI": {
+                        "radius": 43,
+                        "flow": 10.9,
+                        "precip_sq": 1.13,
+                        "precip_tri": 1.31
+                    },
+                    "50PSI": {
+                        "radius": 44,
+                        "flow": 12.3,
+                        "precip_sq": 1.22,
+                        "precip_tri": 1.41
+                    },
+                    "60PSI": {
+                        "radius": 45,
+                        "flow": 13.6,
+                        "precip_sq": 1.29,
+                        "precip_tri": 1.49
+                    },
+                    "70PSI": {
+                        "radius": 47,
+                        "flow": 14.8,
+                        "precip_sq": 1.29,
+                        "precip_tri": 1.49
+                    }
+                },
+                "6": {
+                    "30PSI": {
+                        "radius": 31,
+                        "flow": 4.2,
+                        "precip_sq": 0.84,
+                        "precip_tri": 0.97
+                    },
+                    "40PSI": {
+                        "radius": 35,
+                        "flow": 5,
+                        "precip_sq": 0.79,
+                        "precip_tri": 0.91
+                    },
+                    "50PSI": {
+                        "radius": 37,
+                        "flow": 5.8,
+                        "precip_sq": 0.82,
+                        "precip_tri": 0.94
+                    },
+                    "60PSI": {
+                        "radius": 39,
+                        "flow": 6.3,
+                        "precip_sq": 0.8,
+                        "precip_tri": 0.92
+                    }
+                },
+                "8": {
+                    "40PSI": {
+                        "radius": 37,
+                        "flow": 6.7,
+                        "precip_sq": 0.94,
+                        "precip_tri": 1.09
+                    },
+                    "50PSI": {
+                        "radius": 39,
+                        "flow": 7.7,
+                        "precip_sq": 0.97,
+                        "precip_tri": 1.13
+                    },
+                    "60PSI": {
+                        "radius": 41,
+                        "flow": 8.5,
+                        "precip_sq": 0.97,
+                        "precip_tri": 1.12
+                    },
+                    "70PSI": {
+                        "radius": 41,
+                        "flow": 9.2,
+                        "precip_sq": 1.05,
+                        "precip_tri": 1.22
+                    }
+                }
+            },
+            "short radius": {
+                "0.5": {
+                    "30PSI": {
+                        "radius": 17,
+                        "flow": 0.36,
+                        "precip_sq": 0.24,
+                        "precip_tri": 0.28
+                    },
+                    "40PSI": {
+                        "radius": 17,
+                        "flow": 0.43,
+                        "precip_sq": 0.29,
+                        "precip_tri": 0.33
+                    },
+                    "50PSI": {
+                        "radius": 18,
+                        "flow": 0.5,
+                        "precip_sq": 0.3,
+                        "precip_tri": 0.34
+                    },
+                    "60PSI": {
+                        "radius": 19,
+                        "flow": 0.57,
+                        "precip_sq": 0.3,
+                        "precip_tri": 0.35
+                    }
+                },
+                "1": {
+                    "30PSI": {
+                        "radius": 17,
+                        "flow": 0.78,
+                        "precip_sq": 0.52,
+                        "precip_tri": 0.6
+                    },
+                    "40PSI": {
+                        "radius": 17,
+                        "flow": 0.9,
+                        "precip_sq": 0.6,
+                        "precip_tri": 0.69
+                    },
+                    "50PSI": {
+                        "radius": 18,
+                        "flow": 1,
+                        "precip_sq": 0.59,
+                        "precip_tri": 0.69
+                    },
+                    "60PSI": {
+                        "radius": 19,
+                        "flow": 1.1,
+                        "precip_sq": 0.59,
+                        "precip_tri": 0.68
+                    }
+                },
+                "2": {
+                    "30PSI": {
+                        "radius": 17,
+                        "flow": 1.4,
+                        "precip_sq": 0.93,
+                        "precip_tri": 1.08
+                    },
+                    "40PSI": {
+                        "radius": 17,
+                        "flow": 1.7,
+                        "precip_sq": 1.13,
+                        "precip_tri": 1.31
+                    },
+                    "50PSI": {
+                        "radius": 18,
+                        "flow": 2,
+                        "precip_sq": 1.19,
+                        "precip_tri": 1.37
+                    },
+                    "60PSI": {
+                        "radius": 19,
+                        "flow": 2.2,
+                        "precip_sq": 1.17,
+                        "precip_tri": 1.35
+                    }
+                },
+                "0.75": {
+                    "30PSI": {
+                        "radius": 23,
+                        "flow": 0.58,
+                        "precip_sq": 0.21,
+                        "precip_tri": 0.24
+                    },
+                    "40PSI": {
+                        "radius": 24,
+                        "flow": 0.68,
+                        "precip_sq": 0.23,
+                        "precip_tri": 0.26
+                    },
+                    "50PSI": {
+                        "radius": 25,
+                        "flow": 0.75,
+                        "precip_sq": 0.23,
+                        "precip_tri": 0.27
+                    },
+                    "60PSI": {
+                        "radius": 26,
+                        "flow": 0.83,
+                        "precip_sq": 0.24,
+                        "precip_tri": 0.27
+                    }
+                },
+                "1.5": {
+                    "30PSI": {
+                        "radius": 23,
+                        "flow": 1.1,
+                        "precip_sq": 0.4,
+                        "precip_tri": 0.46
+                    },
+                    "40PSI": {
+                        "radius": 24,
+                        "flow": 1.3,
+                        "precip_sq": 0.43,
+                        "precip_tri": 0.5
+                    },
+                    "50PSI": {
+                        "radius": 25,
+                        "flow": 1.5,
+                        "precip_sq": 0.46,
+                        "precip_tri": 0.53
+                    },
+                    "60PSI": {
+                        "radius": 26,
+                        "flow": 1.6,
+                        "precip_sq": 0.46,
+                        "precip_tri": 0.53
+                    }
+                },
+                "3": {
+                    "30PSI": {
+                        "radius": 23,
+                        "flow": 2.5,
+                        "precip_sq": 0.91,
+                        "precip_tri": 1.05
+                    },
+                    "40PSI": {
+                        "radius": 24,
+                        "flow": 2.7,
+                        "precip_sq": 0.9,
+                        "precip_tri": 1.04
+                    },
+                    "50PSI": {
+                        "radius": 25,
+                        "flow": 3,
+                        "precip_sq": 0.92,
+                        "precip_tri": 1.07
+                    },
+                    "60PSI": {
+                        "radius": 26,
+                        "flow": 3.1,
+                        "precip_sq": 0.88,
+                        "precip_tri": 1.02
+                    }
+                }
+            },
+            "mpr-25": {
+                "Q": {
+                    "25PSI":{
+                        "radius": 23,
+                        "flow": 0.74,
+                        "precip_sq": 0.54,
+                        "precip_tri": 0.62
+                    },
+                    "35PSI":{
+                        "radius": 24,
+                        "flow": 0.88,
+                        "precip_sq": 0.59,
+                        "precip_tri": 0.68
+                    },
+                    "45PSI":{
+                        "radius": 25,
+                        "flow": 1.0,
+                        "precip_sq": 0.62,
+                        "precip_tri": 0.71
+                    },
+                    "55PSI":{
+                        "radius": 25,
+                        "flow": 1.11,
+                        "precip_sq": 0.68,
+                        "precip_tri": 0.79
+                    },
+                    "65PSI":{
+                        "radius": 25,
+                        "flow": 1.21,
+                        "precip_sq": 0.75,
+                        "precip_tri": 0.86
+                    }
+                },
+                "T": {
+                    "25PSI":{
+                        "radius": 23,
+                        "flow": 1.0,
+                        "precip_sq": 0.55,
+                        "precip_tri": 0.63
+                    },
+                    "35PSI":{
+                        "radius": 24,
+                        "flow": 1.21,
+                        "precip_sq": 0.61,
+                        "precip_tri": 0.70
+                    },
+                    "45PSI":{
+                        "radius": 25,
+                        "flow": 1.38,
+                        "precip_sq": 0.64,
+                        "precip_tri": 0.74
+                    },
+                    "55PSI":{
+                        "radius": 25,
+                        "flow": 1.53,
+                        "precip_sq": 0.71,
+                        "precip_tri": 0.82
+                    },
+                    "65PSI":{
+                        "radius": 25,
+                        "flow": 1.67,
+                        "precip_sq": 0.77,
+                        "precip_tri": 0.89
+                    }
+                },
+                "H": {
+                    "25PSI":{
+                        "radius": 23,
+                        "flow": 1.44,
+                        "precip_sq": 0.52,
+                        "precip_tri": 0.61
+                    },
+                    "35PSI":{
+                        "radius": 24,
+                        "flow": 1.73,
+                        "precip_sq": 0.58,
+                        "precip_tri": 0.67
+                    },
+                    "45PSI":{
+                        "radius": 25,
+                        "flow": 1.98,
+                        "precip_sq": 0.61,
+                        "precip_tri": 0.70
+                    },
+                    "55PSI":{
+                        "radius": 25,
+                        "flow": 2.21,
+                        "precip_sq": 0.68,
+                        "precip_tri": 0.79
+                    },
+                    "65PSI":{
+                        "radius": 25,
+                        "flow": 2.41,
+                        "precip_sq": 0.74,
+                        "precip_tri": 0.86
+                    }
+                },
+                "F":{
+                    "25PSI":{
+                        "radius": 23,
+                        "flow": 2.78,
+                        "precip_sq": 0.51,
+                        "precip_tri": 0.58
+                    },
+                    "35PSI":{
+                        "radius": 24,
+                        "flow": 3.34,
+                        "precip_sq": 0.56,
+                        "precip_tri": 0.64
+                    },
+                    "45PSI":{
+                        "radius": 25,
+                        "flow": 3.82,
+                        "precip_sq": 0.59,
+                        "precip_tri": 0.68
+                    },
+                    "55PSI":{
+                        "radius": 25,
+                        "flow": 4.25,
+                        "precip_sq": 0.65,
+                        "precip_tri": 0.86
+                    },
+                    "65PSI":{
+                        "radius": 25,
+                        "flow": 4.63,
+                        "precip_sq": 0.71,
+                        "precip_tri": 0.82
+                    }
+                }
+            },
+            "mpr-30": {
+                "Q":{
+                    "25PSI":{
+                        "radius": 29,
+                        "flow": 1.03,
+                        "precip_sq": 0.47,
+                        "precip_tri": 0.54
+                    },
+                    "35PSI":{
+                        "radius": 30,
+                        "flow": 1.23,
+                        "precip_sq": 0.53,
+                        "precip_tri": 0.61
+                    },
+                    "45PSI":{
+                        "radius": 30,
+                        "flow": 1.40,
+                        "precip_sq": 0.60,
+                        "precip_tri": 0.77
+                    },
+                    "55PSI":{
+                        "radius": 30,
+                        "flow": 1.56,
+                        "precip_sq": 0.67,
+                        "precip_tri": 0.77
+                    },
+                    "65PSI":{
+                        "radius": 30,
+                        "flow": 1.69,
+                        "precip_sq": 0.72,
+                        "precip_tri": 0.83
+                    }
+                },
+                "T":{
+                    "25PSI":{
+                        "radius": 29,
+                        "flow": 1.34,
+                        "precip_sq": 0.46,
+                        "precip_tri": 0.53
+                    },
+                    "35PSI":{
+                        "radius": 30,
+                        "flow": 1.62,
+                        "precip_sq": 0.52,
+                        "precip_tri": 0.60
+                    },
+                    "45PSI":{
+                        "radius": 30,
+                        "flow": 1.85,
+                        "precip_sq": 0.59,
+                        "precip_tri": 0.69
+                    },
+                    "55PSI":{
+                        "radius": 30,
+                        "flow": 2.06,
+                        "precip_sq": 0.66,
+                        "precip_tri": 0.76
+                    },
+                    "65PSI":{
+                        "radius": 30,
+                        "flow": 2.24,
+                        "precip_sq": 0.72,
+                        "precip_tri": 0.83
+                    }
+                },
+                "H": {
+                    "25PSI":{
+                        "radius": 29,
+                        "flow": 2.15,
+                        "precip_sq": 0.49,
+                        "precip_tri": 0.57
+                    },
+                    "35PSI":{
+                        "radius": 30,
+                        "flow": 2.59,
+                        "precip_sq": 0.55,
+                        "precip_tri": 0.64
+                    },
+                    "45PSI":{
+                        "radius": 30,
+                        "flow": 2.96,
+                        "precip_sq": 0.63,
+                        "precip_tri": 0.73
+                    },
+                    "55PSI":{
+                        "radius": 30,
+                        "flow": 3.30,
+                        "precip_sq": 0.71,
+                        "precip_tri": 0.82
+                    },
+                    "65PSI":{
+                        "radius": 30,
+                        "flow": 3.60,
+                        "precip_sq": 0.71,
+                        "precip_tri": 0.89
+                    }
+                },
+                "F": {
+                    "25PSI":{
+                        "radius": 29,
+                        "flow": 4.24,
+                        "precip_sq": 0.49,
+                        "precip_tri": 0.56
+                    },
+                    "35PSI":{
+                        "radius": 30,
+                        "flow": 5.08,
+                        "precip_sq": 0.54,
+                        "precip_tri": 0.63
+                    },
+                    "45PSI":{
+                        "radius": 30,
+                        "flow": 5.78,
+                        "precip_sq": 0.62,
+                        "precip_tri": 0.71
+                    },
+                    "55PSI":{
+                        "radius": 30,
+                        "flow": 6.39,
+                        "precip_sq": 0.68,
+                        "precip_tri": 0.79
+                    },
+                    "65PSI":{
+                        "radius": 30,
+                        "flow": 6.92,
+                        "precip_sq": 0.74,
+                        "precip_tri": 0.85
+                    }
+                }
+            },
+            "mpr-35": {
+                "Q": {
+                    "25PSI":{
+                        "radius": 32,
+                        "flow": 1.40,
+                        "precip_sq": 0.53,
+                        "precip_tri": 0.61
+                    },
+                    "35PSI":{
+                        "radius": 34,
+                        "flow": 1.67,
+                        "precip_sq": 0.56,
+                        "precip_tri": 0.64
+                    },
+                    "45PSI":{
+                        "radius": 35,
+                        "flow": 1.92,
+                        "precip_sq": 0.60,
+                        "precip_tri": 0.70
+                    },
+                    "55PSI":{
+                        "radius": 35,
+                        "flow": 2.13,
+                        "precip_sq": 0.67,
+                        "precip_tri": 0.77
+                    },
+                    "65PSI":{
+                        "radius": 35,
+                        "flow": 2.31,
+                        "precip_sq": 0.73,
+                        "precip_tri": 0.84
+                    }
+                },
+                "T": {
+                    "25PSI":{
+                        "radius": 32,
+                        "flow": 1.77,
+                        "precip_sq": 0.50,
+                        "precip_tri": 0.58
+                    },
+                    "35PSI":{
+                        "radius": 34,
+                        "flow": 2.15,
+                        "precip_sq": 0.54,
+                        "precip_tri": 0.62
+                    },
+                    "45PSI":{
+                        "radius": 35,
+                        "flow": 2.46,
+                        "precip_sq": 0.58,
+                        "precip_tri": 0.67
+                    },
+                    "55PSI":{
+                        "radius": 35,
+                        "flow": 2.74,
+                        "precip_sq": 0.65,
+                        "precip_tri": 0.75
+                    },
+                    "65PSI":{
+                        "radius": 35,
+                        "flow": 2.99,
+                        "precip_sq": 0.70,
+                        "precip_tri": 0.81
+                    }
+                },
+                "H": {
+                    "25PSI":{
+                        "radius": 32,
+                        "flow": 2.75,
+                        "precip_sq": 0.52,
+                        "precip_tri": 0.60
+                    },
+                    "35PSI":{
+                        "radius": 34,
+                        "flow": 3.33,
+                        "precip_sq": 0.55,
+                        "precip_tri": 0.64
+                    },
+                    "45PSI":{
+                        "radius": 35,
+                        "flow": 3.81,
+                        "precip_sq": 0.60,
+                        "precip_tri": 0.69
+                    },
+                    "55PSI":{
+                        "radius": 35,
+                        "flow": 4.23,
+                        "precip_sq": 0.66,
+                        "precip_tri": 0.77
+                    },
+                    "65PSI":{
+                        "radius": 35,
+                        "flow": 4.62,
+                        "precip_sq": 0.73,
+                        "precip_tri": 0.84
+                    }
+                },
+                "F": {
+                    "25PSI":{
+                        "radius": 32,
+                        "flow": 5.36,
+                        "precip_sq": 0.50,
+                        "precip_tri": 0.58
+                    },
+                    "35PSI":{
+                        "radius": 34,
+                        "flow": 6.62,
+                        "precip_sq": 0.55,
+                        "precip_tri": 0.64
+                    },
+                    "45PSI":{
+                        "radius": 35,
+                        "flow": 7.58,
+                        "precip_sq": 0.60,
+                        "precip_tri": 0.69
+                    },
+                    "55PSI":{
+                        "radius": 35,
+                        "flow": 8.43,
+                        "precip_sq": 0.66,
+                        "precip_tri": 0.76
+                    },
+                    "65PSI":{
+                        "radius": 35,
+                        "flow": 9.18,
+                        "precip_sq": 0.72,
+                        "precip_tri": 0.83
+                    } 
+                }
+            }
+        }
+    }
 }
