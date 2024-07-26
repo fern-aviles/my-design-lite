@@ -3,7 +3,7 @@
         "name": "PGP Ultra",
         "fixedArc": false,
         "minArc": 50,
-        "maxArc": 270,
+        "maxArc": 360,
         "minRadius": 17,
         "maxRadius": 46,
         "performanceData": {
