@@ -108,7 +108,7 @@ export class Product extends Circle {
             maxArc: this.maxArc,
             fixedArc: this.fixedArc,
     };
-    
+
     // Create the Water instance
     this.water = new Water(temp, this);
 
@@ -246,28 +246,15 @@ export class Product extends Circle {
                   console.log(this.water.getArcAngle(), angle)
                   if(angle === "90" && this.water.getArcAngle() <= 90 && this.water.getArcAngle() >= 0 ){
                     this.nozzleOptions[key].text.set({stroke: 'black'});
-                    continue;
                   }
-                  else{
-                    this.nozzleOptions[key].text.set({stroke: 'red'});
-                  }
-                  if(angle === "120" && this.water.getArcAngle() <= 120 && this.water.getArcAngle() > 90 ){
+                  else if(angle === "120" && this.water.getArcAngle() <= 120 && this.water.getArcAngle() > 90 ){
                     this.nozzleOptions[key].text.set({stroke: 'black'});
-                    continue;
                   }
-                  else{
-                    this.nozzleOptions[key].text.set({stroke: 'red'});
-                  }
-                  if(angle === "180" && this.water.getArcAngle() <= 180 && this.water.getArcAngle() > 120 ){
+                  else if(angle === "180" && this.water.getArcAngle() <= 180 && this.water.getArcAngle() > 120 ){
                     this.nozzleOptions[key].text.set({stroke: 'black'});
-                    continue;
                   }
-                  else{
-                    this.nozzleOptions[key].text.set({stroke: 'red'});
-                  }
-                  if(angle === "360" && this.water.getArcAngle() <= 360 && this.water.getArcAngle() > 180 ){
+                  else if(angle === "360" && this.water.getArcAngle() <= 360 && this.water.getArcAngle() > 180 ){
                     this.nozzleOptions[key].text.set({stroke: 'black'});
-                    continue;
                   }
                   else{
                     this.nozzleOptions[key].text.set({stroke: 'red'});
