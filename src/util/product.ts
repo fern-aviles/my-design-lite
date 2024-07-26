@@ -108,6 +108,7 @@ export class Product extends Circle {
             maxArc: this.maxArc,
             fixedArc: this.fixedArc,
     };
+    
     // Create the Water instance
     this.water = new Water(temp, this);
 
@@ -122,11 +123,29 @@ export class Product extends Circle {
       'moving': () => {
         this.findNozzlesWithRadius(data, this.water.getRadius());
         this.deselectNozzle(this.water.getRadius());
-        },
-        'modified': () => {
+      },
+      'modified': () => {
           console.log(this.nozzleInfo);
+      },
+    });
+    this.water.startController.on({
+      'moving': () => {
+        this.findNozzlesWithRadius(data, this.water.getRadius());
+        this.deselectNozzle(this.water.getRadius());
         },
-      });
+      'modified': () => {
+        console.log(this.nozzleInfo);
+      },
+    });
+    this.water.endController.on({
+      'moving': () => {
+        this.findNozzlesWithRadius(data, this.water.getRadius());
+        this.deselectNozzle(this.water.getRadius());
+        },
+      'modified': () => {
+        console.log(this.nozzleInfo);
+      },
+    });
     this.on({
       'mousedblclick': () => {
         this.water.setConstraints({
@@ -220,18 +239,38 @@ export class Product extends Circle {
             if (targetRadius >= nozzleData.radius*.75 && targetRadius <= nozzleData.radius) {
               if(this.selectedNozzle !== key){
                 const angle = key.split(",")[1].slice(1, -1);
+
+                // If the nozzle works with angles only, then make sure to check
+                // only the ones that are within the range of the angles [0-90], [91-180], etc
                 if (key.split(",")[1].includes('°')){
+                  console.log(this.water.getArcAngle(), angle)
                   if(angle === "90" && this.water.getArcAngle() <= 90 && this.water.getArcAngle() >= 0 ){
                     this.nozzleOptions[key].text.set({stroke: 'black'});
+                    continue;
                   }
-                  else if(angle === "120" && this.water.getArcAngle() <= 120 && this.water.getArcAngle() > 90 ){
-                    this.nozzleOptions[key].text.set({stroke: 'black'});
+                  else{
+                    this.nozzleOptions[key].text.set({stroke: 'red'});
                   }
-                  else if(angle === "180" && this.water.getArcAngle() <= 180 && this.water.getArcAngle() > 120 ){
+                  if(angle === "120" && this.water.getArcAngle() <= 120 && this.water.getArcAngle() > 90 ){
                     this.nozzleOptions[key].text.set({stroke: 'black'});
+                    continue;
                   }
-                  else if(angle === "360" && this.water.getArcAngle() <= 360 && this.water.getArcAngle() > 180 ){
+                  else{
+                    this.nozzleOptions[key].text.set({stroke: 'red'});
+                  }
+                  if(angle === "180" && this.water.getArcAngle() <= 180 && this.water.getArcAngle() > 120 ){
                     this.nozzleOptions[key].text.set({stroke: 'black'});
+                    continue;
+                  }
+                  else{
+                    this.nozzleOptions[key].text.set({stroke: 'red'});
+                  }
+                  if(angle === "360" && this.water.getArcAngle() <= 360 && this.water.getArcAngle() > 180 ){
+                    this.nozzleOptions[key].text.set({stroke: 'black'});
+                    continue;
+                  }
+                  else{
+                    this.nozzleOptions[key].text.set({stroke: 'red'});
                   }
                 }
                 else{
