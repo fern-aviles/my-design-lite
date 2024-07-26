@@ -238,11 +238,14 @@ export class Product extends Circle {
             // Check if the targetRadius is within the range of the current nozzle
             if (targetRadius >= nozzleData.radius*.75 && targetRadius <= nozzleData.radius) {
               if(this.selectedNozzle !== key){
-                const angle = key.split(",")[1].slice(1, -1);
-                let arcAngle = this.water.getArcAngle()
+                const angles: any = {"H": "180", "Q": "90", "T": "120", "F": "360"};
+                let angle = key.split(", ")[1];
+                let arcAngle = this.water.getArcAngle();
+
                 // If the nozzle works with angles only, then make sure to check
                 // only the ones that are within the range of the angles [0-90], [91-180], etc
-                if (key.split(",")[1].includes('°')){
+                if ("HQTF".includes(angle)){
+                  angle = angles[angle];
                   if((angle === "90" && arcAngle <= 90 && arcAngle >= 0) ||
                      (angle === "120" && arcAngle <= 120 && arcAngle > 90) ||
                      (angle === "180" && arcAngle <= 180 && arcAngle > 120) ||
@@ -290,10 +293,11 @@ export class Product extends Circle {
         });
         this.nozzleInfo = "No nozzle selected";
     }
-    let angle = this.selectedNozzle.split(', ')[1];
-    let arcAngle = this.water.getArcAngle()
-    if(angle.includes("°")){
-      angle = angle.slice(0, -1);
+    const angles: any = {"H": "180", "Q": "90", "T": "120", "F": "360"};
+    let angle = this.selectedNozzle?.split(', ')[1];
+    let arcAngle = this.water.getArcAngle();
+    if("HTQF".includes(angle)){
+      angle = angles[angle];
       if((!(angle === "90" && arcAngle <= 90 && arcAngle >= 0) &&
           !(angle === "120" && arcAngle <= 120 && arcAngle > 90) &&
           !(angle === "180" && arcAngle <= 180 && arcAngle > 120) &&
@@ -306,9 +310,6 @@ export class Product extends Circle {
               minRadius: this.minRadius
             });
             this.nozzleInfo = "No nozzle selected";
-
-      }
-      else{
       }
     }
   }
