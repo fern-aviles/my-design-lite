@@ -1,5 +1,15 @@
 <template>
   <div>
+    <p> Enter PSI: </p>
+    <input v-model="pressure" placeholder="45">
+
+    <p> Select Product </p>
+    <select v-model="product">
+      <option v-for="option in options" :value="option.value">
+        {{ option.text }}
+      </option>
+    </select>
+
     <canvas ref="canvas" width="1600" height="1200"></canvas>
   </div>
 </template>
@@ -13,10 +23,17 @@
   let c = null;
   let waterScale = 20;
 
+  const pressure = ref('45');
+  const product = ref('461006');
+  const options = ref([
+    { text: 'PGP Ultra', value: '862' },
+    { text: 'MP Rotator', value: '461006' }
+  ]);
 
   const createRotor = (e) => {
     const rotor = new Product({
-      productID: '461006',
+      productID: product.value,
+      pressure: pressure.value + "PSI",
       left: e.offsetX,
       top: e.offsetY,
       canvas: c,
@@ -51,3 +68,9 @@
   c.renderAll();
   });
 </script>
+
+<style>
+p{
+  display: inline;
+}
+</style>

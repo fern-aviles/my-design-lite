@@ -107,8 +107,9 @@ export class Product extends Circle {
     this.nozzleOptions = [];
     this.selectedNozzle = null;
     this.nozzleInfo = "No nozzle selected";
-    this.pressure = this.data[this.productID].recPressure;
+    this.pressure = waterOptions.pressure || this.data[this.productID].recPressure;
     console.log(this.name);
+    console.log("Selected Pressure:", this.pressure)
     waterOptions.minRadius = this.minRadius;
     waterOptions.maxRadius = this.maxRadius;
     waterOptions.minArc = this.minArc;
@@ -350,6 +351,8 @@ export class Product extends Circle {
     // Finding suitable pressure
     let pressures = Object.keys(nozzle.data.angles[key]);
     const closestPressure = this.roundPressure(pressures);
+
+    console.log(closestPressure)
 
     // Selecting and outputting nozzle information
     this.selectedNozzle = e.target.text;
