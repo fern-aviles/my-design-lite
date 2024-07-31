@@ -2,34 +2,54 @@ import { Circle, FabricText, type TOriginX, type TOriginY } from 'fabric';
 import { Water } from './water';
 import data from "./data.json";
 
-export interface NozzleData {
+
+interface AngleDetails {
   radius: number;
-  flow: number;
+  gpm: number;
   precip_sq: number;
   precip_tri: number;
+  gph?: number;
 }
 
-export interface PerformanceData {
-  [nozzleNumber: string]: {
-    [pressure: string]: NozzleData;
+interface Angles {
+  [angle: string]: {
+    [pressure: string]: AngleDetails;
   };
 }
 
-export interface ProductInfo {
+interface NozzleModel {
+  minArc: number;
+  maxArc: number;
+  minRadius: number;
+  maxRadius: number;
+  arcSettings: { [arc: string]: number };
+  angles: Angles;
+}
+
+interface NozzleTypes {
+  [model: string]: NozzleModel;
+}
+
+interface Nozzles {
+  [type: string]: {
+    model: NozzleTypes;
+  };
+}
+
+interface ProductType {
   name: string;
   fixedArc: boolean;
   minArc: number;
   maxArc: number;
   minRadius: number;
   maxRadius: number;
-  performanceData: {
-    standard: PerformanceData;
-    [key: string]: PerformanceData;
-  };
+  recPressure: string;
+  omittedRanges: any;
+  nozzles: Nozzles;
 }
 
-export interface ProductData {
-  [productId: string]: ProductInfo;
+interface Products {
+  [productID: string]: ProductType;
 }
 
 
@@ -42,7 +62,7 @@ export interface ProductData {
  */
 export class Product extends Circle {
   text: FabricText;
-  data: ProductData;
+  data: any;
   water: Water;
   name: string;
   productID: string;
@@ -53,7 +73,7 @@ export class Product extends Circle {
   fixedArc: boolean;
   nozzleOptions: any;
   selectedNozzle: any;
-  pressure: number;
+  pressure: string;
   nozzleInfo: string;
 
   /**
@@ -87,7 +107,7 @@ export class Product extends Circle {
     this.nozzleOptions = [];
     this.selectedNozzle = null;
     this.nozzleInfo = "No nozzle selected";
-    this.pressure = 40;
+    this.pressure = this.data[this.productID].recPressure;
     console.log(this.name);
     waterOptions.minRadius = this.minRadius;
     waterOptions.maxRadius = this.maxRadius;
@@ -117,12 +137,12 @@ export class Product extends Circle {
       top: 0,
       fontSize: 25,
     });
-    this.createNozzlesDictionary(data);
-    this.findNozzlesWithRadius(data, this.minRadius);
+    this.createNozzlesDictionary(this.data);
+    this.findNozzlesWithRadius(this.data, this.minRadius);
     this.water.midController.on({
       'moving': () => {
-        this.findNozzlesWithRadius(data, this.water.getRadius());
-        this.deselectNozzle(this.water.getRadius());
+        this.findNozzlesWithRadius(this.data, this.water.getRadius());
+        this.deselectNozzle(this.water.getRadius(), this.water.getArcAngle());
       },
       'modified': () => {
           console.log(this.nozzleInfo);
@@ -130,8 +150,8 @@ export class Product extends Circle {
     });
     this.water.startController.on({
       'moving': () => {
-        this.findNozzlesWithRadius(data, this.water.getRadius());
-        this.deselectNozzle(this.water.getRadius());
+        this.findNozzlesWithRadius(this.data, this.water.getRadius());
+        this.deselectNozzle(this.water.getRadius(), this.water.getArcAngle());
         },
       'modified': () => {
         console.log(this.nozzleInfo);
@@ -139,8 +159,8 @@ export class Product extends Circle {
     });
     this.water.endController.on({
       'moving': () => {
-        this.findNozzlesWithRadius(data, this.water.getRadius());
-        this.deselectNozzle(this.water.getRadius());
+        this.findNozzlesWithRadius(this.data, this.water.getRadius());
+        this.deselectNozzle(this.water.getRadius(), this.water.getArcAngle());
         },
       'modified': () => {
         console.log(this.nozzleInfo);
@@ -160,111 +180,104 @@ export class Product extends Circle {
 
   /**
    * Iterates through the data to make a nozzles dictionary
-   * @param {ProductData} data 
+   * @param {Products} data 
    * 
    * @returns {null}
    */
-  createNozzlesDictionary(data: ProductData){
+  createNozzlesDictionary(data: Products): void{
     let xOffset = 0;
     let yOffset = 30;
+    const id = this.productID;
+    const nozzles = data[id].nozzles;
 
-    // Iterate through the data to populate a nozzleOptions
-    for (const productId in data) {
-      const product = data[productId];
-      for (const performanceType in product.performanceData) {
-        const performanceData = product.performanceData[performanceType];
-        for (const nozzleNumber in performanceData) {
-          const pressures = performanceData[nozzleNumber];
-          for (const pressure in pressures) {
-            const nozzleData = pressures[pressure];
-            const key = `${performanceType}, ${nozzleNumber}, ${pressure}`;
-            this.nozzleOptions[key] = {
-              show: false,
-              data: nozzleData, 
-              text: new FabricText(`${key}`, {
-                left: xOffset,
-                top: yOffset,
-                fontSize: 15,
-                lockMovementX: true,
-                lockMovementY: true,
-                hasControls: false,
-              })
-            };
-              yOffset += 15;
-              if(yOffset+30 > this.water.canvas.getHeight()) {
-                yOffset = 0;
-                xOffset += 150;
-              }
-
-              // Add event listeners to text to see which nozzle is selected
-              this.nozzleOptions[key].text.on('mousedown', () => {
-                this.nozzleOptions[key].text.set({stroke: 'green'});
-                this.selectedNozzle = key;
-                let scale = 180/this.water.getArcAngle();
-                if (this.selectedNozzle.includes("°")){
-                  scale = 1;
-                }
-                this.nozzleInfo = `Nozzle selected: ${performanceType} ${nozzleNumber} @ ${pressure}\n` +
-                  `Flow: ${nozzleData.flow} GPM, ` +
-                  `Square Precip: ${(nozzleData.precip_sq*scale).toFixed(2)} in/hr, ` +
-                  `Triangle Precip: ${(nozzleData.precip_tri*scale).toFixed(2)} in/hr`;
-                console.log(this.nozzleInfo);
-              });
-              this.water.canvas.add(this.nozzleOptions[key].text);
-          }
+    for(let nozzle in nozzles){ 
+      const numbers = nozzles[nozzle].model;
+      for(let number in numbers){ 
+        const pressures = numbers[number];
+        const key = `${nozzle}, ${number}`;
+        this.nozzleOptions[key] = {
+          show: false,
+          number: number,
+          data: pressures, 
+          pressure: this.pressure,
+          arcSettings: pressures.arcSettings,
+          minArc: pressures.minArc || 0,
+          maxArc: pressures.maxArc || 360,
+          text: new FabricText(`${key}`, {
+            left: xOffset,
+            top: yOffset,
+            fontSize: 15,
+            lockMovementX: true,
+            lockMovementY: true,
+            hasControls: false,
+            stroke: "red",
+          })
+        };
+        yOffset += 15;
+        if(yOffset+30 > this.water.canvas.getHeight()) {
+          yOffset = 0;
+          xOffset += 175;
         }
+        
+        // Add event listeners to text to see which nozzle is selected
+        this.nozzleOptions[key].text.on('mousedown', (e: any) => {
+          this.selectNozzleSettings(e);
+          this.nozzleOptions[key].text.set({stroke: 'green'});
+          console.log(this.nozzleInfo);
+        });
+        this.water.canvas.add(this.nozzleOptions[key].text);
       }
     }
   }
 
   /**
    * Iterates through the data to find the nozzles available to use
-   * @param {ProductData} data 
+   * @param {Products} data 
    * @param {number} targetRadius 
    * 
    * @returns {null}
    */
-  findNozzlesWithRadius(data: ProductData, targetRadius: number): void {
-    for (const productId in data) {
-      const product = data[productId];
-      for (const performanceType in product.performanceData) {
-        const performanceData = product.performanceData[performanceType];
-        for (const nozzleNumber in performanceData) {
-          const pressures = performanceData[nozzleNumber];
-          for (const pressure in pressures) {
-            const nozzleData = pressures[pressure];
-            const key = `${performanceType}, ${nozzleNumber}, ${pressure}`
+  findNozzlesWithRadius(data: Products, targetRadius: number): void {
+    const id = this.productID;
+    const nozzles = data[id].nozzles;
+    for(let nozzle in nozzles){
+      const numbers = nozzles[nozzle].model;
+      for(let number in numbers){
+        const key = `${nozzle}, ${number}`;
 
-            // Check if the targetRadius is within the range of the current nozzle
-            if (targetRadius >= nozzleData.radius*.75 && targetRadius <= nozzleData.radius) {
-              if(this.selectedNozzle !== key){
-                const angles: any = {"H": "180", "Q": "90", "T": "120", "F": "360"};
-                let angle = key.split(", ")[1];
-                let arcAngle = this.water.getArcAngle();
+        const pressures = numbers[number];
+        let prefPressure = null;
+        let tempKey = number; 
+        if (Object.keys(pressures.angles).length === 1){
+          tempKey = Object.keys(pressures.angles)[0];
+        }
+        prefPressure = this.roundPressure(Object.keys(pressures.angles[tempKey]));
 
-                // If the nozzle works with angles only, then make sure to check
-                // only the ones that are within the range of the angles [0-90], [91-180], etc
-                if ("HQTF".includes(angle)){
-                  angle = angles[angle];
-                  if((angle === "90" && arcAngle <= 90 && arcAngle >= 0) ||
-                     (angle === "120" && arcAngle <= 120 && arcAngle > 90) ||
-                     (angle === "180" && arcAngle <= 180 && arcAngle > 120) ||
-                     (angle === "360" && arcAngle <= 360 && arcAngle > 180)){
-                         this.nozzleOptions[key].text.set({stroke: 'black'});
-                  }
-                  else{
-                    this.nozzleOptions[key].text.set({stroke: 'red'});
-                  }
-                }
-                else{
-                  this.nozzleOptions[key].text.set({stroke: 'black'});
-                }
-              }
+        // Setting a new pressure in case the nozzle doesn't 
+        // have the same pressure availble
+        this.nozzleOptions[key].pressure = prefPressure;
+
+        const radius = pressures.angles[tempKey][prefPressure].radius;
+
+        // Check if targetRadius is within the range of the current nozzle
+        if (targetRadius >= radius*.75 &&
+            targetRadius <= radius) {
+          if(this.selectedNozzle !== key){
+            
+            // Check if the arcAngle is within min and max arc
+            let arcAngle = this.water.getArcAngle();
+            let minArc = pressures.minArc;
+            let maxArc = pressures.maxArc;
+            if (arcAngle <= maxArc && arcAngle >= minArc){
+              this.nozzleOptions[key].text.set({stroke: 'black'});
             }
             else{
-              this.nozzleOptions[key].text.set({stroke: 'red'})
+              this.nozzleOptions[key].text.set({stroke: 'red'});
             }
           }
+        }
+        else{
+          this.nozzleOptions[key].text.set({stroke: 'red'});
         }
       }
     }
@@ -275,43 +288,126 @@ export class Product extends Circle {
    * within its range.
    * 
    * @param {number} radius 
-   * 
    * @returns {null}
    */
-  deselectNozzle(radius: number){
+  deselectNozzle(radius: number, angle: number): void{
     if(!this.selectedNozzle){
-      return
+      return;
     }
-    const nozzleRadius = this.nozzleOptions[this.selectedNozzle].data.radius;
-    if(this.selectedNozzle && (radius > nozzleRadius || nozzleRadius*.75 > radius)){
-        this.selectedNozzle = null;
-        this.water.setConstraints({
-          maxArc: this.maxArc,
-          minArc: this.minArc,
-          maxRadius: this.maxRadius,
-          minRadius: this.minRadius
-        });
-        this.nozzleInfo = "No nozzle selected";
+    let deselect = false;
+    const nozzle = this.nozzleOptions[this.selectedNozzle];
+
+    // Access current PSI settings
+    const angleOptions = nozzle.data.angles;
+    const pressure = nozzle.pressure;
+    let number = nozzle.number;
+    if (Object.keys(angleOptions).length === 1){
+      number = Object.keys(angleOptions)[0];
     }
-    const angles: any = {"H": "180", "Q": "90", "T": "120", "F": "360"};
-    let angle = this.selectedNozzle?.split(', ')[1];
-    let arcAngle = this.water.getArcAngle();
-    if("HTQF".includes(angle)){
-      angle = angles[angle];
-      if((!(angle === "90" && arcAngle <= 90 && arcAngle >= 0) &&
-          !(angle === "120" && arcAngle <= 120 && arcAngle > 90) &&
-          !(angle === "180" && arcAngle <= 180 && arcAngle > 120) &&
-          !(angle === "360" && arcAngle <= 360 && arcAngle > 180))){
-            this.selectedNozzle = null;
-            this.water.setConstraints({
-              maxArc: this.maxArc,
-              minArc: this.minArc,
-              maxRadius: this.maxRadius,
-              minRadius: this.minRadius
-            });
-            this.nozzleInfo = "No nozzle selected";
-      }
+
+    // Check if the current radius is within the selected 
+    // nozzle at pressure's radius
+    const nozzleRadius = angleOptions[number][pressure].radius;
+    if(radius > nozzleRadius || nozzleRadius*.75 > radius){
+      deselect = true;
+    }
+
+    // Checking if the angle of the current arc
+    // is greater than the nozzle's minArc or 
+    // is less than the maxArc
+    let minArc = nozzle.minArc || 0;
+    let maxArc = nozzle.maxArc || 360;
+    if (minArc > angle || angle > maxArc){
+      deselect = true;
+    }
+
+    if (deselect){
+      this.selectedNozzle = null;
+      this.water.setConstraints({
+        maxArc: this.maxArc,
+        minArc: this.minArc,
+        maxRadius: this.maxRadius,
+        minRadius: this.minRadius,
+      });
+      this.nozzleInfo = "No nozzle selected";
     }
   }
 
+
+  /**
+   * Selects the settings that are appropriate
+   * according to the arc's configuration
+   * @param e 
+   */
+  selectNozzleSettings(e: any): void{
+    let nozzle = this.nozzleOptions[e.target.text];
+
+    // Finding the best nozzle setting according 
+    // to the arc's angle
+    let angles = nozzle.arcSettings;
+    const key = this.roundAngle(Object.keys(angles));
+
+    // Finding suitable pressure
+    let pressures = Object.keys(nozzle.data.angles[key]);
+    const closestPressure = this.roundPressure(pressures);
+
+    // Selecting and outputting nozzle information
+    this.selectedNozzle = e.target.text;
+    let gpm = nozzle.data.angles[key][closestPressure].gpm;
+    let precip_sq = nozzle.data.angles[key][closestPressure].precip_sq;
+    let precip_tri = nozzle.data.angles[key][closestPressure].precip_tri;
+    this.nozzleInfo = 
+      `Nozzle selected: ${this.selectedNozzle}\n` +
+      `Flow: ${gpm} GPM, ` +
+      `Square Precip: ${(precip_sq).toFixed(2)} in/hr, ` +
+      `Triangle Precip: ${(precip_tri).toFixed(2)} in/hr`;
+  }
+
+
+  /**
+   * Rounds the pressure up or down depending on
+   * which one it is closer to.
+   * @param pressures string array of pressures
+   * @returns {string}
+   */
+  roundPressure(pressures: string[]): string{
+    let closestPressure = pressures[0];
+    let closestNumber = parseInt(pressures[0]);
+    let minDifference = Math.abs(parseInt(this.pressure) - closestNumber);
+    for (let i = 1; i < pressures.length; i++) {
+      const currentNumber = parseInt(pressures[i]);
+      const currentDifference = Math.abs(parseInt(this.pressure) - currentNumber);
+      if (currentDifference < minDifference) {
+        closestPressure = pressures[i];
+        minDifference = currentDifference;
+      }
+    }
+    return closestPressure;
+  }
+
+
+  /**
+   * Rounds the angle up or down depending on
+   * which one it is closer to.
+   * @param angles string array of angles
+   * @returns {string}
+   */
+  roundAngle(angles: string[]): string{
+    if(angles[0] === "0" && angles[1] === "360"){
+      return "360"
+    }
+    const angle = this.water.getArcAngle();
+    let closestPressure = angles[0];
+    let closestNumber = parseInt(angles[0]);
+    let minDifference = Math.abs(angle - closestNumber);
+    for (let i = 1; i < angles.length; i++) {
+      const currentNumber = parseInt(angles[i]);
+      const currentDifference = Math.abs(angle - currentNumber);
+      if (currentDifference < minDifference) {
+        closestPressure = angles[i];
+        minDifference = currentDifference;
+      }
+    }
+    return closestPressure;
+  }
 }
