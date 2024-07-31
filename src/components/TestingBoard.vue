@@ -13,9 +13,10 @@
   let c = null;
   let waterScale = 20;
 
+
   const createRotor = (e) => {
     const rotor = new Product({
-      productID: '862',
+      productID: '461006',
       left: e.offsetX,
       top: e.offsetY,
       canvas: c,
@@ -41,7 +42,7 @@
     originX: 'center',
     fontSize: 15,
   });
-  c.add(line, scaleText)
+  c.add(line, scaleText);
   c.on('mouse:up', (options) => {
       if(options.isClick && (!options.target || options.target instanceof Water)){
         createRotor(options.e);
