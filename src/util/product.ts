@@ -72,7 +72,7 @@ export class Product extends Circle {
   maxArc: number;
   fixedArc: boolean;
   nozzleOptions: any;
-  selectedNozzle: any;
+  selectedNozzle: string;
   pressure: string;
   nozzleInfo: string;
 
@@ -104,8 +104,8 @@ export class Product extends Circle {
     this.minArc = this.data[this.productID].minArc;
     this.maxArc = this.data[this.productID].maxArc;
     this.fixedArc = this.data[this.productID].fixedArc;
-    this.nozzleOptions = [];
-    this.selectedNozzle = null;
+    this.nozzleOptions = {};
+    this.selectedNozzle = "";
     this.nozzleInfo = "No nozzle selected";
     this.pressure = waterOptions.pressure || this.data[this.productID].recPressure;
     console.log(this.name);
@@ -146,7 +146,7 @@ export class Product extends Circle {
         this.deselectNozzle(this.water.getRadius(), this.water.getArcAngle());
       },
       'modified': () => {
-          console.log(this.nozzleInfo);
+        console.log(this.nozzleInfo);
       },
     });
     this.water.startController.on({
@@ -169,6 +169,7 @@ export class Product extends Circle {
     });
     this.on({
       'mousedblclick': () => {
+        console.log(this)
         this.water.setConstraints({
           maxArc: this.maxArc,
           minArc: this.minArc,
@@ -211,6 +212,7 @@ export class Product extends Circle {
             lockMovementX: true,
             lockMovementY: true,
             hasControls: false,
+            selectable: false,
             stroke: "red",
           })
         };
@@ -224,7 +226,7 @@ export class Product extends Circle {
         this.nozzleOptions[key].text.on('mousedown', (e: any) => {
           this.selectNozzleSettings(e);
           this.nozzleOptions[key].text.set({stroke: 'green'});
-          console.log(this.nozzleInfo);
+          console.log(this.selectedNozzle, this.nozzleInfo);
         });
         this.water.canvas.add(this.nozzleOptions[key].text);
       }
@@ -271,13 +273,16 @@ export class Product extends Circle {
             let maxArc = pressures.maxArc;
             if (arcAngle <= maxArc && arcAngle >= minArc){
               this.nozzleOptions[key].text.set({stroke: 'black'});
+              this.nozzleOptions[key].show = true;
             }
             else{
               this.nozzleOptions[key].text.set({stroke: 'red'});
+              this.nozzleOptions[key].show = false;
             }
           }
         }
         else{
+          this.nozzleOptions[key].show = false;
           this.nozzleOptions[key].text.set({stroke: 'red'});
         }
       }
@@ -323,7 +328,8 @@ export class Product extends Circle {
     }
 
     if (deselect){
-      this.selectedNozzle = null;
+
+      this.selectedNozzle = "";
       this.water.setConstraints({
         maxArc: this.maxArc,
         minArc: this.minArc,
@@ -342,6 +348,9 @@ export class Product extends Circle {
    */
   selectNozzleSettings(e: any): void{
     let nozzle = this.nozzleOptions[e.target.text];
+    if (e instanceof Object){
+
+    }
 
     // Finding the best nozzle setting according 
     // to the arc's angle
@@ -412,5 +421,32 @@ export class Product extends Circle {
       }
     }
     return closestPressure;
+  }
+
+  setNozzle(e: string){ 
+    this.selectedNozzle = e    
+    let nozzle = this.nozzleOptions[e];
+    
+    let angles = nozzle.arcSettings;
+    const key = this.roundAngle(Object.keys(angles));
+
+    // Finding suitable pressure
+    let pressures = Object.keys(nozzle.data.angles[key]);
+    const closestPressure = this.roundPressure(pressures);
+
+    // Selecting and outputting nozzle information
+    this.selectedNozzle = e;
+    let gpm = nozzle.data.angles[key][closestPressure].gpm;
+    let precip_sq = nozzle.data.angles[key][closestPressure].precip_sq;
+    let precip_tri = nozzle.data.angles[key][closestPressure].precip_tri;
+    this.nozzleInfo = 
+      `Nozzle selected: ${this.selectedNozzle}\n` +
+      `Flow: ${gpm} GPM, ` +
+      `Square Precip: ${(precip_sq).toFixed(2)} in/hr, ` +
+      `Triangle Precip: ${(precip_tri).toFixed(2)} in/hr`;
+  }
+
+  getSelectedNozzle(){
+    return this.selectedNozzle
   }
 }
