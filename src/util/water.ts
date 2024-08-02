@@ -95,6 +95,7 @@ export class Water extends Path {
       hasBorders: false,
       selectable: true,
       controllerType: 'end',
+      water: this,
     });
 
     const startControlXY = this.getPointOnCircumference(this.radius, util.degreesToRadians(startAngle));
@@ -109,6 +110,7 @@ export class Water extends Path {
       hasBorders: false,
       selectable: true,
       controllerType: 'start',
+      water: this,
     });
 
     const midAngle = this.computeMidAngle(startAngle, endAngle);
@@ -125,6 +127,7 @@ export class Water extends Path {
       hasBorders: false,
       selectable: true,
       controllerType: 'mid',
+      water: this,
     });
 
     // Add info line
