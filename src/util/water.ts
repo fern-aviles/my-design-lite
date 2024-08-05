@@ -26,6 +26,9 @@ export class Water extends Path {
   fixedArc: boolean;
   waterScale: number;
   distance: number;
+  omittedAngles: any;
+  lock: boolean = false; 
+  lock2: boolean = false;
 
   declare canvas: Canvas;
   /**
@@ -80,6 +83,7 @@ export class Water extends Path {
     this.fixedArc = options.fixedArc;
     this.midAngle = 0;
     this.sweepAngle = this.getSweepAngle(startAngle, endAngle);
+    this.omittedAngles = [[270, 360]];
     this.set({left: centerX, top: centerY});
     
     // Add control circles
@@ -246,60 +250,23 @@ export class Water extends Path {
     const centerX = this.getCenterPoint().x,
           centerY = this.getCenterPoint().y;
     let angle = Math.atan2(y - centerY, x - centerX) * (180 / Math.PI);
-
     // Normalize angle
-    angle = angle >= 0 ? angle : 360 + angle;
+    angle = this.normalizeAngle(angle, false)
 
-    // Snap to full circle
-    let sweepAngle = util.radiansToDegrees(this.sweepAngle);
-    let prevAngle = angle;
-    if((0 <= sweepAngle && sweepAngle <= 5) || (sweepAngle <= 360 && sweepAngle >= 355)){
-      if(control.controllerType === 'end'){
-        angle = this.startAngle-.01;
-        if(Math.abs(prevAngle - this.startAngle) >= 5 && Math.abs(prevAngle - this.startAngle) <= 355){
-          angle = prevAngle;
-        }
-      }
-      else{
-        angle = this.endAngle+.01;
-        if(Math.abs(prevAngle - this.endAngle) >= 5 && Math.abs(prevAngle - this.endAngle) <= 355){
-          angle = prevAngle;
-        }
-      }
-    }
+    
+    // Check for minimum and maximum arcs
+    angle = this.checkOmittedAngles(angle, control.controllerType);
+
+    // Check for minimum and maximum arcs
+    angle = this.checkArcSettings(angle, control.controllerType)
 
     // Check what controller is being used based on the controllerType
     // and make sure it's within the specifications
     if (control.controllerType === 'end'){
-      const newEndAngle = angle;
-      this.sweepAngle = util.radiansToDegrees(this.getSweepAngle(this.startAngle, newEndAngle));
-
-      // Check if the new angle is within the allowed range
-      if (this.sweepAngle > this.maxArc) {
-        this.endAngle = this.normalizeAngle(this.startAngle + this.maxArc, false);
-      }
-      else if (this.sweepAngle < this.minArc){
-        this.endAngle = this.normalizeAngle(this.startAngle + this.minArc, false);
-      }
-      else {
-        this.endAngle = this.normalizeAngle(newEndAngle, false);
-      }
+        this.endAngle = this.normalizeAngle(angle, false);
     }
     else if (control.controllerType === 'start'){
-      const newStartAngle = angle;
-      this.sweepAngle = util.radiansToDegrees(this.getSweepAngle(newStartAngle, this.endAngle));
-
-      // Check if the new angle is within the allowed range
-      if (this.sweepAngle > this.maxArc) {
-        // 
-        this.startAngle = this.normalizeAngle(this.endAngle - this.maxArc, false);
-      }
-      else if (this.sweepAngle < this.minArc){
-        this.startAngle = this.normalizeAngle(this.endAngle - this.minArc, false);
-      }
-      else {
-        this.startAngle = this.normalizeAngle(newStartAngle, false);
-      }
+        this.startAngle = this.normalizeAngle(angle, false);
     }
 
     // Calculate sweep angle
@@ -318,6 +285,109 @@ export class Water extends Path {
     this.setCoords();
     this.showControls(true);
     this.canvas.renderAll();
+  }
+
+  /**
+   * Checks the water object is not under the minimum or 
+   * over the maximum arc angle
+   * @param angle 
+   * @param control 
+   * @returns 
+   */
+  checkArcSettings(angle: number, control: string): number{
+    let sweepAngle;
+    if(control === "start"){
+      sweepAngle = this.getSweepAngle(angle, this.endAngle) * (180/Math.PI)
+      if (sweepAngle < this.minArc){
+        angle = this.endAngle - this.minArc;
+      }
+      else if (sweepAngle > this.maxArc){
+        angle = this.endAngle - this.maxArc;
+      }
+
+      if ((0 <= sweepAngle && sweepAngle <= 5) || (355 <= sweepAngle && sweepAngle <= 360)){
+        angle = this.endAngle +.001
+      }
+    }
+    if(control === "end"){
+      sweepAngle = this.getSweepAngle(this.startAngle, angle) * (180/Math.PI)
+      if (sweepAngle < this.minArc){
+        angle = this.startAngle + this.minArc;
+      }
+      else if (sweepAngle > this.maxArc){
+        angle = this.startAngle + this.maxArc;
+      }
+
+      if ((0 <= sweepAngle && sweepAngle <= 5) || (355 <= sweepAngle && sweepAngle <= 360)){
+        angle = this.startAngle - .001
+      }
+    }
+    
+    return this.normalizeAngle(angle, false);
+  }
+
+  /**
+   * Checks for angles the arc should not be in
+   * @param angle 
+   * @param control 
+   * @returns {number}
+   */
+  checkOmittedAngles(angle: number, control: string): number {
+    let sweepAngle;
+    angle = this.normalizeAngle(angle, false);
+    for (let idx in this.omittedAngles){
+      let [num1, num2] = this.omittedAngles[idx]
+      if (control === 'start'){
+        sweepAngle = this.getSweepAngle(angle, this.endAngle) * (180/Math.PI);
+        if (num1-5 < sweepAngle && sweepAngle < num1 + 5){
+          angle = this.endAngle - num1
+          this.lock = false;
+          this.lock2 = true
+        }
+        else if (num2-5 < sweepAngle && sweepAngle < num2 + 5){
+          angle = this.endAngle - (num2 - .0001);
+          this.lock = true;
+          this.lock2 = false;
+          
+        }
+        else if ( this.lock2 && num1+5 < sweepAngle && sweepAngle < num2-5){
+          angle = this.endAngle - (num2 - .0001);
+          this.lock = false;
+          this.lock2 = true;
+        }
+        else if ( this.lock && num1+5 < sweepAngle && sweepAngle < num2-5){
+          angle = this.endAngle - (num1 - .0001);
+          this.lock = true;
+          this.lock2 = false;
+        }
+      }
+
+      if (control === 'end'){
+        sweepAngle = this.getSweepAngle(this.startAngle, angle) * (180/Math.PI);
+        if (num1-5 < sweepAngle && sweepAngle < num1 + 5){
+          angle = this.startAngle + num1
+          this.lock = false;
+          this.lock2 = true
+        }
+        else if (num2-5 < sweepAngle && sweepAngle < num2 + 5){
+          angle = this.startAngle + (num2 - .0001);
+          this.lock = true;
+          this.lock2 = false;
+          
+        }
+        else if ( this.lock2 && num1+5 < sweepAngle && sweepAngle < num2-5){
+          angle = this.startAngle + (num2 - .0001);
+          this.lock = false;
+          this.lock2 = true;
+        }
+        else if ( this.lock && num1+5 < sweepAngle && sweepAngle < num2-5){
+          angle = this.startAngle + (num1 - .0001);
+          this.lock = true;
+          this.lock2 = false;
+        }
+      }
+    }
+    return this.normalizeAngle(angle, false)
   }
 
   /**
@@ -500,37 +570,8 @@ export class Water extends Path {
   setPointOnCircumference(controller: any, angle: number){
     angle = util.degreesToRadians(angle);
     const centerX = this.getCenterPoint().x,
-          centerY = this.getCenterPoint().y,
-          controllerType = controller.controllerType;
+          centerY = this.getCenterPoint().y;
     
-    // Check if the position of the controller is within
-    // the sweep angle for startController or endController
-    const sweepAngle = Math.round(util.radiansToDegrees(this.sweepAngle));
-    if(sweepAngle >= this.maxArc){
-      if(controllerType === 'end'){
-        let newAngle = this.startAngle + this.maxArc;
-        newAngle = this.normalizeAngle(this.startAngle + this.maxArc, false);
-        angle = util.degreesToRadians(newAngle);
-      }
-      else if ( controllerType === 'start'){
-        let newAngle = this.endAngle - this.maxArc;
-        newAngle = this.normalizeAngle(newAngle, false);
-        angle = util.degreesToRadians(newAngle);
-      }
-    }
-    else if(sweepAngle <= this.minArc){
-      if(controllerType === 'end'){
-        let newAngle = this.startAngle + this.minArc;
-        newAngle = this.normalizeAngle(newAngle, false);
-        angle = util.degreesToRadians(newAngle);
-      }
-      else if ( controllerType === 'start'){
-        let newAngle = this.endAngle - this.minArc;
-        newAngle = this.normalizeAngle(newAngle, false);
-        angle = util.degreesToRadians(newAngle);
-      }
-    }
-
     const x = centerX + ((this.scaleX * this.radius) * Math.cos(angle));
     const y = centerY + ((this.scaleX * this.radius) * Math.sin(angle));
     controller.set({ left: x, top: y });

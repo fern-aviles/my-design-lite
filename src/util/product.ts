@@ -1,4 +1,4 @@
-import { Circle, FabricText, type TOriginX, type TOriginY } from 'fabric';
+import { Circle, FabricText, Gradient, type TOriginX, type TOriginY } from 'fabric';
 import { Water } from './water';
 import data from "./data.json";
 
@@ -23,6 +23,7 @@ interface NozzleModel {
   minRadius: number;
   maxRadius: number;
   arcSettings: { [arc: string]: number };
+  color?: string;
   angles: Angles;
 }
 
@@ -89,8 +90,8 @@ export class Product extends Circle {
       top: waterOptions.top,  
       originX: 'center' as TOriginX,
       originY: 'center' as TOriginY,
-      radius: 7,
-      fill: 'gray',
+      radius: 10,
+      fill: 'white',
       hasControls: false,
     };
 
@@ -179,6 +180,39 @@ export class Product extends Circle {
       },
     });
   }
+
+
+  render(ctx : CanvasRenderingContext2D){
+    super.render(ctx);
+    ctx.save();
+
+    ctx.translate(this.left, this.top);
+    ctx.rotate(this.angle * Math.PI / 180);
+
+    const centerX = 0;
+    const centerY = 0;
+
+
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, this.radius-6, 0, Math.PI * 2);
+    ctx.strokeStyle = "black";
+    ctx.stroke();
+    ctx.fill();
+    ctx.closePath();
+
+    
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, this.radius-1, 0, Math.PI * 2);
+    ctx.strokeStyle = "gray";
+    ctx.stroke();
+    ctx.closePath();
+
+
+    ctx.restore()
+  }
+
 
   /**
    * Iterates through the data to make a nozzles dictionary
@@ -274,6 +308,9 @@ export class Product extends Circle {
             if (arcAngle <= maxArc && arcAngle >= minArc){
               this.nozzleOptions[key].text.set({stroke: 'black'});
               this.nozzleOptions[key].show = true;
+              if (!this.selectedNozzle) {
+                this.setNozzle(key);
+              }
             }
             else{
               this.nozzleOptions[key].text.set({stroke: 'red'});
@@ -328,7 +365,6 @@ export class Product extends Circle {
     }
 
     if (deselect){
-
       this.selectedNozzle = "";
       this.water.setConstraints({
         maxArc: this.maxArc,
@@ -336,6 +372,7 @@ export class Product extends Circle {
         maxRadius: this.maxRadius,
         minRadius: this.minRadius,
       });
+      this.set({ fill: "white"});
       this.nozzleInfo = "No nozzle selected";
     }
   }
@@ -361,7 +398,7 @@ export class Product extends Circle {
     let pressures = Object.keys(nozzle.data.angles[key]);
     const closestPressure = this.roundPressure(pressures);
 
-    console.log(closestPressure)
+    console.log(closestPressure);
 
     // Selecting and outputting nozzle information
     this.selectedNozzle = e.target.text;
@@ -425,10 +462,12 @@ export class Product extends Circle {
 
   setNozzle(e: string){ 
     this.selectedNozzle = e    
+    console.log(e)
     let nozzle = this.nozzleOptions[e];
     
     let angles = nozzle.arcSettings;
     const key = this.roundAngle(Object.keys(angles));
+    console.log(key)
 
     // Finding suitable pressure
     let pressures = Object.keys(nozzle.data.angles[key]);
@@ -439,11 +478,15 @@ export class Product extends Circle {
     let gpm = nozzle.data.angles[key][closestPressure].gpm;
     let precip_sq = nozzle.data.angles[key][closestPressure].precip_sq;
     let precip_tri = nozzle.data.angles[key][closestPressure].precip_tri;
+    console.log(this.nozzleOptions[this.selectedNozzle].data.color)
     this.nozzleInfo = 
       `Nozzle selected: ${this.selectedNozzle}\n` +
       `Flow: ${gpm} GPM, ` +
       `Square Precip: ${(precip_sq).toFixed(2)} in/hr, ` +
       `Triangle Precip: ${(precip_tri).toFixed(2)} in/hr`;
+
+    this.set({ fill: nozzle.data.color});
+    this.water.canvas.renderAll();
   }
 
   getSelectedNozzle(){
