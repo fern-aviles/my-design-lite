@@ -1386,7 +1386,7 @@
     "minRadius": 12,
     "maxRadius": 35,
     "recPressure": "40PSI",
-    "omittedRanges": [[270, 360]],
+    "omittedAngles": [[270, 360]],
     "nozzles": {
       "mp1000": {
         "minRadius": 12,
