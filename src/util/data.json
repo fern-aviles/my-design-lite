@@ -8,6 +8,7 @@
     "maxRadius": 46,
     "recPressure": "45PSI",
     "omittedRanges": [[0, 50]],
+    "autoselect": false,
     "nozzles": {
       "standard": {
         "model": {
@@ -1387,6 +1388,7 @@
     "maxRadius": 35,
     "recPressure": "40PSI",
     "omittedAngles": [[270, 360]],
+    "autoSelect": true,
     "nozzles": {
       "mp1000": {
         "minRadius": 12,

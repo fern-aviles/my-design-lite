@@ -76,6 +76,7 @@ export class Product extends Circle {
   selectedNozzle: string;
   pressure: string;
   nozzleInfo: string;
+  autoSelectable: any;
 
   /**
    * Constructs the Product object and is using 
@@ -106,6 +107,7 @@ export class Product extends Circle {
     this.minArc = product.minArc;
     this.maxArc = product.maxArc;
     this.fixedArc = product.fixedArc;
+    this.autoSelectable = product.autoSelect;
     this.nozzleOptions = {};
     this.selectedNozzle = "";
     this.nozzleInfo = "No nozzle selected";
@@ -133,7 +135,6 @@ export class Product extends Circle {
             fixedArc: this.fixedArc,
             omittedAngles: waterOptions.omittedAngles,
     };
-    console.log(waterOptions)
 
     // Create the Water instance
     this.water = new Water(temp, this);
@@ -185,9 +186,16 @@ export class Product extends Circle {
     });
   }
 
-
-  render(ctx : CanvasRenderingContext2D){
+  /**
+   * Renders the Product object
+   * @param ctx 
+   * @returns 
+   */
+  render(ctx : CanvasRenderingContext2D): void{
     super.render(ctx);
+    if(this.name === "PGP Ultra"){
+      return;
+    }
     ctx.save();
 
     ctx.translate(this.left, this.top);
@@ -196,7 +204,6 @@ export class Product extends Circle {
     const centerX = 0;
     const centerY = 0;
 
-
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.arc(centerX, centerY, this.radius-6, 0, Math.PI * 2);
@@ -204,7 +211,6 @@ export class Product extends Circle {
     ctx.stroke();
     ctx.fill();
     ctx.closePath();
-
     
     ctx.lineWidth = 2;
     ctx.beginPath();
@@ -212,7 +218,6 @@ export class Product extends Circle {
     ctx.strokeStyle = "gray";
     ctx.stroke();
     ctx.closePath();
-
 
     ctx.restore()
   }
@@ -317,7 +322,7 @@ export class Product extends Circle {
               this.nozzleOptions[key].show = true;
               this.nozzleOptions[key].inArc = true;
               this.nozzleOptions[key].inRadius = true;
-              if (!this.selectedNozzle) {
+              if (!this.selectedNozzle && this.autoSelectable) {
                 this.setNozzle(key);
               }
               if (pressures.maxArc >= mainMaxArc){
@@ -336,7 +341,6 @@ export class Product extends Circle {
               this.nozzleOptions[key].show = false;
               this.nozzleOptions[key].inArc = false;
               this.nozzleOptions[key].inRadius = true;
-
             }
           }
         }
@@ -531,7 +535,7 @@ export class Product extends Circle {
       `Square Precip: ${(precip_sq).toFixed(2)} in/hr, ` +
       `Triangle Precip: ${(precip_tri).toFixed(2)} in/hr`;
 
-    this.set({ fill: nozzle.data.color});
+    this.set({ fill: nozzle.data.color || 'black'});
     this.water.canvas.renderAll();
   }
 
