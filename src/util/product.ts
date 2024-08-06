@@ -283,6 +283,7 @@ export class Product extends Circle {
   findNozzlesWithRadius(data: Products, targetRadius: number): void {
     const id = this.productID;
     const nozzles = data[id].nozzles;
+    let mainMaxArc = 0;
     for(let nozzle in nozzles){
       const numbers = nozzles[nozzle].model;
       for(let number in numbers){
@@ -319,9 +320,18 @@ export class Product extends Circle {
               if (!this.selectedNozzle) {
                 this.setNozzle(key);
               }
+              if (pressures.maxArc >= mainMaxArc){
+                mainMaxArc = pressures.maxArc;
+              }
+              const constraints = {
+                maxArc: mainMaxArc,
+                minArc: this.minArc,
+                maxRadius: this.maxRadius,
+                minRadius: this.minRadius
+              };
+              this.water.setConstraints(constraints);
             }
             else{
-
               this.nozzleOptions[key].text.set({stroke: 'orange'});
               this.nozzleOptions[key].show = false;
               this.nozzleOptions[key].inArc = false;
@@ -338,26 +348,25 @@ export class Product extends Circle {
         }
       }
     }
-    let maxArc = 0;
     let selected = null;
     if(!this.selectedNozzle){
       for(let n in this.nozzleOptions){
-        let nozzleArc = parseInt(this.nozzleOptions[n].data.maxArc);
         let nozzle = this.nozzleOptions[n];
-        if(!nozzle.inArc && nozzle.inRadius && nozzleArc > maxArc){
+        let nozzleArc = parseInt(nozzle.data.maxArc);
+        if(!nozzle.inArc && nozzle.inRadius && nozzleArc > mainMaxArc){
           selected = n;
-          maxArc = nozzleArc;
+          mainMaxArc = nozzleArc;
         }
       }
       if(selected){
-        if (this.water.getArcAngle() > maxArc){
-          let newArc = Math.abs(this.water.getArcAngle() - maxArc);
+        if (this.water.getArcAngle() > mainMaxArc){
+          let newArc = Math.abs(this.water.getArcAngle() - mainMaxArc);
           const constraints = {
-            maxArc: maxArc,
+            maxArc: mainMaxArc,
             minArc: this.minArc,
             maxRadius: this.maxRadius,
             minRadius: this.minRadius
-          }
+          };
           const newStart = this.water.startAngle + (newArc/2);
           const newEnd = this.water.endAngle - (newArc/2);
           this.water.setWater(newStart, newEnd);
