@@ -152,6 +152,7 @@ export class Product extends Circle {
         this.deselectNozzle(this.water.getRadius(), this.water.getArcAngle());
       },
       'modified': () => {
+        this.setNozzle(this.selectedNozzle);
         console.log(this.nozzleInfo);
       },
     });
@@ -161,6 +162,7 @@ export class Product extends Circle {
         this.deselectNozzle(this.water.getRadius(), this.water.getArcAngle());
         },
       'modified': () => {
+        this.setNozzle(this.selectedNozzle);
         console.log(this.nozzleInfo);
       },
     });
@@ -170,6 +172,7 @@ export class Product extends Circle {
         this.deselectNozzle(this.water.getRadius(), this.water.getArcAngle());
         },
       'modified': () => {
+        this.setNozzle(this.selectedNozzle);
         console.log(this.nozzleInfo);
       },
     });
@@ -443,7 +446,6 @@ export class Product extends Circle {
     if (e instanceof Object){
 
     }
-
     // Finding the best nozzle setting according 
     // to the arc's angle
     let angles = nozzle.arcSettings;
@@ -463,6 +465,9 @@ export class Product extends Circle {
       `Flow: ${gpm} GPM, ` +
       `Square Precip: ${(precip_sq).toFixed(2)} in/hr, ` +
       `Triangle Precip: ${(precip_tri).toFixed(2)} in/hr`;
+
+      this.set({ fill: nozzle.data.color || 'black'});
+      this.water.canvas.renderAll();
   }
 
 
