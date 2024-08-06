@@ -519,6 +519,9 @@ export class Product extends Circle {
   }
 
   setNozzle(e: string){ 
+    if(!e){
+      return;
+    }
     this.selectedNozzle = e;
     let nozzle = this.nozzleOptions[e];
     
