@@ -1403,7 +1403,7 @@
             "minArc": 90,
             "maxArc": 210,
             "arcSettings": {"90": 90, "180": 180, "210": 210},
-            "color": "FireBrick",
+            "color": "#800000",
             "angles": {
               "90": {
                 "30PSI": {
@@ -1545,7 +1545,7 @@
             "minArc": 210,
             "maxArc": 270,
             "arcSettings": {"210": 210, "270": 270},
-            "color": "SkyBlue",
+            "color": "#ADD8E6",
             "angles": {
               "210": {
                 "30PSI": {
@@ -1643,7 +1643,7 @@
             "minArc": 360,
             "maxArc": 360,
             "arcSettings": {"360": 360},
-            "color": "YellowGreen",
+            "color": "#808000",
             "angles": {
               "360": {
                 "30PSI": {
@@ -1706,7 +1706,7 @@
             "minArc": 90,
             "maxArc": 210,
             "arcSettings": {"90": 90, "180": 180, "210": 210},   
-            "color": "FireBrick", 
+            "color": "#800000", 
             "angles": {
               "90": {
                 "30PSI": {
@@ -1848,7 +1848,7 @@
             "minArc": 360,
             "maxArc": 360,
             "arcSettings": {"360": 360},
-            "color": "YellowGreen",
+            "color": "#808000",
             "angles": {
               "360": {
                 "30PSI": {
@@ -1911,7 +1911,7 @@
             "minArc": 90,
             "maxArc": 210,
             "arcSettings": {"90": 90, "180": 180, "210": 210},
-            "color": "black",
+            "color": "#000000",
             "angles":{
               "90": {
                 "25PSI": { "radius": 17, "gpm": 0.34, "gph": 20.4, "precip_sq": 0.45, "precip_tri": 0.52 },
@@ -1948,7 +1948,7 @@
             "minArc": 210,
             "maxArc": 270,
             "arcSettings": {"210": 210, "270": 270},
-            "color": "green",
+            "color": "#006400",
             "angles": {
               "210": {
                 "25PSI": { "radius": 16, "gpm": 0.72, "gph": 43.2, "precip_sq": 0.46, "precip_tri": 0.54 },
@@ -1976,7 +1976,7 @@
             "minArc": 360,
             "maxArc": 360,
             "arcSettings": {"360": 360},
-            "color": "Crimson",
+            "color": "#FF0000",
             "angles": {
               "360": {
                 "25PSI": { "radius": 16, "gpm": 1.20, "gph": 72.0, "precip_sq": 0.45, "precip_tri": 0.52 },
@@ -2004,7 +2004,7 @@
             "minArc": 90,
             "maxArc": 210,
             "arcSettings": {"90": 90, "180": 180, "210": 210},
-            "color": "black",
+            "color": "#000000",
             "angles":{
               "90": {
                 "25PSI": { "radius": 17, "gpm": 0.34, "gph": 20.4, "precip_sq": 0.45, "precip_tri": 0.52 },
@@ -2041,7 +2041,7 @@
             "minArc": 210,
             "maxArc": 270,
             "arcSettings": {"210": 210, "270": 270},
-            "color": "green",
+            "color": "#006400",
             "angles": {
               "210": {
                 "25PSI": { "radius": 16, "gpm": 0.72, "gph": 43.2, "precip_sq": 0.46, "precip_tri": 0.54 },
@@ -2069,7 +2069,7 @@
             "minArc": 360,
             "maxArc": 360,
             "arcSettings": {"360": 360},
-            "color": "Crimson",
+            "color": "#FF0000",
             "angles": {
               "360": {
                 "25PSI": { "radius": 16, "gpm": 1.20, "gph": 72.0, "precip_sq": 0.45, "precip_tri": 0.52 },
@@ -2097,7 +2097,7 @@
             "minArc": 90,
             "maxArc": 210,
             "arcSettings": {"90": 90, "180": 180, "210": 210},
-            "color": "SkyBlue",
+            "color": "#4169E1",
             "angles": {
               "90": {
                 "25PSI": { "radius": 25, "gpm": 0.71, "gph": 42.6, "precip_sq": 0.44, "precip_tri": 0.51 },
@@ -2134,7 +2134,7 @@
             "minArc": 210,
             "maxArc": 270,
             "arcSettings": {"210": 210, "270": 270},
-            "color": "yellow",
+            "color": "#FFFF00",
             "angles": {
               "210": {
                 "25PSI": { "radius": 25, "gpm": 1.68, "gph": 100.8, "precip_sq": 0.44, "precip_tri": 0.51 },
@@ -2162,7 +2162,7 @@
             "minArc": 360,
             "maxArc": 360,
             "arcSettings": {"360": 360},
-            "color": "gray",
+            "color": "#808080",
             "angles": {
               "360": {
                 "25PSI": { "radius": 25, "gpm": 2.88, "gph": 172.8, "precip_sq": 0.44, "precip_tri": 0.51 },
@@ -2190,7 +2190,7 @@
             "minArc": 90,
             "maxArc": 210,
             "arcSettings": {"90": 90, "180": 180, "210": 210},
-            "color": "SkyBlue",
+            "color": "#4169E1",
             "angles": {
               "90": {
                 "25PSI": { "radius": 25, "gpm": 0.71, "gph": 42.6, "precip_sq": 0.44, "precip_tri": 0.51 },
@@ -2227,7 +2227,7 @@
             "minArc": 210,
             "maxArc": 270,
             "arcSettings": {"210": 210, "270": 270},
-            "color": "yellow",
+            "color": "#FFFF00",
             "angles": {
               "210": {
                 "25PSI": { "radius": 25, "gpm": 1.68, "gph": 100.8, "precip_sq": 0.44, "precip_tri": 0.51 },
@@ -2255,7 +2255,7 @@
             "minArc": 360,
             "maxArc": 360,
             "arcSettings": {"360": 360},
-            "color": "gray",
+            "color": "#808080",
             "angles": {
               "360": {
                 "25PSI": { "radius": 25, "gpm": 2.88, "gph": 172.8, "precip_sq": 0.44, "precip_tri": 0.51 },
@@ -2283,7 +2283,7 @@
             "minArc": 90,
             "maxArc": 210,
             "arcSettings": {"90": 90, "180": 180, "210": 210},
-            "color": "PeachPuff",
+            "color": "#E9C2A6",
             "angles": {
               "90": {
                 "25PSI": { "radius": 33, "gpm": 1.04, "gph": 62.4, "precip_sq": 0.37, "precip_tri": 0.42 },
