@@ -29,6 +29,7 @@ export class Water extends Path {
   omittedAngles: any;
   lock: boolean = false; 
   lock2: boolean = false;
+  minScaling: number = 0.25;
 
   declare canvas: Canvas;
   /**
@@ -164,7 +165,7 @@ export class Water extends Path {
                                                 this.infoLine.x2,
                                                 this.infoLine.y2);
     this.infoText = new FabricText(
-      `${Math.round(distance/20)} ft, ${Math.round(util.radiansToDegrees(this.sweepAngle))}°`, {
+      `${Math.round(distance/20).toFixed(2)} ft, ${Math.round(util.radiansToDegrees(this.sweepAngle))}°`, {
       left: mid.x,
       top: mid.y,
       angle: textAngle,
@@ -287,109 +288,6 @@ export class Water extends Path {
   }
 
   /**
-   * Checks the water object is not under the minimum or 
-   * over the maximum arc angle
-   * @param angle 
-   * @param control 
-   * @returns 
-   */
-  checkArcSettings(angle: number, control: string): number{
-    let sweepAngle;
-    if(control === "start"){
-      sweepAngle = this.getSweepAngle(angle, this.endAngle) * (180/Math.PI)
-      if (sweepAngle < this.minArc){
-        angle = this.endAngle - this.minArc;
-      }
-      else if (sweepAngle > this.maxArc){
-        angle = this.endAngle - this.maxArc;
-      }
-
-      if ((0 <= sweepAngle && sweepAngle <= 5) || (355 <= sweepAngle && sweepAngle <= 360)){
-        angle = this.endAngle +.001;
-      }
-    }
-    if(control === "end"){
-      sweepAngle = this.getSweepAngle(this.startAngle, angle) * (180/Math.PI)
-      if (sweepAngle < this.minArc){
-        angle = this.startAngle + this.minArc;
-      }
-      else if (sweepAngle > this.maxArc){
-        angle = this.startAngle + this.maxArc;
-      }
-
-      if ((0 <= sweepAngle && sweepAngle <= 5) || (355 <= sweepAngle && sweepAngle <= 360)){
-        angle = this.startAngle - .001;
-      }
-    }
-    
-    return this.normalizeAngle(angle, false);
-  }
-
-  /**
-   * Checks for angles the arc should not be in
-   * @param angle 
-   * @param control 
-   * @returns {number}
-   */
-  checkOmittedAngles(angle: number, control: string): number {
-    let sweepAngle;
-    angle = this.normalizeAngle(angle, false);
-    for (let idx in this.omittedAngles){
-      let [num1, num2] = this.omittedAngles[idx];
-      if (control === 'start'){
-        sweepAngle = this.getSweepAngle(angle, this.endAngle) * (180/Math.PI);
-        if (num1-5 < sweepAngle && sweepAngle < num1 + 5){
-          angle = this.endAngle - num1;
-          this.lock = false;
-          this.lock2 = true;
-        }
-        else if (num2-5 < sweepAngle && sweepAngle < num2 + 5){
-          angle = this.endAngle - (num2 - .0001);
-          this.lock = true;
-          this.lock2 = false;
-          
-        }
-        else if ( this.lock2 && num1+5 < sweepAngle && sweepAngle < num2-5){
-          angle = this.endAngle - (num2 - .0001);
-          this.lock = false;
-          this.lock2 = true;
-        }
-        else if ( this.lock && num1+5 < sweepAngle && sweepAngle < num2-5){
-          angle = this.endAngle - (num1 - .0001);
-          this.lock = true;
-          this.lock2 = false;
-        }
-      }
-
-      if (control === 'end'){
-        sweepAngle = this.getSweepAngle(this.startAngle, angle) * (180/Math.PI);
-        if (num1-5 < sweepAngle && sweepAngle < num1 + 5){
-          angle = this.startAngle + num1;
-          this.lock = false;
-          this.lock2 = true;
-        }
-        else if (num2-5 < sweepAngle && sweepAngle < num2 + 5){
-          angle = this.startAngle + (num2 - .0001);
-          this.lock = true;
-          this.lock2 = false;
-          
-        }
-        else if ( this.lock2 && num1+5 < sweepAngle && sweepAngle < num2-5){
-          angle = this.startAngle + (num2 - .0001);
-          this.lock = false;
-          this.lock2 = true;
-        }
-        else if ( this.lock && num1+5 < sweepAngle && sweepAngle < num2-5){
-          angle = this.startAngle + (num1 - .0001);
-          this.lock = true;
-          this.lock2 = false;
-        }
-      }
-    }
-    return this.normalizeAngle(angle, false)
-  }
-
-  /**
    * Calculates the rotation of the radius in turn, changes control 
    * angles so it reflects the changes properly anytime the radius
    * is being rotated.
@@ -433,8 +331,8 @@ export class Water extends Path {
     this.scale(distanceApart/this.radius);
     distanceApart = distanceApart/this.waterScale;
     let radiusScale = (this.radius/this.waterScale);
-    if(distanceApart < this.minRadius * .75){
-      this.scale((.75*this.minRadius)/radiusScale);
+    if(distanceApart < this.minRadius * (1-this.minScaling)){
+      this.scale(((1-this.minScaling)*this.minRadius)/radiusScale);
       this.changeMidControllerPos(this.midController);
     } 
     else if(distanceApart > this.maxRadius){
@@ -543,6 +441,115 @@ export class Water extends Path {
     while (sweep < 0) sweep += 2 * Math.PI;
     while (sweep > 2 * Math.PI) sweep -= 2 * Math.PI;
     return sweep;
+  }
+
+  /**
+   * Checks the water object is not under the minimum or 
+   * over the maximum arc angle
+   * @param angle 
+   * @param control 
+   * @returns 
+   */
+  checkArcSettings(angle: number, control: string): number{
+    let sweepAngle;
+    if(control === "start"){
+      sweepAngle = this.getSweepAngle(angle, this.endAngle) * (180/Math.PI);
+      if(this.sweepAngle > this.maxArc){
+        return this.startAngle
+      }
+      if (sweepAngle < this.minArc){
+        angle = this.endAngle - this.minArc;
+      }
+      else if (sweepAngle > this.maxArc){
+        angle = this.endAngle - this.maxArc;
+      }
+
+      if ((0 <= sweepAngle && sweepAngle <= 5) || (355 <= sweepAngle && sweepAngle <= 360)){
+        angle = this.endAngle +.001;
+      }
+    }
+    if(control === "end"){
+      sweepAngle = this.getSweepAngle(this.startAngle, angle) * (180/Math.PI);
+      if (sweepAngle < this.minArc){
+        angle = this.startAngle + this.minArc;
+      }
+      else if (sweepAngle > this.maxArc){
+        angle = this.startAngle + this.maxArc;
+      }
+
+      if ((0 <= sweepAngle && sweepAngle <= 5) || (355 <= sweepAngle && sweepAngle <= 360)){
+        angle = this.startAngle - .001;
+      }
+    }
+    
+    return this.normalizeAngle(angle, false);
+  }
+
+  /**
+   * Checks for angles the arc should not be in
+   * @param angle 
+   * @param control 
+   * @returns {number}
+   */
+  checkOmittedAngles(angle: number, control: string): number {
+    let sweepAngle;
+    angle = this.normalizeAngle(angle, false);
+    for (let idx in this.omittedAngles){
+      let [num1, num2] = this.omittedAngles[idx];
+      if(this.sweepAngle > this.maxArc){
+        return this.startAngle
+      }
+      if (control === 'start'){
+        sweepAngle = this.getSweepAngle(angle, this.endAngle) * (180/Math.PI);
+        if ( num1-5 < sweepAngle && sweepAngle < num1 + 5){
+          angle = this.endAngle - num1;
+          this.lock = false;
+          this.lock2 = true;
+        }
+        else if (num2-5 < sweepAngle && sweepAngle < num2 + 5){
+          angle = this.endAngle - (num2 - .0001);
+          this.lock = true;
+          this.lock2 = false;
+          
+        }
+        else if ( this.lock2 && num1+5 < sweepAngle && sweepAngle < num2-5){
+          angle = this.endAngle - (num2 - .0001);
+          this.lock = false;
+          this.lock2 = true;
+        }
+        else if ( this.lock && num1+5 < sweepAngle && sweepAngle < num2-5){
+          angle = this.endAngle - (num1 - .0001);
+          this.lock = true;
+          this.lock2 = false;
+        }
+      }
+
+      if (control === 'end'){
+        sweepAngle = this.getSweepAngle(this.startAngle, angle) * (180/Math.PI);
+        if (num1-5 < sweepAngle && sweepAngle < num1 + 5){
+          angle = this.startAngle + num1;
+          this.lock = false;
+          this.lock2 = true;
+        }
+        else if (num2-5 < sweepAngle && sweepAngle < num2 + 5){
+          angle = this.startAngle + (num2 - .0001);
+          this.lock = true;
+          this.lock2 = false;
+          
+        }
+        else if ( this.lock2 && num1+5 < sweepAngle && sweepAngle < num2-5){
+          angle = this.startAngle + (num2 - .0001);
+          this.lock = false;
+          this.lock2 = true;
+        }
+        else if ( this.lock && num1+5 < sweepAngle && sweepAngle < num2-5){
+          angle = this.startAngle + (num1 - .0001);
+          this.lock = true;
+          this.lock2 = false;
+        }
+      }
+    }
+    return this.normalizeAngle(angle, false)
   }
 
   /**
@@ -773,6 +780,10 @@ export class Water extends Path {
     this.setCoords();
     this.showControls(true);
     this.canvas.renderAll();
+  }
+
+  setMinScaling(scale: number): void {
+    this.minScaling = scale;
   }
 }
 export default Water;
