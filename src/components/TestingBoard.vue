@@ -32,11 +32,12 @@
   let waterScale = 20;
   let products = 0;
 
-  const pressure = ref('45');
-  const product = ref('461006');
+  const pressure = ref('30');
+  const product = ref('884');
   const options = ref([
     { text: 'PGP Ultra', value: '862' },
-    { text: 'MP Rotator', value: '461006' }
+    { text: 'MP Rotator', value: '461006'},
+    { text: 'Pro Adjustable Nozzles', value:'884'}
   ]);
   let newNozzles = [];
   let nozzle = ref(null);

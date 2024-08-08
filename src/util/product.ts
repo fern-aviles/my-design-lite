@@ -255,6 +255,7 @@ export class Product extends Circle {
         if (nozzles[nozzle].minScaling > minScaling){
           minScaling = nozzles[nozzle].minScaling;
         }
+        // console.log(nozzles[nozzle].minScaling || 0.25)
         this.nozzleOptions[key] = {
           show: false,
           model: model,
@@ -292,6 +293,7 @@ export class Product extends Circle {
       }
     }
     this.water.setMinScaling(minScaling);
+    // console.log(this.nozzleOptions)
   }
 
   /**
@@ -326,7 +328,9 @@ export class Product extends Circle {
         const radius = data.angles[currAngle][prefPressure].radius;
 
         // Check if targetRadius is within the range of the current nozzle
+        // console.log(this.nozzleOptions[key])
         const roundedMinRadius = parseInt((radius*(1-this.nozzleOptions[key].minScaling)).toFixed(2));
+        // console.log(this.nozzleOptions[key].minScaling, roundedMinRadius)
         if (targetRadius >= roundedMinRadius &&
             targetRadius <= radius) {
           if(this.selectedNozzle !== key){
@@ -383,8 +387,6 @@ export class Product extends Circle {
       }
     }
 
-
-
     let selected = null;
     if(!this.selectedNozzle){
       for(let n in this.nozzleOptions){
@@ -438,6 +440,11 @@ export class Product extends Circle {
     if (Object.keys(angleOptions).length === 1){
       model = Object.keys(angleOptions)[0];
     }
+    else if(!Object.keys(angleOptions).includes(model)){
+      model = this.roundAngle(Object.keys(angleOptions))
+    }
+
+    // console.log(angleOptions, model, pressure)
 
     // Check if the current radius is within the selected 
     // nozzle at pressure's radius
@@ -515,12 +522,17 @@ export class Product extends Circle {
     return closestAngle;
   }
 
-  setNozzle(e: string){ 
-    if(!e){
+  /**
+   * Sets nozzle
+   * @param selectedNozzle 
+   * @returns {null}
+   */
+  setNozzle(selectedNozzle: string): void{ 
+    if(!selectedNozzle){
       return;
     }
-    this.selectedNozzle = e;
-    let nozzle = this.nozzleOptions[e];
+    this.selectedNozzle = selectedNozzle;
+    let nozzle = this.nozzleOptions[selectedNozzle];
     
     let angles = nozzle.arcSettings;
     const key = this.roundAngle(Object.keys(angles));
@@ -530,7 +542,7 @@ export class Product extends Circle {
     const closestPressure = this.roundPressure(pressures);
 
     // Selecting and outputting nozzle information
-    this.selectedNozzle = e;
+    this.selectedNozzle = selectedNozzle;
     let gpm = nozzle.data.angles[key][closestPressure].gpm;
     let precip_sq = nozzle.data.angles[key][closestPressure].precip_sq;
     let precip_tri = nozzle.data.angles[key][closestPressure].precip_tri;
@@ -544,7 +556,11 @@ export class Product extends Circle {
     this.water.canvas.renderAll();
   }
 
-  getSelectedNozzle(){
+  /**
+   * Gets the currently selected nozzle
+   * @returns {string}
+   */
+  getSelectedNozzle(): string{
     return this.selectedNozzle;
   }
 }
