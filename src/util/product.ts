@@ -449,7 +449,7 @@ export class HunterProduct extends Circle {
       model = Object.keys(angleOptions)[0];
     }
     else if(!Object.keys(angleOptions).includes(model)){
-      model = this.roundAngle(Object.keys(angleOptions))
+      model = this.roundAngle(Object.keys(angleOptions));
     }
 
     // Check if the current radius is within the selected 
@@ -511,7 +511,7 @@ export class HunterProduct extends Circle {
    */
   roundAngle(angles: string[]): string{
     if(angles[0] === "0" && angles[1] === "360"){
-      return "360"
+      return "360";
     }
     const angle = this.water.getArcAngle();
     let closestAngle = angles[0];
