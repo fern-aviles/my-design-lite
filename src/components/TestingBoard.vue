@@ -33,13 +33,13 @@ import { Controller } from '@/util/controller';
   let waterScale = 20;
   let products = 0;
 
-  const pressure = ref('30');
-  const product = ref('884');
+  const pressure = ref('45');
+  const product = ref('861');
   const options = ref([
     { text: 'PGP Ultra', value: '862' },
     { text: 'MP Rotator', value: '461006' },
     { text: 'Pro Adjustable Nozzles', value:'884' },
-    { text: 'Pro Fixed Nozzles', value: '885' }, 
+    { text: 'PGP-ADJ', value: '861'}
   ]);
   interface NozzleDictionary {
   [key: number]: {

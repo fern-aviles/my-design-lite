@@ -2813,5 +2813,145 @@
         }
       }
     }
+  },
+  "861": {
+    "name": "PGP-ADJ",
+    "fixedArc": false,
+    "minArc": 0,
+    "maxArc": 360,
+    "minRadius": 22,
+    "maxRadius": 52,
+    "recPressure": "30PSI",
+    "omittedAngles": [],
+    "autoSelect": true,
+    "nozzles": {
+      "blue": {
+        "minArc": 0,
+        "maxArc": 360,
+        "arcSettings": {"0": 0, "360": 360},
+        "model": {
+          "1.5": {
+            "minArc": 0,
+            "maxArc": 360,
+            "arcSettings": {"0": 0, "360": 360},
+            "color": "#2a6486",
+            "angles": {
+              "360": {
+                "25PSI": {"radius": 29, "gpm": 1.2, "precip_sq": 0.27, "precip_tri": 0.32},
+                "35PSI": {"radius": 31, "gpm": 1.4, "precip_sq": 0.28, "precip_tri": 0.32},
+                "45PSI": {"radius": 31, "gpm": 1.5, "precip_sq": 0.3, "precip_tri": 0.35},
+                "55PSI": {"radius": 32, "gpm": 1.8, "precip_sq": 0.34, "precip_tri": 0.39},
+                "65PSI": {"radius": 32, "gpm": 1.9, "precip_sq": 0.36, "precip_tri": 0.41}
+              }
+            }
+          },
+          "2.0": {
+            "minArc": 0,
+            "maxArc": 360,
+            "arcSettings": {"0": 0, "360": 360},
+            "color": "#2a6486",
+            "angles": {
+              "360": {
+                "25PSI": {"radius": 33, "gpm": 1.4, "precip_sq": 0.25, "precip_tri": 0.29},
+                "35PSI": {"radius": 33, "gpm": 1.7, "precip_sq": 0.3, "precip_tri": 0.35},
+                "45PSI": {"radius": 34, "gpm": 2.0, "precip_sq": 0.33, "precip_tri": 0.38},
+                "55PSI": {"radius": 34, "gpm": 2.1, "precip_sq": 0.35, "precip_tri": 0.4},
+                "65PSI": {"radius": 34, "gpm": 2.3, "precip_sq": 0.38, "precip_tri": 0.44}
+              }
+            }
+          },
+          "2.5": {
+            "minArc": 0,
+            "maxArc": 360,
+            "arcSettings": {"0": 0, "360": 360},
+            "color": "#2a6486",
+            "angles": {
+              "360": {
+                "25PSI": {"radius": 33, "gpm": 1.7, "precip_sq": 0.3, "precip_tri": 0.35},
+                "35PSI": {"radius": 35, "gpm": 2.1, "precip_sq": 0.33, "precip_tri": 0.38},
+                "45PSI": {"radius": 35, "gpm": 2.5, "precip_sq": 0.39, "precip_tri": 0.45},
+                "55PSI": {"radius": 35, "gpm": 2.6, "precip_sq": 0.41, "precip_tri": 0.47},
+                "65PSI": {"radius": 35, "gpm": 2.9, "precip_sq": 0.46, "precip_tri": 0.53}
+              }
+            }
+          },
+          "3.0": {
+            "minArc": 0,
+            "maxArc": 360,
+            "arcSettings": {"0": 0, "360": 360},
+            "color": "#2a6486",
+            "angles": {
+              "360": {
+                "25PSI": {"radius": 35, "gpm": 2.2, "precip_sq": 0.35, "precip_tri": 0.4},
+                "35PSI": {"radius": 36, "gpm": 2.7, "precip_sq": 0.4, "precip_tri": 0.46},
+                "45PSI": {"radius": 38, "gpm": 3.0, "precip_sq": 0.4, "precip_tri": 0.46},
+                "55PSI": {"radius": 39, "gpm": 3.4, "precip_sq": 0.43, "precip_tri": 0.5},
+                "65PSI": {"radius": 39, "gpm": 3.7, "precip_sq": 0.47, "precip_tri": 0.54}
+              }
+            }
+          },
+          "4.0": {
+            "minArc": 0,
+            "maxArc": 360,
+            "arcSettings": {"0": 0, "360": 360},
+            "color": "#2a6486",
+            "angles": {
+              "360": {
+                "25PSI": {"radius": 37, "gpm": 3.0, "precip_sq": 0.42, "precip_tri": 0.49},
+                "35PSI": {"radius": 39, "gpm": 3.5, "precip_sq": 0.44, "precip_tri": 0.51},
+                "45PSI": {"radius": 40, "gpm": 4.0, "precip_sq": 0.48, "precip_tri": 0.56},
+                "55PSI": {"radius": 41, "gpm": 4.5, "precip_sq": 0.52, "precip_tri": 0.6},
+                "65PSI": {"radius": 41, "gpm": 4.8, "precip_sq": 0.55, "precip_tri": 0.63}
+              }
+            }
+          },
+          "5.0": {
+            "minArc": 0,
+            "maxArc": 360,
+            "arcSettings": {"0": 0, "360": 360},
+            "color": "#2a6486",
+            "angles": {
+              "360": {
+                "25PSI": {"radius": 37, "gpm": 3.7, "precip_sq": 0.52, "precip_tri": 0.6},
+                "35PSI": {"radius": 39, "gpm": 4.5, "precip_sq": 0.57, "precip_tri": 0.66},
+                "45PSI": {"radius": 42, "gpm": 5.0, "precip_sq": 0.55, "precip_tri": 0.63},
+                "55PSI": {"radius": 42, "gpm": 5.7, "precip_sq": 0.62, "precip_tri": 0.72},
+                "65PSI": {"radius": 42, "gpm": 6.2, "precip_sq": 0.68, "precip_tri": 0.78}
+              }
+            }
+          },
+          "6.0": {
+            "minArc": 0,
+            "maxArc": 360,
+            "arcSettings": {"0": 0, "360": 360},
+            "color": "#2a6486",
+            "angles": {
+              "360": {
+                "25PSI": {"radius": 38, "gpm": 4.3, "precip_sq": 0.57, "precip_tri": 0.66},
+                "35PSI": {"radius": 40, "gpm": 5.6, "precip_sq": 0.67, "precip_tri": 0.78},
+                "45PSI": {"radius": 43, "gpm": 6.0, "precip_sq": 0.62, "precip_tri": 0.72},
+                "55PSI": {"radius": 44, "gpm": 6.7, "precip_sq": 0.67, "precip_tri": 0.77},
+                "65PSI": {"radius": 44, "gpm": 7.3, "precip_sq": 0.73, "precip_tri": 0.84}
+              }
+            }
+          },
+          "8.0": {
+            "minArc": 0,
+            "maxArc": 360,
+            "arcSettings": {"0": 0, "360": 360},
+            "color": "#2a6486",
+            "angles": {
+              "360": {
+                "25PSI": {"radius": 37, "gpm": 6.0, "precip_sq": 0.84, "precip_tri": 0.97},
+                "35PSI": {"radius": 41, "gpm": 7.0, "precip_sq": 0.80, "precip_tri": 0.93},
+                "45PSI": {"radius": 44, "gpm": 8.0, "precip_sq": 0.80, "precip_tri": 0.92},
+                "55PSI": {"radius": 46, "gpm": 9.0, "precip_sq": 0.82, "precip_tri": 0.95},
+                "65PSI": {"radius": 46, "gpm": 9.8, "precip_sq": 0.89, "precip_tri": 1.03}
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }
