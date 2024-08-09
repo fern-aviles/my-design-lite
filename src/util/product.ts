@@ -1,9 +1,9 @@
-import { Circle, FabricText, Gradient, type TOriginX, type TOriginY } from 'fabric';
+import { Circle, FabricText, type TOriginX, type TOriginY } from 'fabric';
 import { Water } from './water';
 import data from "./data.json";
 
 
-interface AngleDetails {
+export interface AngleDetails {
   radius: number;
   gpm: number;
   precip_sq: number;
@@ -11,13 +11,13 @@ interface AngleDetails {
   gph?: number;
 }
 
-interface Angles {
+export interface Angles {
   [angle: string]: {
     [pressure: string]: AngleDetails;
   };
 }
 
-interface NozzleModel {
+export interface NozzleModel {
   minArc: number;
   maxArc: number;
   minRadius: number;
@@ -27,18 +27,18 @@ interface NozzleModel {
   angles: Angles;
 }
 
-interface NozzleTypes {
+export interface NozzleTypes {
   [model: string]: NozzleModel;
 }
 
-interface Nozzles {
+export interface Nozzles {
   [type: string]: {
     minScaling: any;
     model: NozzleTypes;
   };
 }
 
-interface ProductType {
+export interface ProductType {
   name: string;
   fixedArc: boolean;
   minArc: number;
@@ -50,19 +50,19 @@ interface ProductType {
   nozzles: Nozzles;
 }
 
-interface Products {
+export interface Products {
   [productID: string]: ProductType;
 }
 
 
 /**
- * Creates a Product object which filters data and
+ * Creates a HunterProduct object which filters data and
  * allows users to customize the object's water radius
  * and arc angle
  * 
  * @extends Circle
  */
-export class Product extends Circle {
+export class HunterProduct extends Circle {
   text: FabricText;
   data: any;
   water: Water;
@@ -80,7 +80,7 @@ export class Product extends Circle {
   autoSelectable: any;
 
   /**
-   * Constructs the Product object and is using 
+   * Constructs the HunterProduct object and is using 
    * waterOptions to create a Water object to allow for
    * customization
    * 
@@ -191,13 +191,13 @@ export class Product extends Circle {
   }
 
   /**
-   * Renders the Product object
+   * Renders the HunterProduct object
    * @param ctx 
    * @returns 
    */
   render(ctx : CanvasRenderingContext2D): void{
     super.render(ctx);
-    if(this.name === "PGP Ultra"){
+    if(this.name !== "Standard MP Rotator"){
       return;
     }
     ctx.save();
@@ -340,9 +340,6 @@ export class Product extends Circle {
               this.nozzleOptions[key].show = true;
               this.nozzleOptions[key].inArc = true;
               this.nozzleOptions[key].inRadius = true;
-              if (!this.selectedNozzle && this.autoSelectable) {
-                this.setNozzle(key);
-              }
               if (data.maxArc >= maxArc){
                 maxArc = data.maxArc;
               }
@@ -383,8 +380,6 @@ export class Product extends Circle {
       }
     }
 
-
-
     let selected = null;
     if(!this.selectedNozzle){
       for(let n in this.nozzleOptions){
@@ -412,8 +407,23 @@ export class Product extends Circle {
         }
       }
     }
-    else{
-      
+
+    if (!this.autoSelectable){
+      return;
+    }
+    // Final loop to select a nozzle
+    let nozzleChosen = false;
+    for(let nozzle in nozzles){
+      const models = nozzles[nozzle].model
+      for(let model in models){
+        const key = `${nozzle}, ${model}`;
+        if (this.nozzleOptions[key].show && !nozzleChosen){
+          this.setNozzle(key)
+          nozzleChosen = true;
+          break;
+        }
+        if (nozzleChosen) break;
+      }
     }
   }
 
@@ -437,6 +447,9 @@ export class Product extends Circle {
     let model = nozzle.model;
     if (Object.keys(angleOptions).length === 1){
       model = Object.keys(angleOptions)[0];
+    }
+    else if(!Object.keys(angleOptions).includes(model)){
+      model = this.roundAngle(Object.keys(angleOptions))
     }
 
     // Check if the current radius is within the selected 
@@ -515,12 +528,17 @@ export class Product extends Circle {
     return closestAngle;
   }
 
-  setNozzle(e: string){ 
-    if(!e){
+  /**
+   * Sets nozzle
+   * @param selectedNozzle 
+   * @returns {null}
+   */
+  setNozzle(selectedNozzle: string): void{ 
+    if(!selectedNozzle){
       return;
     }
-    this.selectedNozzle = e;
-    let nozzle = this.nozzleOptions[e];
+    this.selectedNozzle = selectedNozzle;
+    let nozzle = this.nozzleOptions[selectedNozzle];
     
     let angles = nozzle.arcSettings;
     const key = this.roundAngle(Object.keys(angles));
@@ -530,7 +548,7 @@ export class Product extends Circle {
     const closestPressure = this.roundPressure(pressures);
 
     // Selecting and outputting nozzle information
-    this.selectedNozzle = e;
+    this.selectedNozzle = selectedNozzle;
     let gpm = nozzle.data.angles[key][closestPressure].gpm;
     let precip_sq = nozzle.data.angles[key][closestPressure].precip_sq;
     let precip_tri = nozzle.data.angles[key][closestPressure].precip_tri;
@@ -544,7 +562,11 @@ export class Product extends Circle {
     this.water.canvas.renderAll();
   }
 
-  getSelectedNozzle(){
+  /**
+   * Gets the currently selected nozzle
+   * @returns {string}
+   */
+  getSelectedNozzle(): string{
     return this.selectedNozzle;
   }
 }

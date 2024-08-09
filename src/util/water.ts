@@ -1,4 +1,5 @@
 import {Path, Circle, Canvas, util, Line, FabricText} from 'fabric'
+import { Controller } from './controller';
 /**
  * Water and water controls of a product
  * 
@@ -71,7 +72,7 @@ export class Water extends Path {
     this.endAngle = endAngle;
     this.centerX = product.getCenterPoint().x;
     this.centerY = product.getCenterPoint().y;
-    this.waterScale = waterScale;
+    this.waterScale = options.waterScale | waterScale;
     this.radius = radius * this.waterScale;
     this.distance = this.radius;
     this.canvas = canvas;
@@ -89,7 +90,7 @@ export class Water extends Path {
     
     // Add control circles
     const endControlXY = this.getPointOnCircumference(this.radius, util.degreesToRadians(endAngle));
-    this.endController = new Circle({
+    this.endController = new Controller({
       left: endControlXY.x + centerX,
       top: endControlXY.y + centerY,
       radius: 7,
@@ -104,7 +105,7 @@ export class Water extends Path {
     });
 
     const startControlXY = this.getPointOnCircumference(this.radius, util.degreesToRadians(startAngle));
-    this.startController = new Circle({
+    this.startController = new Controller({
       left: startControlXY.x + centerX,
       top: startControlXY.y + centerY,
       radius: 7,
@@ -121,7 +122,7 @@ export class Water extends Path {
     const midAngle = this.computeMidAngle(startAngle, endAngle);
     this.midAngle = util.radiansToDegrees(midAngle);
     const midControllerXY = this.getPointOnCircumference(this.radius, util.degreesToRadians(midAngle));
-    this.midController = new Circle({
+    this.midController = new Controller({
       left: midControllerXY.x + centerX,
       top: midControllerXY.y + centerY,
       radius: 7,
@@ -784,6 +785,10 @@ export class Water extends Path {
 
   setMinScaling(scale: number): void {
     this.minScaling = scale;
+  }
+
+  updateWaterScale(waterScale: number): void {
+    this.waterScale = waterScale;
   }
 }
 export default Water;
