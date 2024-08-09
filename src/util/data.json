@@ -2334,10 +2334,10 @@
     "maxRadius": 17,
     "recPressure": "30PSI",
     "omittedAngles": [],
-    "autoSelect": false,
+    "autoSelect": true,
     "nozzles": {
       "4A": {
-        "minRadius": 4,
+        "minRadius": 3,
         "maxRadius": 4,
         "minArc": 0,
         "maxArc": 360,
@@ -2609,15 +2609,15 @@
         }
       },
       "12A": {
-        "minRadius": 9,
-        "maxRadius": 11,
+        "minRadius": 11,
+        "maxRadius": 13,
         "minArc": 0,
         "maxArc": 360,
         "arcSettings": {"45": 45, "90": 90, "120": 120, "180": 180, "240": 240, "270": 270, "360": 360},
         "model": {
           "12A": {
-            "minRadius": 9,
-            "maxRadius": 11,
+            "minRadius": 11,
+            "maxRadius": 13,
             "minArc": 0,
             "maxArc": 360,
             "arcSettings": {"45": 45, "90": 90, "120": 120, "180": 180, "240": 240, "270": 270, "360": 360},
@@ -2677,15 +2677,15 @@
         }
       },
       "15A": {
-        "minRadius": 9,
-        "maxRadius": 11,
+        "minRadius": 14,
+        "maxRadius": 17,
         "minArc": 0,
         "maxArc": 360,
         "arcSettings": {"45": 45, "90": 90, "120": 120, "180": 180, "240": 240, "270": 270, "360": 360},
         "model": {
           "15A": {
-            "minRadius": 9,
-            "maxRadius": 11,
+            "minRadius": 14,
+            "maxRadius": 17,
             "minArc": 0,
             "maxArc": 360,
             "arcSettings": {"45": 45, "90": 90, "120": 120, "180": 180, "240": 240, "270": 270, "360": 360},
@@ -2745,15 +2745,15 @@
         }
       },
       "17A": {
-        "minRadius": 9,
-        "maxRadius": 11,
+        "minRadius": 16,
+        "maxRadius": 19,
         "minArc": 0,
         "maxArc": 360,
         "arcSettings": {"45": 45, "90": 90, "120": 120, "180": 180, "240": 240, "270": 270, "360": 360},
         "model": {
           "17A": {
-            "minRadius": 9,
-            "maxRadius": 11,
+            "minRadius": 16,
+            "maxRadius": 19,
             "minArc": 0,
             "maxArc": 360,
             "arcSettings": {"45": 45, "90": 90, "120": 120, "180": 180, "240": 240, "270": 270, "360": 360},
