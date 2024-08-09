@@ -326,7 +326,7 @@ export class HunterProduct extends Circle {
         const radius = data.angles[currAngle][prefPressure].radius;
 
         // Check if targetRadius is within the range of the current nozzle
-        const roundedMinRadius = parseInt((radius*(1-this.nozzleOptions[key].minScaling)).toFixed(2));
+        let roundedMinRadius = radius*(1-this.nozzleOptions[key].minScaling);
         if (targetRadius >= roundedMinRadius &&
             targetRadius <= radius) {
           if(this.selectedNozzle !== key){
@@ -408,7 +408,7 @@ export class HunterProduct extends Circle {
       }
     }
 
-    if (!this.autoSelectable){
+    if (!this.autoSelectable || this.selectedNozzle){
       return;
     }
     // Final loop to select a nozzle
@@ -552,11 +552,21 @@ export class HunterProduct extends Circle {
     let gpm = nozzle.data.angles[key][closestPressure].gpm;
     let precip_sq = nozzle.data.angles[key][closestPressure].precip_sq;
     let precip_tri = nozzle.data.angles[key][closestPressure].precip_tri;
-    this.nozzleInfo = 
-      `Nozzle selected: ${this.selectedNozzle}\n` +
-      `Flow: ${gpm} GPM, ` +
-      `Square Precip: ${(precip_sq).toFixed(2)} in/hr, ` +
-      `Triangle Precip: ${(precip_tri).toFixed(2)} in/hr`;
+    if(["PGP Ultra", "SRM", "PGJ", "PGP-ADJ"].includes(this.name) ){
+      const scaling = 180/this.water.getArcAngle();
+      this.nozzleInfo = 
+        `Nozzle selected: ${this.selectedNozzle}\n` +
+        `Flow: ${gpm} GPM, ` +
+        `Square Precip: ${(precip_sq*scaling).toFixed(2)} in/hr, ` +
+        `Triangle Precip: ${(precip_tri*scaling).toFixed(2)} in/hr`;
+    }
+    else{
+      this.nozzleInfo = 
+        `Nozzle selected: ${this.selectedNozzle}\n` +
+        `Flow: ${gpm} GPM, ` +
+        `Square Precip: ${(precip_sq).toFixed(2)} in/hr, ` +
+        `Triangle Precip: ${(precip_tri).toFixed(2)} in/hr`;
+    }
 
     this.set({ fill: nozzle.data.color || 'white'});
     this.water.canvas.renderAll();
