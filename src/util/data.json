@@ -2830,7 +2830,7 @@
     "minRadius": 15,
     "maxRadius": 37,
     "recPressure": "40PSI",
-    "autoSelect": false,
+    "autoSelect": true,
     "nozzles": {
       "red": {
         "minArc": 0,

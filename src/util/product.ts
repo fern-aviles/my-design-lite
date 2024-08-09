@@ -552,11 +552,21 @@ export class HunterProduct extends Circle {
     let gpm = nozzle.data.angles[key][closestPressure].gpm;
     let precip_sq = nozzle.data.angles[key][closestPressure].precip_sq;
     let precip_tri = nozzle.data.angles[key][closestPressure].precip_tri;
-    this.nozzleInfo = 
-      `Nozzle selected: ${this.selectedNozzle}\n` +
-      `Flow: ${gpm} GPM, ` +
-      `Square Precip: ${(precip_sq).toFixed(2)} in/hr, ` +
-      `Triangle Precip: ${(precip_tri).toFixed(2)} in/hr`;
+    if(["PGP Ultra", "SRM", "PGJ"].includes(this.name) ){
+      const scaling = 180/this.water.getArcAngle();
+      this.nozzleInfo = 
+        `Nozzle selected: ${this.selectedNozzle}\n` +
+        `Flow: ${gpm} GPM, ` +
+        `Square Precip: ${(precip_sq*scaling).toFixed(2)} in/hr, ` +
+        `Triangle Precip: ${(precip_tri*scaling).toFixed(2)} in/hr`;
+    }
+    else{
+      this.nozzleInfo = 
+        `Nozzle selected: ${this.selectedNozzle}\n` +
+        `Flow: ${gpm} GPM, ` +
+        `Square Precip: ${(precip_sq).toFixed(2)} in/hr, ` +
+        `Triangle Precip: ${(precip_tri).toFixed(2)} in/hr`;
+    }
 
     this.set({ fill: nozzle.data.color || 'white'});
     this.water.canvas.renderAll();
