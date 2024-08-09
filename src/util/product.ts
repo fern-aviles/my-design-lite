@@ -407,10 +407,10 @@ export class HunterProduct extends Circle {
         }
       }
     }
-
-    if (!this.autoSelectable){
+    if (!this.autoSelectable || this.selectedNozzle){
       return;
     }
+
     // Final loop to select a nozzle
     let nozzleChosen = false;
     for(let nozzle in nozzles){
@@ -418,7 +418,7 @@ export class HunterProduct extends Circle {
       for(let model in models){
         const key = `${nozzle}, ${model}`;
         if (this.nozzleOptions[key].show && !nozzleChosen){
-          this.setNozzle(key)
+          this.setNozzle(key);
           nozzleChosen = true;
           break;
         }
