@@ -310,7 +310,6 @@ export class HunterProduct extends Circle {
       for(let model in models){
         const key = `${nozzle}, ${model}`;
         const data = models[model];
-        
         // Setting the proper angle setting
         let currAngle = this.roundAngle(Object.keys(this.nozzleOptions[key].data.angles)); 
         if (Object.keys(data.angles).length === 1){
@@ -326,7 +325,7 @@ export class HunterProduct extends Circle {
         const radius = data.angles[currAngle][prefPressure].radius;
 
         // Check if targetRadius is within the range of the current nozzle
-        const roundedMinRadius = parseInt((radius*(1-this.nozzleOptions[key].minScaling)).toFixed(2));
+        let roundedMinRadius = radius*(1-this.nozzleOptions[key].minScaling);
         if (targetRadius >= roundedMinRadius &&
             targetRadius <= radius) {
           if(this.selectedNozzle !== key){
@@ -449,7 +448,7 @@ export class HunterProduct extends Circle {
       model = Object.keys(angleOptions)[0];
     }
     else if(!Object.keys(angleOptions).includes(model)){
-      model = this.roundAngle(Object.keys(angleOptions))
+      model = this.roundAngle(Object.keys(angleOptions));
     }
 
     // Check if the current radius is within the selected 
