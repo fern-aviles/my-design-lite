@@ -340,16 +340,6 @@ export class HunterProduct extends Circle {
               this.nozzleOptions[key].show = true;
               this.nozzleOptions[key].inArc = true;
               this.nozzleOptions[key].inRadius = true;
-              if (data.maxArc >= maxArc){
-                maxArc = data.maxArc;
-              }
-              const constraints = {
-                maxArc: maxArc,
-                minArc: this.minArc,
-                maxRadius: this.maxRadius,
-                minRadius: this.minRadius
-              };
-              this.water.setConstraints(constraints);
             }
             else{
               this.nozzleOptions[key].text.set({stroke: 'orange'});
@@ -357,6 +347,17 @@ export class HunterProduct extends Circle {
               this.nozzleOptions[key].inArc = false;
               this.nozzleOptions[key].inRadius = true;
             }
+            if (nozzleMaxArc >= maxArc){
+              maxArc = nozzleMaxArc;
+              console.log("new max arc", maxArc)
+            }
+            const constraints = {
+              maxArc: maxArc,
+              minArc: this.minArc,
+              maxRadius: this.maxRadius,
+              minRadius: this.minRadius
+            };
+            this.water.setConstraints(constraints);
           }
         }
         else{
@@ -379,15 +380,34 @@ export class HunterProduct extends Circle {
         }
       }
     }
-
+    
+    if (this.autoSelectable){
+      // Final loop to select a nozzle
+      let nozzleChosen = false;
+      for(let nozzle in nozzles){
+        const models = nozzles[nozzle].model
+        for(let model in models){
+          const key = `${nozzle}, ${model}`;
+          if (this.nozzleOptions[key].show && !nozzleChosen){
+            this.setNozzle(key)
+            nozzleChosen = true;
+            break;
+          }
+          if (nozzleChosen) break;
+        }
+      }
+    }
+    else{
+    }
     let selected = null;
     if(!this.selectedNozzle){
       for(let n in this.nozzleOptions){
         let nozzle = this.nozzleOptions[n];
         let nozzleMaxArc = parseInt(nozzle.data.maxArc);
-        if(!nozzle.inArc && nozzle.inRadius && nozzleMaxArc > maxArc){
+        if(!nozzle.inArc && nozzle.inRadius){
           selected = n;
           maxArc = nozzleMaxArc;
+          console.log("new max arc", maxArc)
         }
       }
       if(selected){
@@ -408,23 +428,7 @@ export class HunterProduct extends Circle {
       }
     }
 
-    if (!this.autoSelectable){
-      return;
-    }
-    // Final loop to select a nozzle
-    let nozzleChosen = false;
-    for(let nozzle in nozzles){
-      const models = nozzles[nozzle].model
-      for(let model in models){
-        const key = `${nozzle}, ${model}`;
-        if (this.nozzleOptions[key].show && !nozzleChosen){
-          this.setNozzle(key)
-          nozzleChosen = true;
-          break;
-        }
-        if (nozzleChosen) break;
-      }
-    }
+    
   }
 
   /**

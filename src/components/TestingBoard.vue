@@ -34,7 +34,7 @@ import { Controller } from '@/util/controller';
   let products = 0;
 
   const pressure = ref('30');
-  const product = ref('884');
+  const product = ref('885');
   const options = ref([
     { text: 'PGP Ultra', value: '862' },
     { text: 'MP Rotator', value: '461006' },

@@ -2334,7 +2334,7 @@
     "maxRadius": 17,
     "recPressure": "30PSI",
     "omittedAngles": [],
-    "autoSelect": false,
+    "autoSelect": true,
     "nozzles": {
       "4A": {
         "minRadius": 4,
@@ -2609,15 +2609,15 @@
         }
       },
       "12A": {
-        "minRadius": 9,
-        "maxRadius": 11,
+        "minRadius":11 ,
+        "maxRadius": 13,
         "minArc": 0,
         "maxArc": 360,
         "arcSettings": {"45": 45, "90": 90, "120": 120, "180": 180, "240": 240, "270": 270, "360": 360},
         "model": {
           "12A": {
-            "minRadius": 9,
-            "maxRadius": 11,
+            "minRadius": 11,
+            "maxRadius": 13,
             "minArc": 0,
             "maxArc": 360,
             "arcSettings": {"45": 45, "90": 90, "120": 120, "180": 180, "240": 240, "270": 270, "360": 360},
@@ -2677,15 +2677,15 @@
         }
       },
       "15A": {
-        "minRadius": 9,
-        "maxRadius": 11,
+        "minRadius": 14,
+        "maxRadius": 17,
         "minArc": 0,
         "maxArc": 360,
         "arcSettings": {"45": 45, "90": 90, "120": 120, "180": 180, "240": 240, "270": 270, "360": 360},
         "model": {
           "15A": {
-            "minRadius": 9,
-            "maxRadius": 11,
+            "minRadius": 14,
+            "maxRadius": 17,
             "minArc": 0,
             "maxArc": 360,
             "arcSettings": {"45": 45, "90": 90, "120": 120, "180": 180, "240": 240, "270": 270, "360": 360},
@@ -2745,15 +2745,15 @@
         }
       },
       "17A": {
-        "minRadius": 9,
-        "maxRadius": 11,
+        "minRadius": 16,
+        "maxRadius": 19,
         "minArc": 0,
         "maxArc": 360,
         "arcSettings": {"45": 45, "90": 90, "120": 120, "180": 180, "240": 240, "270": 270, "360": 360},
         "model": {
           "17A": {
-            "minRadius": 9,
-            "maxRadius": 11,
+            "minRadius": 16,
+            "maxRadius": 19,
             "minArc": 0,
             "maxArc": 360,
             "arcSettings": {"45": 45, "90": 90, "120": 120, "180": 180, "240": 240, "270": 270, "360": 360},
@@ -2813,5 +2813,392 @@
         }
       }
     }
+  },
+  "885": {
+    "name": "Pro Fixed Nozzles",
+    "fixedArc": true,
+    "minArc": 0,
+    "maxArc": 360,
+    "minRadius": 4,
+    "maxRadius": 17,
+    "recPressure": "30PSI",
+    "omittedAngles": [[0, 90], [90, 120],[120, 180], [180, 360]],
+    "autoSelect": true,
+    "nozzles": {
+      "5": {
+        "minRadius": 4,
+        "maxRadius": 6,
+        "minArc": 0,
+        "maxArc": 360,
+        "arcSettings": {"90": 90, "120": 120, "180": 180, "360": 360},
+        "model": {
+          "Q": {
+            "minRadius": 4,
+            "maxRadius": 6,
+            "minArc": 90,
+            "maxArc": 90,
+            "arcSettings": {"90": 90},
+            "color": "#2a6486",
+            "angles": {
+              "90": {
+                "20PSI": {"radius": 4, "gpm": 0.09, "precip_sq": 2.25, "precip_tri": 2.6},
+                "25PSI": {"radius": 4, "gpm": 0.11, "precip_sq": 2.54, "precip_tri": 2.94},
+                "30PSI": {"radius": 5, "gpm": 0.12, "precip_sq": 1.8, "precip_tri": 2.08},
+                "35PSI": {"radius": 6, "gpm": 0.13, "precip_sq": 1.36, "precip_tri": 1.57},
+                "40PSI": {"radius": 6, "gpm": 0.14, "precip_sq": 1.46, "precip_tri": 1.69}
+              }
+            }
+          },
+          "H": {
+            "minRadius": 4,
+            "maxRadius": 6,
+            "minArc": 180,
+            "maxArc": 180,
+            "arcSettings": {"180": 180},
+            "color": "#2a6486",
+            "angles": {
+              "180": {
+                "20PSI": {"radius": 4, "gpm": 0.19, "precip_sq": 2.25, "precip_tri": 2.6},
+                "25PSI": {"radius": 4, "gpm": 0.21, "precip_sq": 2.54, "precip_tri": 2.94},
+                "30PSI": {"radius": 5, "gpm": 0.23, "precip_sq": 1.8, "precip_tri": 2.08},
+                "35PSI": {"radius": 6, "gpm": 0.25, "precip_sq": 1.36, "precip_tri": 1.57},
+                "40PSI": {"radius": 6, "gpm": 0.27, "precip_sq": 1.46, "precip_tri": 1.69}
+              }
+            }
+          },
+          "F": {
+            "minRadius": 4,
+            "maxRadius": 6,
+            "minArc": 360,
+            "maxArc": 360,
+            "arcSettings": {"360": 360},
+            "color": "#2a6486",
+            "angles": {
+              "360": {
+                "20PSI": {"radius": 4, "gpm": 0.37, "precip_sq": 2.25, "precip_tri": 2.6},
+                "25PSI": {"radius": 4, "gpm": 0.42, "precip_sq": 2.54, "precip_tri": 2.94},
+                "30PSI": {"radius": 5, "gpm": 0.47, "precip_sq": 1.8, "precip_tri": 2.08},
+                "35PSI": {"radius": 6, "gpm": 0.51, "precip_sq": 1.36, "precip_tri": 1.57},
+                "40PSI": {"radius": 6, "gpm": 0.55, "precip_sq": 1.46, "precip_tri": 1.69}
+              }
+            }
+          }
+        }
+      },
+      "8": {
+        "minRadius": 7,
+        "maxRadius": 9,
+        "minArc": 0,
+        "maxArc": 360,
+        "arcSettings": {"90": 90, "120": 120, "180": 180, "360": 360},
+        "model": {
+          "Q": {
+            "minRadius": 7,
+            "maxRadius": 9,
+            "minArc": 90,
+            "maxArc": 90,
+            "arcSettings": {"90": 90},
+            "color": "#6b4226",
+            "angles": {
+              "90": {
+                "20PSI": {"radius": 7, "gpm": 0.2, "precip_sq": 1.54, "precip_tri": 1.78},
+                "25PSI": {"radius": 8, "gpm": 0.22, "precip_sq": 1.33, "precip_tri": 1.53},
+                "30PSI": {"radius": 8, "gpm": 0.24, "precip_sq": 1.46, "precip_tri": 1.69},
+                "35PSI": {"radius": 9, "gpm": 0.26, "precip_sq": 1.25, "precip_tri": 1.45},
+                "40PSI": {"radius": 9, "gpm": 0.28, "precip_sq": 1.34, "precip_tri": 1.55}
+              }
+            }
+          },
+          "T": {
+            "minRadius": 7,
+            "maxRadius": 9,
+            "minArc": 120,
+            "maxArc": 120,
+            "arcSettings": {"120": 120},
+            "color": "#6b4226",
+            "angles": {
+              "120": {
+                "20PSI": {"radius": 7, "gpm": 0.26, "precip_sq": 1.54, "precip_tri": 1.78},
+                "25PSI": {"radius": 8, "gpm": 0.29, "precip_sq": 1.33, "precip_tri": 1.53},
+                "30PSI": {"radius": 8, "gpm": 0.32, "precip_sq": 1.46, "precip_tri": 1.69},
+                "35PSI": {"radius": 9, "gpm": 0.35, "precip_sq": 1.25, "precip_tri": 1.45},
+                "40PSI": {"radius": 9, "gpm": 0.38, "precip_sq": 1.34, "precip_tri": 1.55}
+              }
+            }
+          },
+          "H": {
+            "minRadius": 7,
+            "maxRadius": 9,
+            "minArc": 180,
+            "maxArc": 180,
+            "arcSettings": {"180": 180},
+            "color": "#6b4226",
+            "angles": {
+              "180": {
+                "20PSI": {"radius": 7, "gpm": 0.38, "precip_sq": 1.49, "precip_tri": 1.72},
+                "25PSI": {"radius": 8, "gpm": 0.43, "precip_sq": 1.28, "precip_tri": 1.48},
+                "30PSI": {"radius": 8, "gpm": 0.47, "precip_sq": 1.41, "precip_tri": 1.63},
+                "35PSI": {"radius": 9, "gpm": 0.51, "precip_sq": 1.21, "precip_tri": 1.39},
+                "40PSI": {"radius": 9, "gpm": 0.54, "precip_sq": 1.29, "precip_tri": 1.49}
+              }
+            }
+          },
+          "F": {
+            "minRadius": 7,
+            "maxRadius": 9,
+            "minArc": 360,
+            "maxArc": 360,
+            "arcSettings": {"360": 360},
+            "color": "#6b4226",
+            "angles": {
+              "360": {
+                "20PSI": {"radius": 7, "gpm": 0.78, "precip_sq": 1.54, "precip_tri": 1.78},
+                "25PSI": {"radius": 8, "gpm": 0.88, "precip_sq": 1.33, "precip_tri": 1.53},
+                "30PSI": {"radius": 8, "gpm": 0.97, "precip_sq": 1.46, "precip_tri": 1.69},
+                "35PSI": {"radius": 9, "gpm": 1.05, "precip_sq": 1.25, "precip_tri": 1.45},
+                "40PSI": {"radius": 9, "gpm": 1.13, "precip_sq": 1.34, "precip_tri": 1.55}
+              }
+            }
+          }
+        }
+      },
+      "10": {
+        "arcSettings": {"90": 90, "120": 120, "180": 180, "360": 360},
+        "model": {
+          "Q": {
+            "minArc": 90,
+            "maxArc": 90,
+            "arcSettings": {"90": 90},
+            "color": "#ff0000",
+            "angles": {
+              "90": {
+                "20PSI": {"radius": 9, "gpm": 0.34, "precip_sq": 1.63, "precip_tri": 1.88},
+                "25PSI": {"radius": 10, "gpm": 0.39, "precip_sq": 1.48, "precip_tri": 1.71},
+                "30PSI": {"radius": 10, "gpm": 0.42, "precip_sq": 1.63, "precip_tri": 1.89},
+                "35PSI": {"radius": 11, "gpm": 0.46, "precip_sq": 1.47, "precip_tri": 1.69},
+                "40PSI": {"radius": 11, "gpm": 0.49, "precip_sq": 1.57, "precip_tri": 1.82}
+              }
+            }
+          },
+          "T": {
+            "minRadius": 7,
+            "maxRadius": 9,
+            "minArc": 120,
+            "maxArc": 120,
+            "arcSettings": {"120": 120},
+            "color": "#ff0000",
+            "angles": {
+              "120": {
+                "20PSI": {"radius": 9, "gpm": 0.46, "precip_sq": 1.63, "precip_tri": 1.88},
+                "25PSI": {"radius": 10, "gpm": 0.51, "precip_sq": 1.48, "precip_tri": 1.71},
+                "30PSI": {"radius": 10, "gpm": 0.57, "precip_sq": 1.63, "precip_tri": 1.89},
+                "35PSI": {"radius": 11, "gpm": 0.61, "precip_sq": 1.47, "precip_tri": 1.69},
+                "40PSI": {"radius": 11, "gpm": 0.66, "precip_sq": 1.57, "precip_tri": 1.82}
+              }
+            }
+          },
+          "H": {
+            "minRadius": 7,
+            "maxRadius": 9,
+            "minArc": 180,
+            "maxArc": 180,
+            "arcSettings": {"180": 180},
+            "color": "#ff0000",
+            "angles": {
+              "180": {
+                "20PSI": {"radius": 9, "gpm": 0.7, "precip_sq": 1.67, "precip_tri": 1.92},
+                "25PSI": {"radius": 10, "gpm": 0.79, "precip_sq": 1.53, "precip_tri": 1.76},
+                "30PSI": {"radius": 10, "gpm": 0.88, "precip_sq": 1.69, "precip_tri": 1.95},
+                "35PSI": {"radius": 11, "gpm": 0.95, "precip_sq": 1.52, "precip_tri": 1.75},
+                "40PSI": {"radius": 11, "gpm": 1.03, "precip_sq": 1.63, "precip_tri": 1.89}
+              }
+            }
+          },
+          "F": {
+            "minRadius": 7,
+            "maxRadius": 9,
+            "minArc": 360,
+            "maxArc": 360,
+            "arcSettings": {"360": 360},
+            "color": "#ff0000",
+            "angles": {
+              "360": {
+                "20PSI": {"radius": 9, "gpm": 1.29, "precip_sq": 1.53, "precip_tri": 1.77},
+                "25PSI": {"radius": 10, "gpm": 1.45, "precip_sq": 1.39, "precip_tri": 1.61},
+                "30PSI": {"radius": 10, "gpm": 1.59, "precip_sq": 1.53, "precip_tri": 1.76},
+                "35PSI": {"radius": 11, "gpm": 1.72, "precip_sq": 1.37, "precip_tri": 1.58},
+                "40PSI": {"radius": 11, "gpm": 1.84, "precip_sq": 1.46, "precip_tri": 1.69}
+              }
+            }
+          }
+        }
+      },
+      "12": {
+        "arcSettings": {"90": 90, "120": 120, "180": 180, "360": 360},
+        "model": {
+          "Q": {
+            "minArc": 90,
+            "maxArc": 90,
+            "arcSettings": {"90": 90},
+            "color": "#007562",
+            "angles": {
+              "90": {
+                "20PSI": {"radius": 11, "gpm": 0.54, "precip_sq": 1.71, "precip_tri": 1.98},
+                "25PSI": {"radius": 12, "gpm": 0.61, "precip_sq": 1.62, "precip_tri": 1.87},
+                "30PSI": {"radius": 12, "gpm": 0.67, "precip_sq": 1.78, "precip_tri": 2.06},
+                "35PSI": {"radius": 13, "gpm": 0.72, "precip_sq": 1.65, "precip_tri": 1.90},
+                "40PSI": {"radius": 13, "gpm": 0.78, "precip_sq": 1.77, "precip_tri": 2.04}
+              }
+            }
+          },
+          "T": {
+            "minArc": 120,
+            "maxArc": 120,
+            "arcSettings": {"120": 120},
+            "color": "#007562",
+            "angles": {
+              "120": {
+                "20PSI": {"radius": 11, "gpm": 0.72, "precip_sq": 1.71, "precip_tri": 1.98},
+                "25PSI": {"radius": 12, "gpm": 0.81, "precip_sq": 1.62, "precip_tri": 1.87},
+                "30PSI": {"radius": 12, "gpm": 0.89, "precip_sq": 1.78, "precip_tri": 2.06},
+                "35PSI": {"radius": 13, "gpm": 0.97, "precip_sq": 1.65, "precip_tri": 1.90},
+                "40PSI": {"radius": 13, "gpm": 1.04, "precip_sq": 1.77, "precip_tri": 2.04}
+              }
+            }
+          },
+          "H": {
+            "minArc": 180,
+            "maxArc": 180,
+            "arcSettings": {"180": 180},
+            "color": "#007562",
+            "angles": {
+              "180": {
+                "20PSI": {"radius": 11, "gpm": 1.05, "precip_sq": 1.67, "precip_tri": 1.93},
+                "25PSI": {"radius": 12, "gpm": 1.18, "precip_sq": 1.58, "precip_tri": 1.83},
+                "30PSI": {"radius": 12, "gpm": 1.30, "precip_sq": 1.74, "precip_tri": 2.01},
+                "35PSI": {"radius": 13, "gpm": 1.42, "precip_sq": 1.61, "precip_tri": 1.86},
+                "40PSI": {"radius": 13, "gpm": 1.52, "precip_sq": 1.73, "precip_tri": 2.00}
+              }
+            }
+          },
+          "F": {
+            "minArc": 360,
+            "maxArc": 360,
+            "arcSettings": {"360": 360},
+            "color": "#007562",
+            "angles": {
+              "360": {
+                "20PSI": {"radius": 11, "gpm": 2.17, "precip_sq": 1.72, "precip_tri": 1.99},
+                "25PSI": {"radius": 12, "gpm": 2.45, "precip_sq": 1.63, "precip_tri": 1.89},
+                "30PSI": {"radius": 12, "gpm": 2.70, "precip_sq": 1.80, "precip_tri": 2.08},
+                "35PSI": {"radius": 13, "gpm": 2.93, "precip_sq": 1.67, "precip_tri": 1.93},
+                "40PSI": {"radius": 13, "gpm": 3.15, "precip_sq": 1.80, "precip_tri": 2.07}
+              }
+            }
+          }
+        }
+      },
+      "15": {
+        "arcSettings": {"90": 90, "120": 120, "180": 180, "360": 360},
+        "model": {
+          "Q": {
+            "minArc": 90,
+            "maxArc": 90,
+            "arcSettings": {"90": 90},
+            "color": "#000000",
+            "angles": {
+              "90": {
+                "20PSI": {"radius": 14, "gpm": 0.78, "precip_sq": 1.53, "precip_tri": 1.77},
+                "25PSI": {"radius": 15, "gpm": 0.88, "precip_sq": 1.51, "precip_tri": 1.74},
+                "30PSI": {"radius": 15, "gpm": 0.97, "precip_sq": 1.67, "precip_tri": 1.92},
+                "35PSI": {"radius": 16, "gpm": 1.06, "precip_sq": 1.59, "precip_tri": 1.84},
+                "40PSI": {"radius": 17, "gpm": 1.14, "precip_sq": 1.52, "precip_tri": 1.75}
+              }
+            }
+          },
+          "T": {
+            "minArc": 120,
+            "maxArc": 120,
+            "arcSettings": {"120": 120},
+            "color": "#000000",
+            "angles": {
+              "120": {
+                "20PSI": {"radius": 14, "gpm": 1.04, "precip_sq": 1.53, "precip_tri": 1.77},
+                "25PSI": {"radius": 15, "gpm": 1.17, "precip_sq": 1.51, "precip_tri": 1.74},
+                "30PSI": {"radius": 15, "gpm": 1.30, "precip_sq": 1.67, "precip_tri": 1.92},
+                "35PSI": {"radius": 16, "gpm": 1.41, "precip_sq": 1.59, "precip_tri": 1.84},
+                "40PSI": {"radius": 17, "gpm": 1.52, "precip_sq": 1.52, "precip_tri": 1.75}
+              }
+            }
+          },
+          "H": {
+            "minArc": 180,
+            "maxArc": 180,
+            "arcSettings": {"180": 180},
+            "color": "#000000",
+            "angles": {
+              "180": {
+                "20PSI": {"radius": 14, "gpm": 1.51, "precip_sq": 1.48, "precip_tri": 1.71},
+                "25PSI": {"radius": 15, "gpm": 1.69, "precip_sq": 1.45, "precip_tri": 1.67},
+                "30PSI": {"radius": 15, "gpm": 1.86, "precip_sq": 1.59, "precip_tri": 1.84},
+                "35PSI": {"radius": 16, "gpm": 2.02, "precip_sq": 1.52, "precip_tri": 1.75},
+                "40PSI": {"radius": 17, "gpm": 2.16, "precip_sq": 1.44, "precip_tri": 1.66}
+              }
+            }
+          },
+          "F": {
+            "minArc": 360,
+            "maxArc": 360,
+            "arcSettings": {"360": 360},
+            "color": "#000000",
+            "angles": {
+              "360": {
+                "20PSI": {"radius": 14, "gpm": 3.04, "precip_sq": 1.49, "precip_tri": 1.72},
+                "25PSI": {"radius": 15, "gpm": 3.41, "precip_sq": 1.46, "precip_tri": 1.69},
+                "30PSI": {"radius": 15, "gpm": 3.75, "precip_sq": 1.61, "precip_tri": 1.85},
+                "35PSI": {"radius": 16, "gpm": 4.07, "precip_sq": 1.53, "precip_tri": 1.76},
+                "40PSI": {"radius": 17, "gpm": 4.36, "precip_sq": 1.45, "precip_tri": 1.68}
+              }
+            }
+          }
+        }
+      },
+      "17": {
+        "arcSettings": {"90": 90, "120": 120, "180": 180, "360": 360},
+        "model": {
+          "Q": {
+            "minArc": 90,
+            "maxArc": 90,
+            "arcSettings": {"90": 90},
+            "color": "#818080",
+            "angles": {
+              "90": {
+                "20PSI": {"radius": 16, "gpm": 0.93, "precip_sq": 1.4, "precip_tri": 1.61},
+                "25PSI": {"radius": 17, "gpm": 1.05, "precip_sq": 1.39, "precip_tri": 1.61},
+                "30PSI": {"radius": 17, "gpm": 1.15, "precip_sq": 1.54, "precip_tri": 1.77},
+                "35PSI": {"radius": 18, "gpm": 1.25, "precip_sq": 1.49, "precip_tri": 1.72},
+                "40PSI": {"radius": 19, "gpm": 1.34, "precip_sq": 1.43, "precip_tri": 1.65}
+              }
+            }
+          },
+          "H": {
+            "minArc": 180,
+            "maxArc": 180,
+            "arcSettings": {"180": 180},
+            "color": "#818080",
+            "angles": {
+              "180": {
+                "20PSI": {"radius": 16, "gpm": 1.91, "precip_sq": 1.43, "precip_tri": 1.66},
+                "25PSI": {"radius": 17, "gpm": 2.15, "precip_sq": 1.43, "precip_tri": 1.65},
+                "30PSI": {"radius": 17, "gpm": 2.37, "precip_sq": 1.58, "precip_tri": 1.82},
+                "35PSI": {"radius": 18, "gpm": 2.57, "precip_sq": 1.53, "precip_tri": 1.76},
+                "40PSI": {"radius": 19, "gpm": 2.76, "precip_sq": 1.47, "precip_tri": 1.7}
+              }
+            }
+          }
+        }
+      }
+    }
   }
+
 }
