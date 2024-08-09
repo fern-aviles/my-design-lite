@@ -3,7 +3,7 @@
     <p> Enter PSI: </p>
     <input v-model="pressure" placeholder="45">
 
-    <p> Select Product </p>
+    <p> Select HunterProduct </p>
     <select v-model="product">
       <option v-for="option in options" :value="option.value">
         {{ option.text }}
@@ -22,13 +22,14 @@
   </div>
 </template>
 
-<script setup lnag="ts">
+<script setup lang="ts">
   import { ref, onMounted, watch } from 'vue';
   import { Canvas, Circle, FabricText, Line } from 'fabric';
-  import { Water } from '@/util/water.ts'
-  import { Product } from '@/util/product.ts'
-  const canvas = ref(null);
-  let c = null;
+  import { Water } from '@/util/water'
+  import { HunterProduct } from '@/util/product'
+import { Controller } from '@/util/controller';
+  const canvas = ref();
+  let c = null as Canvas | null;
   let waterScale = 20;
   let products = 0;
 
@@ -36,14 +37,21 @@
   const product = ref('884');
   const options = ref([
     { text: 'PGP Ultra', value: '862' },
-    { text: 'MP Rotator', value: '461006'},
-    { text: 'Pro Adjustable Nozzles', value:'884'}
+    { text: 'MP Rotator', value: '461006' },
+    { text: 'Pro Adjustable Nozzles', value:'884' },
+    { text: 'Pro Fixed Nozzles', value: '885' }, 
   ]);
+  interface NozzleDictionary {
+  [key: number]: {
+    show: boolean;
+    // other properties
+  };
+}
   let newNozzles = [];
-  let nozzle = ref(null);
+  let nozzle = ref();
 
   // Create a reactive nozzles container
-  const nozzles = ref({});
+  const nozzles = ref<NozzleDictionary>({});
 
   // Watch for changes in the nozzles selection
   watch(
@@ -54,20 +62,21 @@
     { deep: true }
   );
 
-  const onChange = (e) => {
-    e = c.getActiveObject();
-    // It's a Product
-    if(e instanceof Product){
+  const onChange = (e: any) => {
+    e = c!.getActiveObject();
+    // It's a HunterProduct
+    if(e instanceof HunterProduct){
       e.setNozzle(nozzle.value);
     }
       // It's a controller
-    else if(e instanceof Circle){
-      e.water.product.setNozzle(nozzle.value);
+    else if(e instanceof Controller){
+      let product = e.water.product as HunterProduct
+      product.setNozzle(nozzle.value);
     }
   }
 
-  const createRotor = (e) => {
-    const rotor = new Product({
+  const createRotor = (e: any) => {
+    const rotor = new HunterProduct({
       productID: product.value,
       pressure: pressure.value + "PSI",
       left: e.offsetX,
@@ -75,9 +84,9 @@
       productIndex: products,
       canvas: c,
     });
-    c.add(rotor);
+    c!.add(rotor);
     nozzles.value = {...rotor.nozzleOptions};
-    c.setActiveObject(rotor);
+    c!.setActiveObject(rotor);
   }
 
   onMounted(() => {
@@ -105,7 +114,7 @@
         createRotor(options.e);
       }
       // Clicking on a product
-      else if(options.target instanceof Product){
+      else if(options.target instanceof HunterProduct){
         newNozzles = options.target.nozzleOptions;
         nozzles.value = {...newNozzles};
 
@@ -113,11 +122,12 @@
         nozzle.value = nozzleSelected;
       }
       // Clicking on a controller
-      else if(options.target instanceof Circle){
-        newNozzles = options.target.water.product.nozzleOptions;
-        nozzles.value = {...newNozzles};
+      else if(options.target instanceof Controller){
+        let product: HunterProduct = options.target.water.product as HunterProduct
+        newNozzles = product.nozzleOptions;
+        nozzles.value = {...newNozzles}
 
-        nozzle.value = options.target.water.product.getSelectedNozzle();
+        nozzle.value = product.getSelectedNozzle();
       }
       // Clicking nowhere and object is not added
       else if(!options.target){
