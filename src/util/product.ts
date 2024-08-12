@@ -400,10 +400,9 @@ export class HunterProduct extends Circle {
         return (a[2] as string).localeCompare(b[2] as string);
       });
       this.setNozzle(candidateNozzleRanking[0][2] as string);
-      
+
       // Change arc setting if it's out of bounds with candidate nozzle
       if(this.maxArc != 0 && this.maxArc < this.water.getArcAngle() ){
-        console.log(this.maxArc)
         let newArc = Math.abs(this.water.getArcAngle() - this.maxArc);
         const newStart = this.water.startAngle + (newArc/2);
         const newEnd = this.water.endAngle - (newArc/2);
@@ -447,7 +446,6 @@ export class HunterProduct extends Circle {
         }
         else{
           if(key === this.selectedNozzle){
-            console.log("deselecting nozzle in radius")
             this.deselectNozzle();
           }
           this.nozzleOptions[key].inRadius = false;
