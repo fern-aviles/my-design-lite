@@ -310,6 +310,7 @@ export class HunterProduct extends Circle {
       for(let model in models){
         const key = `${nozzle}, ${model}`;
         const data = models[model];
+        
         // Setting the proper angle setting
         let currAngle = this.roundAngle(Object.keys(this.nozzleOptions[key].data.angles)); 
         if (Object.keys(data.angles).length === 1){
@@ -406,10 +407,10 @@ export class HunterProduct extends Circle {
         }
       }
     }
-
-    if (!this.autoSelectable){
+    if (!this.autoSelectable || this.selectedNozzle){
       return;
     }
+
     // Final loop to select a nozzle
     let nozzleChosen = false;
     for(let nozzle in nozzles){
@@ -417,7 +418,7 @@ export class HunterProduct extends Circle {
       for(let model in models){
         const key = `${nozzle}, ${model}`;
         if (this.nozzleOptions[key].show && !nozzleChosen){
-          this.setNozzle(key)
+          this.setNozzle(key);
           nozzleChosen = true;
           break;
         }
@@ -510,7 +511,7 @@ export class HunterProduct extends Circle {
    */
   roundAngle(angles: string[]): string{
     if(angles[0] === "0" && angles[1] === "360"){
-      return "360"
+      return "360";
     }
     const angle = this.water.getArcAngle();
     let closestAngle = angles[0];
