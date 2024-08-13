@@ -304,7 +304,7 @@ export class HunterProduct extends Circle {
    */
   findNozzles(data: Products, targetRadius: number): void {
 
-    // Heler function to find nozzles in radius
+    // Helper function to find nozzles in radius
     this.findNozzlesRadius(data, targetRadius);
 
     // Helper function to find nozzles in arc
@@ -317,7 +317,11 @@ export class HunterProduct extends Circle {
 
   }
 
-  // Selects for the most optimal nozzle
+  /**
+   * Selects for the most optimal nozzle
+   * 
+   * @returns {null}
+   */
   selectNozzle(): void {
     // Available nozzle ranking
     // Sorts by radius and then by arc and then by string
@@ -418,7 +422,12 @@ export class HunterProduct extends Circle {
     }
   }
 
-  // Chekcs for nozzles that work for the current radius
+  /**
+   * Checks for nozzles that work for the current radius
+   * @param data 
+   * @param targetRadius 
+   * @returns {null}
+   */
   findNozzlesRadius(data: any, targetRadius: number): void {
     const id = this.productID;
     const nozzles = data[id].nozzles;
@@ -460,7 +469,10 @@ export class HunterProduct extends Circle {
     }
   }
 
-  // Checks for nozzles that work with the current arc setting
+  /**
+   * Checks for nozzles that work with the current arc setting
+   * @returns {null}
+   */
   findNozzlesArc(): void {
     let maxArc = 0;
     for(let model in this.nozzleOptions){
@@ -513,7 +525,6 @@ export class HunterProduct extends Circle {
   /**
    * Deselects the selected nozzle once it's no longer
    * within its range.
-   * 
    * @param {number} radius 
    * @returns {null}
    */
