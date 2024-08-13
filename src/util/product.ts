@@ -311,7 +311,7 @@ export class HunterProduct extends Circle {
     this.findNozzlesArc();
 
     // Select a nozzle
-    if (!this.selectedNozzle){
+    if (!this.selectedNozzle && this.autoSelectable){
       this.selectNozzle();
     }
 
