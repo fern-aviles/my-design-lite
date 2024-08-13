@@ -453,19 +453,16 @@ export class Water extends Path {
    */
   checkArcSettings(angle: number, control: string): number{
     let sweepAngle;
+    angle = this.normalizeAngle(angle, false);
     if(control === "start"){
       sweepAngle = this.getSweepAngle(angle, this.endAngle) * (180/Math.PI);
-      if(this.sweepAngle > this.maxArc){
-        return this.startAngle
-      }
       if (sweepAngle < this.minArc){
         angle = this.endAngle - this.minArc;
       }
-      else if (sweepAngle > this.maxArc){
+      else if (sweepAngle > this.maxArc ){
         angle = this.endAngle - this.maxArc;
       }
-
-      if ((0 <= sweepAngle && sweepAngle <= 5) || (355 <= sweepAngle && sweepAngle <= 360)){
+      else if ((0 <= sweepAngle && sweepAngle <= 5) || (355 <= sweepAngle && sweepAngle <= 360)){
         angle = this.endAngle +.001;
       }
     }
@@ -477,8 +474,7 @@ export class Water extends Path {
       else if (sweepAngle > this.maxArc){
         angle = this.startAngle + this.maxArc;
       }
-
-      if ((0 <= sweepAngle && sweepAngle <= 5) || (355 <= sweepAngle && sweepAngle <= 360)){
+      else if ((0 <= sweepAngle && sweepAngle <= 5) || (355 <= sweepAngle && sweepAngle <= 360)){
         angle = this.startAngle - .001;
       }
     }
@@ -497,12 +493,17 @@ export class Water extends Path {
     angle = this.normalizeAngle(angle, false);
     for (let idx in this.omittedAngles){
       let [num1, num2] = this.omittedAngles[idx];
-      if(this.sweepAngle > this.maxArc){
-        return this.startAngle
-      }
       if (control === 'start'){
         sweepAngle = this.getSweepAngle(angle, this.endAngle) * (180/Math.PI);
-        if ( num1-5 < sweepAngle && sweepAngle < num1 + 5){
+        if(sweepAngle > this.maxArc){
+          angle = this.endAngle - this.maxArc;
+          break;
+        }
+        else if(sweepAngle < this.minArc){
+          angle = this.endAngle - this.minArc;
+          break;
+        }
+        else if ( num1-5 < sweepAngle && sweepAngle < num1 + 5){
           angle = this.endAngle - num1;
           this.lock = false;
           this.lock2 = true;
@@ -527,6 +528,13 @@ export class Water extends Path {
 
       if (control === 'end'){
         sweepAngle = this.getSweepAngle(this.startAngle, angle) * (180/Math.PI);
+        if(sweepAngle > this.maxArc){
+          return this.startAngle + this.maxArc;
+        }
+        if(sweepAngle < this.minArc){
+          angle = this.startAngle + this.minArc;
+          break;
+        }
         if (num1-5 < sweepAngle && sweepAngle < num1 + 5){
           angle = this.startAngle + num1;
           this.lock = false;

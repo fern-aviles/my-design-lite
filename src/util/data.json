@@ -2817,7 +2817,7 @@
   "885": {
     "name": "Pro Fixed Nozzles",
     "fixedArc": true,
-    "minArc": 0,
+    "minArc": 90,
     "maxArc": 360,
     "minRadius": 4,
     "maxRadius": 17,

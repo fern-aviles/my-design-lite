@@ -186,6 +186,7 @@ export class HunterProduct extends Circle {
           maxRadius: this.maxRadius,
           minRadius: this.minRadius
         });
+        console.log(this.water.maxArc)
       },
     });
   }
@@ -407,11 +408,14 @@ export class HunterProduct extends Circle {
         const newStart = this.water.startAngle + (newArc/2);
         const newEnd = this.water.endAngle - (newArc/2);
         this.water.setWater(newStart, newEnd);
+        this.water.setConstraints({
+          maxArc: this.maxArc,
+          minArc: this.minArc,
+          maxRadius: this.maxRadius,
+          minRadius: this.minRadius,
+        });
       }
-
-
     }
-    
   }
 
   // Chekcs for nozzles that work for the current radius
@@ -463,7 +467,7 @@ export class HunterProduct extends Circle {
       const modelObj = this.nozzleOptions[model];
 
       // Setting the proper angle setting
-      const anglesInModel = modelObj.data.angles
+      const anglesInModel = modelObj.data.angles;
       let currAngle = this.roundAngle(Object.keys(anglesInModel)); 
       if (Object.keys(anglesInModel).length === 1){
         currAngle = Object.keys(anglesInModel)[0];
@@ -503,7 +507,7 @@ export class HunterProduct extends Circle {
         }
       }
     }
-    this.maxArc = maxArc
+    this.maxArc = maxArc;
   }
 
   /**
@@ -555,7 +559,7 @@ export class HunterProduct extends Circle {
    */
   roundAngle(angles: string[]): string{
     if(angles[0] === "0" && angles[1] === "360"){
-      return "360"
+      return "360";
     }
     const angle = this.water.getArcAngle();
     let closestAngle = angles[0];
@@ -602,7 +606,7 @@ export class HunterProduct extends Circle {
       `Square Precip: ${(precip_sq).toFixed(2)} in/hr, ` +
       `Triangle Precip: ${(precip_tri).toFixed(2)} in/hr`;
 
-    this.set({ fill: nozzle.data.color || 'white'});
+    this.set({ fill: nozzle.data.color || 'black'});
     this.water.canvas.renderAll();
   }
 
