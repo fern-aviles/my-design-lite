@@ -491,8 +491,9 @@ export class Water extends Path {
   checkOmittedAngles(angle: number, control: string): number {
     let sweepAngle;
     angle = this.normalizeAngle(angle, false);
-    for (let idx in this.omittedAngles){
-      let [num1, num2] = this.omittedAngles[idx];
+    for (let i = 0; i < this.omittedAngles.length - 1; i++) {
+      let num1 = this.omittedAngles[i];
+      let num2 = this.omittedAngles[i + 1];
       if (control === 'start'){
         sweepAngle = this.getSweepAngle(angle, this.endAngle) * (180/Math.PI);
         if(sweepAngle > this.maxArc){
@@ -797,6 +798,10 @@ export class Water extends Path {
 
   updateWaterScale(waterScale: number): void {
     this.waterScale = waterScale;
+  }
+
+  setOmittedAngles(angles: any): void {
+    this.omittedAngles = angles;
   }
 }
 export default Water;

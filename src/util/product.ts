@@ -33,6 +33,7 @@ export interface NozzleTypes {
 
 export interface Nozzles {
   [type: string]: {
+    omittedAngles: any;
     minScaling: any;
     model: NozzleTypes;
   };
@@ -46,7 +47,6 @@ export interface ProductType {
   minRadius: number;
   maxRadius: number;
   recPressure: string;
-  omittedRanges: any;
   nozzles: Nozzles;
 }
 
@@ -78,6 +78,7 @@ export class HunterProduct extends Circle {
   pressure: string;
   nozzleInfo: string;
   autoSelectable: any;
+  omittedAngles: any;
 
   /**
    * Constructs the HunterProduct object and is using 
@@ -113,6 +114,7 @@ export class HunterProduct extends Circle {
     this.selectedNozzle = "";
     this.nozzleInfo = "No nozzle selected";
     this.pressure = waterOptions.pressure || product.recPressure;
+    this.omittedAngles = product.omittedAngles;
     console.log(this.name);
     console.log("Selected Pressure:", this.pressure)
     waterOptions.minRadius = this.minRadius;
@@ -245,6 +247,7 @@ export class HunterProduct extends Circle {
     // ex. standard, mp1000
     for(let nozzle in nozzles){ 
       const models = nozzles[nozzle].model;
+      const omittedAngles = nozzles[nozzle].omittedAngles;
 
       // Iterate through the models
       // ex. 1.5, 90
@@ -267,6 +270,7 @@ export class HunterProduct extends Circle {
           minScaling: nozzles[nozzle].minScaling || 0.25,
           inArc: false,
           inRadius: false,
+          omittedAngles: omittedAngles || [],
           text: new FabricText(`${key}`, {
             left: xOffset,
             top: yOffset,
@@ -598,6 +602,18 @@ export class HunterProduct extends Circle {
     }
     this.selectedNozzle = selectedNozzle;
     let nozzle = this.nozzleOptions[selectedNozzle];
+
+    // If the selected nozzle doesn't have nozzles at a specific angle,
+    // remove the option to select that angle
+    if(nozzle.omittedAngles.length > 0){
+      const waterOmittedAngles = new Set(this.omittedAngles);
+      let omittedAngles = new Set(nozzle.omittedAngles);
+      let res = this.intersection(omittedAngles, waterOmittedAngles);
+      this.water.setOmittedAngles(res);
+    }
+    else{
+      this.water.setOmittedAngles(this.omittedAngles);
+    }
     
     let angles = nozzle.arcSettings;
     const key = this.roundAngle(Object.keys(angles));
@@ -627,5 +643,16 @@ export class HunterProduct extends Circle {
    */
   getSelectedNozzle(): string{
     return this.selectedNozzle;
+  }
+
+  intersection<T>(setA: Set<T>, setB: Set<T>): any {
+    const result = new Set<T>();
+    for (let item of setA) {
+      if (setB.has(item)) {
+        result.add(item);
+      }
+    }
+
+    return Array.from(result);
   }
 }
