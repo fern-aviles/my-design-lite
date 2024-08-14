@@ -151,7 +151,6 @@ export class HunterProduct extends Circle {
     this.findNozzles(this.data, this.minRadius);
     this.water.midController.on({
       'moving': () => {
-        // this.deselectNozzle(this.water.getRadius(), this.water.getArcAngle());
         this.findNozzles(this.data, this.water.getRadius());
       },
       'modified': () => {
@@ -161,7 +160,6 @@ export class HunterProduct extends Circle {
     });
     this.water.startController.on({
       'moving': () => {
-        // this.deselectNozzle(this.water.getRadius(), this.water.getArcAngle());
         this.findNozzles(this.data, this.water.getRadius());
         },
       'modified': () => {
@@ -171,7 +169,6 @@ export class HunterProduct extends Circle {
     });
     this.water.endController.on({
       'moving': () => {
-        // this.deselectNozzle(this.water.getRadius(), this.water.getArcAngle());
         this.findNozzles(this.data, this.water.getRadius());
         },
       'modified': () => {
@@ -479,6 +476,7 @@ export class HunterProduct extends Circle {
    */
   findNozzlesArc(): void {
     let maxArc = 0;
+    let currentOmittedAngles = [];
     for(let model in this.nozzleOptions){
       const modelObj = this.nozzleOptions[model];
 
@@ -506,7 +504,13 @@ export class HunterProduct extends Circle {
           maxArc = modelMaxArc;
         }
         const arcAngle = this.water.getArcAngle();
-        
+        const modelOmittedAngles = modelObj.omittedAngles;
+        if(modelOmittedAngles.length > 0){
+          currentOmittedAngles.push(...modelObj.omittedAngles);
+        }
+        else if(this.omittedAngles){
+          currentOmittedAngles.push(...this.omittedAngles);
+        }
         // Check if the current nozzle is selectable with the current arc
         if (modelMinArc <= arcAngle && arcAngle <= modelMaxArc){
           modelObj.text.set({stroke: 'black'});
@@ -523,6 +527,11 @@ export class HunterProduct extends Circle {
         }
       }
     }
+    // // If the selected nozzle doesn't have nozzles at a specific angle,
+    // // remove the option to select that angle
+    currentOmittedAngles = Array.from(new Set(currentOmittedAngles));
+    this.water.setOmittedAngles(currentOmittedAngles);
+
     this.maxArc = maxArc;
   }
 
@@ -540,6 +549,7 @@ export class HunterProduct extends Circle {
       maxRadius: this.maxRadius,
       minRadius: this.minRadius,
     });
+    this.water.setOmittedAngles(this.omittedAngles);
     this.set({ fill: "white"});
     this.nozzleInfo = "No nozzle selected";
   }
@@ -602,18 +612,6 @@ export class HunterProduct extends Circle {
     }
     this.selectedNozzle = selectedNozzle;
     let nozzle = this.nozzleOptions[selectedNozzle];
-
-    // If the selected nozzle doesn't have nozzles at a specific angle,
-    // remove the option to select that angle
-    if(nozzle.omittedAngles.length > 0){
-      const waterOmittedAngles = new Set(this.omittedAngles);
-      let omittedAngles = new Set(nozzle.omittedAngles);
-      let res = this.intersection(omittedAngles, waterOmittedAngles);
-      this.water.setOmittedAngles(res);
-    }
-    else{
-      this.water.setOmittedAngles(this.omittedAngles);
-    }
     
     let angles = nozzle.arcSettings;
     const key = this.roundAngle(Object.keys(angles));
