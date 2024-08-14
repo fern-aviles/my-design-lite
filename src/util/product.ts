@@ -319,7 +319,7 @@ export class HunterProduct extends Circle {
   }
 
   /**
-   * Selects for the most optimal nozzle
+   * Selects the most optimal nozzle
    * 
    * @returns {null}
    */
@@ -354,6 +354,7 @@ export class HunterProduct extends Circle {
 
       const arcAngle = this.water.getArcAngle();
       const arcRadius = this.water.getRadius();
+
       // Checking if the current arc setting works
       // if it does, it goes to nozzleRanking
       if(modelObj.inRadius && modelObj.inArc){
@@ -390,18 +391,22 @@ export class HunterProduct extends Circle {
       });
       this.setNozzle(nozzleRanking[0][2] as string);
     }
+
     // If there are no nozzles to choose from,
     // select from the candidate ranking
     else if (candidateNozzleRanking.length > 0){
       candidateNozzleRanking.sort((a, b) => {
+
         // Compare the first elements, which are numbers
         if (a[0] !== b[0]) {
           return (a[0] as number) - (b[0] as number);
         }
+
         // Compare the second elements, which are also numbers
         if (a[1] !== b[1]) {
           return (a[1] as number) - (b[1] as number);
         }
+
         // Compare the third elements, which are strings
         return (a[2] as string).localeCompare(b[2] as string);
       });
@@ -497,6 +502,7 @@ export class HunterProduct extends Circle {
       if (modelObj.inRadius) {
         const modelMaxArc = modelObj.maxArc;
         const modelMinArc = modelObj.minArc;
+
         // out of the nozzles that work with the radius,
         // make sure to set the maxArc for water to be the
         // largest arc of one of the nozzles
@@ -511,6 +517,7 @@ export class HunterProduct extends Circle {
         else if(this.omittedAngles){
           currentOmittedAngles.push(...this.omittedAngles);
         }
+
         // Check if the current nozzle is selectable with the current arc
         if (modelMinArc <= arcAngle && arcAngle <= modelMaxArc){
           modelObj.text.set({stroke: 'black'});
@@ -527,8 +534,9 @@ export class HunterProduct extends Circle {
         }
       }
     }
-    // // If the selected nozzle doesn't have nozzles at a specific angle,
-    // // remove the option to select that angle
+
+    // If the selected nozzle doesn't have nozzles at a specific angle,
+    // remove the option to select that angle
     currentOmittedAngles = Array.from(new Set(currentOmittedAngles));
     this.water.setOmittedAngles(currentOmittedAngles);
 
@@ -643,6 +651,12 @@ export class HunterProduct extends Circle {
     return this.selectedNozzle;
   }
 
+  /**
+   * Checks intersection between two sets.
+   * @param setA 
+   * @param setB 
+   * @returns 
+   */
   intersection<T>(setA: Set<T>, setB: Set<T>): any {
     const result = new Set<T>();
     for (let item of setA) {

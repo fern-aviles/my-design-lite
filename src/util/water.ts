@@ -480,7 +480,6 @@ export class Water extends Path {
         angle = this.startAngle - .001;
       }
     }
-    
     return this.normalizeAngle(angle, false);
   }
 
@@ -537,6 +536,7 @@ export class Water extends Path {
           sweepAngle = nextSnapPoint;
         }
       }
+
       // Moving backwards
       else if (sweepAngle < this.prevSnap - 5) {
         if (lastSnapIndex > 0) {
@@ -786,16 +786,29 @@ export class Water extends Path {
     this.canvas.renderAll();
   }
 
+  /**
+   * Sets the minimum scaling
+   * @param scale 
+   */
   setMinScaling(scale: number): void {
     this.minScaling = scale;
   }
 
+  /**
+   * Updates the water distance scaling
+   * @param waterScale 
+   */
   updateWaterScale(waterScale: number): void {
     this.waterScale = waterScale;
   }
 
+  /**
+   * Sets new omitted angles
+   * @param angles 
+   */
   setOmittedAngles(angles: any): void {
     this.omittedAngles = angles;
   }
 }
+
 export default Water;
