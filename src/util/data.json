@@ -1387,7 +1387,7 @@
     "minRadius": 12,
     "maxRadius": 35,
     "recPressure": "40PSI",
-    "omittedAngles": [[270, 360]],
+    "omittedAngles": [270, 360],
     "autoSelect": true,
     "nozzles": {
       "mp1000": {
@@ -2337,7 +2337,7 @@
     "autoSelect": true,
     "nozzles": {
       "4A": {
-        "minRadius": 3,
+        "minRadius": 4,
         "maxRadius": 4,
         "minArc": 0,
         "maxArc": 360,
@@ -2609,7 +2609,7 @@
         }
       },
       "12A": {
-        "minRadius": 11,
+        "minRadius":11 ,
         "maxRadius": 13,
         "minArc": 0,
         "maxArc": 360,

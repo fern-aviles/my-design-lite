@@ -38,8 +38,7 @@ import { Controller } from '@/util/controller';
   const options = ref([
     { text: 'PGP Ultra', value: '862' },
     { text: 'MP Rotator', value: '461006' },
-    { text: 'Pro Adjustable Nozzles', value:'884' },
-    { text: 'Pro Fixed Nozzles', value: '885' }, 
+    { text: 'Pro Adjustable Nozzles', value:'884' }
   ]);
   interface NozzleDictionary {
   [key: number]: {
@@ -70,7 +69,7 @@ import { Controller } from '@/util/controller';
     }
       // It's a controller
     else if(e instanceof Controller){
-      let product = e.water.product as HunterProduct
+      let product = e.water.product as HunterProduct;
       product.setNozzle(nozzle.value);
     }
   }
@@ -123,9 +122,9 @@ import { Controller } from '@/util/controller';
       }
       // Clicking on a controller
       else if(options.target instanceof Controller){
-        let product: HunterProduct = options.target.water.product as HunterProduct
+        let product: HunterProduct = options.target.water.product as HunterProduct;
         newNozzles = product.nozzleOptions;
-        nozzles.value = {...newNozzles}
+        nozzles.value = {...newNozzles};
 
         nozzle.value = product.getSelectedNozzle();
       }
