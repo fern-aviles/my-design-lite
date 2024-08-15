@@ -3,7 +3,7 @@
     <p> Enter PSI: </p>
     <input v-model="pressure" placeholder="45">
 
-    <p> Select HunterProduct </p>
+    <p> Select Product </p>
     <select v-model="product">
       <option v-for="option in options" :value="option.value">
         {{ option.text }}
@@ -18,13 +18,6 @@
         {{ key }}
       </option>
     </select>
-
-    <label> Create rotor</label>
-    <input
-      type="checkbox"
-      v-model="rotorCreation"
-      :true-value=true
-      :false-value=false />
     <canvas ref="canvas" width="1600" height="1200"></canvas>
   </div>
 </template>
@@ -34,8 +27,8 @@
   import { Canvas, FabricText, Line } from 'fabric';
   import { Water } from '@/util/water'
   import { HunterProduct } from '@/util/product'
-import { Controller } from '@/util/controller';
-import { MPStrip } from '@/util/strip';
+  import { Controller } from '@/util/controller';
+  import { MPStrip, MPStripwater } from '@/util/strip';
   const canvas = ref();
   let c = null as Canvas | null;
   let waterScale = 20;
@@ -43,11 +36,12 @@ import { MPStrip } from '@/util/strip';
   let rotorCreation = false;
 
   const pressure = ref('30');
-  const product = ref('884');
+  const product = ref('179291');
   const options = ref([
     { text: 'PGP Ultra', value: '862' },
     { text: 'MP Rotator', value: '461006' },
-    { text: 'Pro Adjustable Nozzles', value:'884' }
+    { text: 'Pro Adjustable Nozzles', value:'884' },
+    { text: 'MP Strip', value: '179291'}
   ]);
   interface NozzleDictionary {
   [key: number]: {
@@ -81,10 +75,18 @@ import { MPStrip } from '@/util/strip';
       let product = e.water.product as HunterProduct;
       product.setNozzle(nozzle.value);
     }
+    else if (e instanceof MPStrip){
+      e.setSelectedNozzle(nozzle.value)
+    }
+      // It's a controller
+    else if(e instanceof MPStripwater){
+      let product = e.product as MPStrip;
+      product.setSelectedNozzle(nozzle.value);
+    }
   }
 
   const createRotor = (e: any) => {
-    if(rotorCreation){
+    if(product.value != '179291'){
       const rotor = new HunterProduct({
         productID: product.value,
         pressure: pressure.value + "PSI",
@@ -113,7 +115,6 @@ import { MPStrip } from '@/util/strip';
     nozzles.value = {...mpstrip.nozzleOptions};
     c!.setActiveObject(mpstrip);
     }
-    console.log("Created Rotor:", rotorCreation)
   }
 
   const createMPStrip = (e: any) => {
@@ -173,6 +174,13 @@ import { MPStrip } from '@/util/strip';
       else if(!options.target){
         nozzles.value = {};
         nozzle.value = "";
+      }
+      else if (options.target instanceof MPStrip){
+        newNozzles = options.target.nozzleOptions;
+        nozzles.value = {...newNozzles};
+
+        const nozzleSelected = options.target.getSelectedNozzle();
+        nozzle.value = nozzleSelected;
       }
       // Other selection
       else{
