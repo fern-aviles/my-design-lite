@@ -2331,10 +2331,10 @@
     "minArc": 0,
     "maxArc": 360,
     "minRadius": 4,
-    "maxRadius": 17,
+    "maxRadius": 19,
     "recPressure": "30PSI",
     "omittedAngles": [],
-    "autoSelect": false,
+    "autoSelect": true,
     "nozzles": {
       "4A": {
         "minRadius": 4,
@@ -2817,12 +2817,12 @@
   "860": { 
     "name": "SRM",
     "fixedArc": false,
-    "minArc": 0,
+    "minArc": 40,
     "maxArc": 360,
     "minRadius": 14,
     "maxRadius": 34,
     "recPressure": "40PSI",
-    "autoSelect": true,
+    "autoSelect": false,
     "nozzles": {
       "dark green": {
         "minArc": 0,
