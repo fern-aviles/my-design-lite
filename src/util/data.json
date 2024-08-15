@@ -2813,5 +2813,41 @@
         }
       }
     }
+  },
+  "179291": {
+    "name": "MP Strip Nozzles",
+    "recPressure": "40PSI",
+    "omittedAngles": [],
+    "minArc": 90,
+    "maxArc": 360,
+    "minRadius": 12,
+    "maxRadius": 35,
+    "fixedArc": true,
+    "nozzles": {
+      "left": {
+        "30PSI": {"height": "4", "width": "14", "gpm": 0.19, "precip_sq": 11.4},
+        "35PSI": {"height": "5", "width": "15", "gpm": 0.21, "precip_sq": 12.6},
+        "40PSI": {"height": "5", "width": "15", "gpm": 0.22, "precip_sq": 13.2},
+        "45PSI": {"height": "5", "width": "15", "gpm": 0.23, "precip_sq": 13.8},
+        "50PSI": {"height": "6", "width": "16", "gpm": 0.25, "precip_sq": 15.0},
+        "55PSI": {"height": "6", "width": "16", "gpm": 0.26, "precip_sq": 15.6}
+      },
+      "right": {
+        "30PSI": {"height": "4", "width": "14", "gpm": 0.19, "precip_sq": 11.4},
+        "35PSI": {"height": "5", "width": "15", "gpm": 0.21, "precip_sq": 12.6},
+        "40PSI": {"height": "5", "width": "15", "gpm": 0.22, "precip_sq": 13.2},
+        "45PSI": {"height": "5", "width": "15", "gpm": 0.23, "precip_sq": 13.8},
+        "50PSI": {"height": "6", "width": "16", "gpm": 0.25, "precip_sq": 15.0},
+        "55PSI": {"height": "6", "width": "16", "gpm": 0.26, "precip_sq": 15.6}
+      },
+      "center": {
+        "30PSI": {"height": "4", "width": "28", "gpm": 0.38, "precip_sq": 22.8},
+        "35PSI": {"height": "5", "width": "30", "gpm": 0.41, "precip_sq": 24.6},
+        "40PSI": {"height": "5", "width": "30", "gpm": 0.44, "precip_sq": 26.4},
+        "45PSI": {"height": "5", "width": "30", "gpm": 0.47, "precip_sq": 28.2},
+        "50PSI": {"height": "6", "width": "32", "gpm": 0.49, "precip_sq": 29.4},
+        "55PSI": {"height": "6", "width": "32", "gpm": 0.51, "precip_sq": 30.6}
+      }
+    }
   }
 }

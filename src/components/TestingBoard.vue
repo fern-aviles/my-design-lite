@@ -18,20 +18,29 @@
         {{ key }}
       </option>
     </select>
+
+    <label> Create rotor</label>
+    <input
+      type="checkbox"
+      v-model="rotorCreation"
+      :true-value=true
+      :false-value=false />
     <canvas ref="canvas" width="1600" height="1200"></canvas>
   </div>
 </template>
 
 <script setup lang="ts">
   import { ref, onMounted, watch } from 'vue';
-  import { Canvas, Circle, FabricText, Line } from 'fabric';
+  import { Canvas, FabricText, Line } from 'fabric';
   import { Water } from '@/util/water'
   import { HunterProduct } from '@/util/product'
 import { Controller } from '@/util/controller';
+import { MPStrip } from '@/util/strip';
   const canvas = ref();
   let c = null as Canvas | null;
   let waterScale = 20;
   let products = 0;
+  let rotorCreation = false;
 
   const pressure = ref('30');
   const product = ref('884');
@@ -75,7 +84,40 @@ import { Controller } from '@/util/controller';
   }
 
   const createRotor = (e: any) => {
-    const rotor = new HunterProduct({
+    if(rotorCreation){
+      const rotor = new HunterProduct({
+        productID: product.value,
+        pressure: pressure.value + "PSI",
+        left: e.offsetX,
+        top: e.offsetY,
+        productIndex: products,
+        canvas: c,
+      });
+      c!.add(rotor);
+      nozzles.value = {...rotor.nozzleOptions};
+      c!.setActiveObject(rotor);
+    }
+    else{
+    const mpstrip = new MPStrip({
+      productID: 179291,
+      pressure: pressure.value + "PSI",
+      left: e.offsetX,
+      top: e.offsetY,
+      productIndex: products,
+      width: 20,
+      height: 10,
+      fill: 'black',
+      canvas: c,
+    });
+    c!.add(mpstrip);
+    nozzles.value = {...mpstrip.nozzleOptions};
+    c!.setActiveObject(mpstrip);
+    }
+    console.log("Created Rotor:", rotorCreation)
+  }
+
+  const createMPStrip = (e: any) => {
+    const mpstrip = new MPStrip({
       productID: product.value,
       pressure: pressure.value + "PSI",
       left: e.offsetX,
@@ -83,11 +125,10 @@ import { Controller } from '@/util/controller';
       productIndex: products,
       canvas: c,
     });
-    c!.add(rotor);
-    nozzles.value = {...rotor.nozzleOptions};
-    c!.setActiveObject(rotor);
+    c!.add(mpstrip);
+    nozzles.value = {...mpstrip.nozzleOptions};
+    c!.setActiveObject(mpstrip);
   }
-
   onMounted(() => {
   const canvasValue = canvas.value;
   c = new Canvas(canvasValue, {
