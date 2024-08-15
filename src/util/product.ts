@@ -647,7 +647,7 @@ export class HunterProduct extends Circle {
     let gpm = nozzle.data.angles[key][closestPressure].gpm;
     let precip_sq = nozzle.data.angles[key][closestPressure].precip_sq;
     let precip_tri = nozzle.data.angles[key][closestPressure].precip_tri;
-    if(["PGP Ultra", "SRM", "PGJ"].includes(this.name) ){
+    if(["PGP Ultra", "SRM", "PGJ", "PGP-ADJ"].includes(this.name) ){
       const scaling = 180/this.water.getArcAngle();
       this.nozzleInfo = 
         `Nozzle selected: ${this.selectedNozzle}\n` +
