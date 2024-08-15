@@ -2331,7 +2331,7 @@
     "minArc": 0,
     "maxArc": 360,
     "minRadius": 4,
-    "maxRadius": 17,
+    "maxRadius": 19,
     "recPressure": "30PSI",
     "omittedAngles": [],
     "autoSelect": true,
@@ -2817,13 +2817,13 @@
   "861": {
     "name": "PGP-ADJ",
     "fixedArc": false,
-    "minArc": 0,
+    "minArc": 40,
     "maxArc": 360,
     "minRadius": 22,
     "maxRadius": 52,
     "recPressure": "30PSI",
     "omittedAngles": [],
-    "autoSelect": true,
+    "autoSelect": false,
     "nozzles": {
       "blue": {
         "minArc": 0,
