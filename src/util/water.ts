@@ -87,6 +87,7 @@ export class Water extends Path {
     this.midAngle = 0;
     this.sweepAngle = this.getSweepAngle(startAngle, endAngle);
     this.omittedAngles = options.omittedAngles;
+    this.minScaling = options.minScaling;
     this.set({left: centerX, top: centerY});
     
     // Add control circles
@@ -403,7 +404,7 @@ export class Water extends Path {
       top: mid.y,
       angle: textAngle,
     });
-    this.distance = parseFloat((distance/this.waterScale).toFixed(2));
+    this.distance = parseFloat((distance/this.waterScale).toFixed(5));
   }
 
   /**
@@ -753,18 +754,18 @@ export class Water extends Path {
    * @returns {null}
    */
   setConstraints(constraints: any){
-    this.maxArc = constraints.maxArc;
-    this.minArc = constraints.minArc;
-    this.maxRadius = constraints.maxRadius;
-    this.minRadius = constraints.minRadius;
+    this.maxArc = constraints.maxArc || this.maxArc;
+    this.minArc = constraints.minArc || this.minArc;
+    this.maxRadius = constraints.maxRadius || this.maxRadius;
+    this.minRadius = constraints.minRadius || this.minRadius;
   }
 
   /**
-   * Sets the water object to a specific position
+   * Sets the water object to a specific arc
    * @param start 
    * @param end 
    */
-  setWater(start: number, end: number){
+  setWaterArc(start: number, end: number){
     this.startAngle = this.normalizeAngle(start, false);
     this.endAngle = this.normalizeAngle(end, false);
 
