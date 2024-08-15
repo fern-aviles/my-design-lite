@@ -39,7 +39,10 @@ import { Controller } from '@/util/controller';
     { text: 'PGP Ultra', value: '862' },
     { text: 'MP Rotator', value: '461006' },
     { text: 'Pro Adjustable Nozzles', value:'884' },
-    { text: 'PGJ', value: '695'}
+    { text: 'Pro Fixed Nozzles', value: '885' },
+    { text: 'PGJ', value: '695' },
+    { text: 'PGP-ADJ', value: '861' },
+    { text: 'SRM', value: '860' },
   ]);
   interface NozzleDictionary {
   [key: number]: {
