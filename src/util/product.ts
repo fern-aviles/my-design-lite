@@ -1,4 +1,4 @@
-import { Circle, FabricText, type TOriginX, type TOriginY } from 'fabric';
+import { Canvas, Circle, FabricText, type TOriginX, type TOriginY } from 'fabric';
 import { Water } from './water';
 import data from "./data.json";
 
@@ -79,6 +79,8 @@ export class HunterProduct extends Circle {
   nozzleInfo: string;
   autoSelectable: any;
   omittedAngles: any;
+  minScaling: number = 0.25;
+  canvas: Canvas;
 
   /**
    * Constructs the HunterProduct object and is using 
@@ -115,6 +117,9 @@ export class HunterProduct extends Circle {
     this.nozzleInfo = "No nozzle selected";
     this.pressure = waterOptions.pressure || product.recPressure;
     this.omittedAngles = product.omittedAngles;
+    this.canvas = waterOptions.canvas;
+    this.createNozzlesDictionary(this.data);
+    this.setRadiusLimits(this.data);
     console.log(this.name);
     console.log("Selected Pressure:", this.pressure)
     waterOptions.minRadius = this.minRadius;
@@ -123,6 +128,7 @@ export class HunterProduct extends Circle {
     waterOptions.maxArc = this.maxArc;
     waterOptions.fixedArc = this.fixedArc;
     waterOptions.omittedAngles = product.omittedAngles;
+    waterOptions.minScaling = this.minScaling;
     const temp = {
             startAngle: 0,
             endAngle: 270,
@@ -137,6 +143,7 @@ export class HunterProduct extends Circle {
             maxArc: this.maxArc,
             fixedArc: this.fixedArc,
             omittedAngles: waterOptions.omittedAngles,
+            minScaling: waterOptions.minScaling
     };
 
     // Create the Water instance
@@ -147,7 +154,6 @@ export class HunterProduct extends Circle {
       top: 0,
       fontSize: 25,
     });
-    this.createNozzlesDictionary(this.data);
     this.findNozzles(this.data, this.minRadius);
     this.water.midController.on({
       'moving': () => {
@@ -280,7 +286,7 @@ export class HunterProduct extends Circle {
           })
         };
         yOffset += 15;
-        if(yOffset+30 > this.water.canvas.getHeight()) {
+        if(yOffset+30 > this.canvas.getHeight()) {
           yOffset = 0;
           xOffset += 175;
         }
@@ -290,10 +296,10 @@ export class HunterProduct extends Circle {
           this.nozzleOptions[key].text.set({stroke: 'green'});
           console.log(this.selectedNozzle, this.nozzleInfo);
         });
-        this.water.canvas.add(this.nozzleOptions[key].text);
+        this.canvas.add(this.nozzleOptions[key].text);
       }
     }
-    this.water.setMinScaling(minScaling);
+    this.minScaling = minScaling;
   }
 
   /**
@@ -417,12 +423,10 @@ export class HunterProduct extends Circle {
         let newArc = Math.abs(this.water.getArcAngle() - this.maxArc);
         const newStart = this.water.startAngle + (newArc/2);
         const newEnd = this.water.endAngle - (newArc/2);
-        this.water.setWater(newStart, newEnd);
+        this.water.setWaterArc(newStart, newEnd);
         this.water.setConstraints({
           maxArc: this.maxArc,
           minArc: this.minArc,
-          maxRadius: this.maxRadius,
-          minRadius: this.minRadius,
         });
       }
     }
@@ -437,6 +441,8 @@ export class HunterProduct extends Circle {
   findNozzlesRadius(data: any, targetRadius: number): void {
     const id = this.productID;
     const nozzles = data[id].nozzles;
+    let maxRadius = 0;
+    let minRadius = 100;
     for(let nozzle in nozzles){
       const models = nozzles[nozzle].model;
       for(let model in models){
@@ -457,6 +463,12 @@ export class HunterProduct extends Circle {
 
         const radius = data.angles[currAngle][prefPressure].radius;
 
+        // Check if radius is the smallest
+        minRadius = Math.min(minRadius, radius);
+
+        // Check if radius is the largest
+        maxRadius = Math.max(maxRadius, radius);
+
         // Check if targetRadius is within the range of the current nozzle
         let roundedMinRadius = radius*(1-this.nozzleOptions[key].minScaling);
         if (targetRadius >= roundedMinRadius &&
@@ -473,6 +485,8 @@ export class HunterProduct extends Circle {
         }
       }
     }
+
+    this.water.setConstraints({maxRadius: maxRadius, minRadius: minRadius});
   }
 
   /**
@@ -649,7 +663,7 @@ export class HunterProduct extends Circle {
         `Triangle Precip: ${(precip_tri).toFixed(2)} in/hr`;
     }
     this.set({ fill: nozzle.data.color || 'black'});
-    this.water.canvas.renderAll();
+    this.canvas.renderAll();
   }
 
   /**
@@ -675,5 +689,49 @@ export class HunterProduct extends Circle {
     }
 
     return Array.from(result);
+  }
+
+  /**
+   * Finds the smallest and largest radius for the current
+   * pressure.
+   * @param data 
+   */
+  setRadiusLimits(data: Products): void{
+    const id = this.productID;
+    const nozzles = data[id].nozzles;
+    let maxRadius = 0;
+    let minRadius = 1000;
+    for(let nozzle in nozzles){
+      const models = nozzles[nozzle].model;
+      for(let model in models){
+        const key = `${nozzle}, ${model}`;
+        const data = models[model];
+        
+        // Setting the proper angle setting
+        let angles = Object.keys(data.angles);
+        for(let currAngle in angles){
+          currAngle = angles[currAngle];
+          if (angles.length === 1){
+            currAngle = angles[0];
+          }
+
+          // Setting a new pressure in case the nozzle doesn't 
+          // have the same pressure available
+          let prefPressure = null;
+          prefPressure = this.roundPressure(Object.keys(data.angles[currAngle]));
+          this.nozzleOptions[key].pressure = prefPressure;
+
+          const radius = data.angles[currAngle][prefPressure].radius;
+
+          // Check if radius is the smallest
+          minRadius = Math.min(minRadius, radius);
+
+          // Check if radius is the largest
+          maxRadius = Math.max(maxRadius, radius);
+        }
+      }
+    }
+    this.maxRadius = maxRadius;
+    this.minRadius = minRadius;
   }
 }
