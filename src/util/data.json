@@ -2339,7 +2339,7 @@
     "minArc": 0,
     "maxArc": 360,
     "minRadius": 4,
-    "maxRadius": 17,
+    "maxRadius": 19,
     "recPressure": "30PSI",
     "omittedAngles": [],
     "autoSelect": true,
@@ -2830,7 +2830,7 @@
     "minRadius": 15,
     "maxRadius": 37,
     "recPressure": "40PSI",
-    "autoSelect": true,
+    "autoSelect": false,
     "nozzles": {
       "red": {
         "minArc": 0,

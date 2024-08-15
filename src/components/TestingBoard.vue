@@ -33,7 +33,7 @@ import { Controller } from '@/util/controller';
   let waterScale = 20;
   let products = 0;
 
-  const pressure = ref('30');
+  const pressure = ref('40');
   const product = ref('695');
   const options = ref([
     { text: 'PGP Ultra', value: '862' },
