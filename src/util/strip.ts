@@ -7,7 +7,8 @@ import { Circle,
          Line,
          Rect,
          Control,
-         controlsUtils} from 'fabric';
+         controlsUtils,
+         util} from 'fabric';
 import { type Products,
          type ProductType,
          type Nozzles,
@@ -17,7 +18,9 @@ import { type Products,
          type AngleDetails
          } from './huntertypes';
 import data from "./data.json";
-import { h } from 'vue';
+import { Controller } from './controller';
+
+const INCREASE_ONE_END = true;
 
 export class MPStrip extends Circle{
   water: MPStripwater;
@@ -44,18 +47,21 @@ export class MPStrip extends Circle{
     options.originX = 'center';
     options.originY = 'center';
     options.hasControls = false;
-    options.fill = 'gray'
+    options.fill = 'gray';
     super(options);
 
     // Setting options for product water
     options.selectable = true;
     options.hasControls = true;
     options.hasBorder = false;
+    options.lockMovementX = true;
+    options.lockMovementY = true;
     options.centeredRotation = false;
     options.centeredScaling = false;
     options.uniformScaling = true;
     options.lockScalingFlip = true;   // Prevent flipping during scaling
     options.lockUniScaling = true;   // Allow uniform scaling
+    options.minScaleLimit = 0.75;
     options.side = this.side;
     options.originX = this.side;
     options.originY = 'bottom';
@@ -68,7 +74,7 @@ export class MPStrip extends Circle{
     this.pressure = options.pressure;
     this.productID = options.productID;
     const id = this.productID;
-    const productData = data[id];
+    const productData = this.data[id];
     const nozzlesData = productData.nozzles;
     const pressures = nozzlesData[this.nozzleLookUp[this.side]];
     const pressureData = pressures[this.roundPressure(Object.keys(pressures))];
@@ -86,11 +92,11 @@ export class MPStrip extends Circle{
     this.side = options.side;
     this.canvas = options.canvas;
 
-    this.canvas.add(water);
+    this.canvas.insertAt(0, water);
 
   }
 
-  createNozzleDictionary(data: Products){
+  createNozzleDictionary(data: any){
     for(let nozzleIdx in data.nozzles){
       let nozzle = data.nozzles[nozzleIdx];
       this.nozzleOptions[nozzleIdx] = {};
@@ -101,7 +107,7 @@ export class MPStrip extends Circle{
   }
 
   getSelectedNozzle(): string{
-    return this.nozzleLookUp[this.side]
+    return this.nozzleLookUp[this.side];
   }
 
   setSelectedNozzle(nozzle: string): void{
@@ -109,11 +115,17 @@ export class MPStrip extends Circle{
     this.side = this.reverseNozzleLookUp[nozzle];
     this.water.setSide(this.side);
 
-    const pressures= Object.keys(this.nozzleOptions[nozzle].data);
+    const pressures = Object.keys(this.nozzleOptions[nozzle].data);
     const pressure = this.roundPressure(pressures);
     const {width, height} = this.nozzleOptions[nozzle].data[pressure];
     this.water.setWater(width, height);
     this.water.setControls();
+    this.set({
+      left: this.water.left,
+      top: this.water.top,
+    });
+    this.setCoords();
+    this.canvas.renderAll();
   }
 
   roundPressure(pressures: string[]): string{
@@ -138,6 +150,9 @@ export class MPStripwater extends Rect{
   side: string;
   canvas: Canvas;
   waterScale: number = 20;
+  initial: boolean = true;
+  maxScale: number = 1;
+  minScale: number = 0.75;
 
   constructor(options: any){
     options.fill = 'rgba(0, 0, 255, .2)';
@@ -146,11 +161,56 @@ export class MPStripwater extends Rect{
     this.pressure = '';
     this.side = options.side;
     this.canvas = options.canvas;
+
     this.setControls();
+    this.on('scaling', (event) => {
+      // Get current scale factors
+      let scaleX = this.scaleX;
+      let scaleY = this.scaleY;
+
+      let minScale = this.minScale;
+      let maxScale = this.maxScale;
+    
+      // Enforce minimum and maximum scaling
+      if (scaleX < minScale) {
+        scaleX = minScale;
+      } else if (scaleX > maxScale) {
+        scaleX = maxScale;
+      }
+    
+      if (scaleY < minScale) {
+        scaleY = minScale;
+      } else if (scaleY > maxScale) {
+        scaleY = maxScale;
+      }
+    
+      // Apply the constrained scale values
+      this.set({
+        scaleX: scaleX,
+        scaleY: scaleY,
+      });
+    });
     this.product.on({
       'moving': (e) => {this.set({left: this.product.left, top: this.product.top});   
-                        this.setCoords();},
+                        this.setCoords();
+                       },
       "mousedblclick": (e) => {console.log(this.product)},
+      'selected': () => {
+      // Make the rectangle's controls visible
+        this.setControlsVisibility({
+          tr: this.side === 'left',
+          tl: this.side === 'right',
+          br: false,
+          bl: false,
+          mt: this.side === 'center',
+          mb: false,
+          ml: false,
+          mr: false,
+          mtr: false,
+        });
+        this.setCoords(); // Update the rectangle's coordinates
+        this.canvas.renderAll(); // Re-render the canvas
+      }
     });
   }
 
@@ -188,7 +248,6 @@ export class MPStripwater extends Rect{
       });
     }
     else{
-      console.log("center")
       this.controls.mt = new Control({
         x: 0,
         y: -0.5,
@@ -198,25 +257,43 @@ export class MPStripwater extends Rect{
         cursorStyle: 'pointer',
         withConnection: true,
         actionHandler(eventData, transform, x, y) {
+          // Perform rotation with snapping
           controlsUtils.rotationWithSnapping(eventData, transform, x, y);
-          // controlsUtils.scalingEqually(eventData, transform, x, y);
+          // Calculate the difference in the y-coordinate from the origin to the current pointer position
+          const water: MPStripwater = transform.target as MPStripwater;
+          const target = water.product;
+          const pointer = target.canvas!.getViewportPoint(eventData);
+          
+          // Calculate the new scale based on the vertical movement (height)
+          const distance = Math.sqrt(
+            Math.pow(pointer.x - water.left, 2) +
+            Math.pow(pointer.y - water.top, 2)
+          );
+          const newScale = distance / (target.width * target.scaleX);
+          let scaleY = distance / (water.height * water.scaleY);
+          const minScale = water.minScaleLimit;
+          const maxScale = 1;
+        
+          if (scaleY < minScale) {
+            scaleY = minScale;
+          }
+          else if (scaleY > maxScale) {
+            scaleY = maxScale;
+          }
+          // Apply scaling uniformly based on height
+          water.set({
+            scaleY: scaleY,
+            scaleX: scaleY
+          });
+      
+      
+          water.setCoords();  // Update the object's coordinates
+          water.canvas!.requestRenderAll();  // Re-render the canvas
           return true;
         }
       });
     }
-
-    this.setControlsVisibility({
-      tr: this.side === 'left',
-      tl: this.side === 'right',
-      br: false,
-      bl: false,
-      mt: this.side === 'center',
-      mb: false,
-      ml: false,
-      mr: false,
-      mtr: false,
-    });
-    this.set({originX: this.side});
+    this.changeOrigin();
     this.setCoords();
     this.canvas.renderAll();
   }
@@ -227,12 +304,57 @@ export class MPStripwater extends Rect{
 
   setWater(width: number, height: number): void{
     this.set({
-      scaleX: 1,
-      scaleY: 1,
       width: width*this.waterScale,
       height: height*this.waterScale
     });
     this.setCoords();
     this.canvas.renderAll();
+  }
+
+  changeOrigin() {
+    const newOriginX = this.side; // Target origin ('left', 'center', or 'right')
+    const currentOriginX = this.originX;
+  
+    if (currentOriginX === newOriginX) return; // No need to change if already the same
+  
+    // Calculate the direction and magnitude of the shift
+    let currentOffsetFactor = 0;
+    let newOffsetFactor = 0;
+    
+    if (currentOriginX === 'left') {
+      currentOffsetFactor = -0.5;
+    } else if (currentOriginX === 'center') {
+      currentOffsetFactor = 0;
+    } else if (currentOriginX === 'right') {
+      currentOffsetFactor = 0.5;
+    }
+    
+    if (newOriginX === 'left') {
+      newOffsetFactor = -0.5;
+    } else if (newOriginX === 'center') {
+      newOffsetFactor = 0;
+    } else if (newOriginX === 'right') {
+      newOffsetFactor = 0.5;
+    }
+
+    // Calculate the offset based on width, scale, and angle
+    let offsetX = (newOffsetFactor - currentOffsetFactor) * this.width * this.scaleX;
+    if(!INCREASE_ONE_END && newOriginX === 'center'){
+      offsetX /= 2;
+    }
+    if(INCREASE_ONE_END && currentOriginX === 'center'){
+      offsetX *= 2;
+    }
+    const angleRad = util.degreesToRadians(this.angle);
+  
+    // Apply the offset to the left and top positions
+    this.set({
+      left: this.left + offsetX * Math.cos(angleRad),
+      top: this.top + offsetX * Math.sin(angleRad),
+      originX: newOriginX,
+    });
+  
+    this.setCoords(); // Update the rectangle's coordinates
+    this.canvas.renderAll(); // Re-render the canvas
   }
 }

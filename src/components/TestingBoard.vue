@@ -116,20 +116,6 @@
     c!.setActiveObject(mpstrip);
     }
   }
-
-  const createMPStrip = (e: any) => {
-    const mpstrip = new MPStrip({
-      productID: product.value,
-      pressure: pressure.value + "PSI",
-      left: e.offsetX,
-      top: e.offsetY,
-      productIndex: products,
-      canvas: c,
-    });
-    c!.add(mpstrip);
-    nozzles.value = {...mpstrip.nozzleOptions};
-    c!.setActiveObject(mpstrip);
-  }
   onMounted(() => {
   const canvasValue = canvas.value;
   c = new Canvas(canvasValue, {
