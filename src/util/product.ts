@@ -552,7 +552,6 @@ export class HunterProduct extends Circle {
     // If the selected nozzle doesn't have nozzles at a specific angle,
     // remove the option to select that angle
     currentOmittedAngles = Array.from(new Set(currentOmittedAngles));
-    console.log(currentOmittedAngles)
     this.water.setOmittedAngles(currentOmittedAngles);
 
     this.maxArc = maxArc;
