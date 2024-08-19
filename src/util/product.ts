@@ -450,42 +450,45 @@ export class HunterProduct extends Circle {
         const data = models[model];
         
         // Setting the proper angle setting
-        let currAngle = this.roundAngle(Object.keys(this.nozzleOptions[key].data.angles)); 
-        if (Object.keys(data.angles).length === 1){
-          currAngle = Object.keys(data.angles)[0];
-        }
+        let angles = Object.keys(data.angles);
 
-        // Setting a new pressure in case the nozzle doesn't 
-        // have the same pressure available
-        let prefPressure = null;
-        prefPressure = this.roundPressure(Object.keys(data.angles[currAngle]));
-        this.nozzleOptions[key].pressure = prefPressure;
-
-        const radius = data.angles[currAngle][prefPressure].radius;
-
-        // Check if radius is the smallest
-        minRadius = Math.min(minRadius, radius);
-
-        // Check if radius is the largest
-        maxRadius = Math.max(maxRadius, radius);
-
-        // Check if targetRadius is within the range of the current nozzle
-        let roundedMinRadius = radius*(1-this.nozzleOptions[key].minScaling);
-        if (targetRadius >= roundedMinRadius &&
-            targetRadius <= radius) {
-              this.nozzleOptions[key].inRadius = true;
-        }
-        else{
-          if(key === this.selectedNozzle){
-            this.deselectNozzle();
+        for(let currAngle in angles){
+          currAngle = angles[currAngle];
+          if (Object.keys(data.angles).length === 1){
+            currAngle = Object.keys(data.angles)[0];
           }
-          this.nozzleOptions[key].inRadius = false;
-          this.nozzleOptions[key].text.set({stroke: 'red'});
-          this.nozzleOptions[key].show = false;
+
+          // Setting a new pressure in case the nozzle doesn't 
+          // have the same pressure available
+          let prefPressure = null;
+          prefPressure = this.roundPressure(Object.keys(data.angles[currAngle]));
+          this.nozzleOptions[key].pressure = prefPressure;
+
+          const radius = data.angles[currAngle][prefPressure].radius;
+
+          // Check if radius is the smallest
+          minRadius = Math.min(minRadius, radius);
+
+          // Check if radius is the largest
+          maxRadius = Math.max(maxRadius, radius);
+
+          // Check if targetRadius is within the range of the current nozzle
+          let roundedMinRadius = radius*(1-this.nozzleOptions[key].minScaling);
+          if (targetRadius >= roundedMinRadius &&
+              targetRadius <= radius) {
+                this.nozzleOptions[key].inRadius = true;
+          }
+          else{
+            if(key === this.selectedNozzle){
+              this.deselectNozzle();
+            }
+            this.nozzleOptions[key].inRadius = false;
+            this.nozzleOptions[key].text.set({stroke: 'red'});
+            this.nozzleOptions[key].show = false;
+          }
         }
       }
     }
-
     this.water.setConstraints({maxRadius: maxRadius, minRadius: minRadius});
   }
 
@@ -501,52 +504,59 @@ export class HunterProduct extends Circle {
 
       // Setting the proper angle setting
       const anglesInModel = modelObj.data.angles;
-      let currAngle = this.roundAngle(Object.keys(anglesInModel)); 
-      if (Object.keys(anglesInModel).length === 1){
-        currAngle = Object.keys(anglesInModel)[0];
-      }
+      let angles = Object.keys(anglesInModel);
 
-      // Setting a new pressure in case the nozzle doesn't 
-      // have the same pressure available
-      let prefPressure = null;
-      prefPressure = this.roundPressure(Object.keys(anglesInModel[currAngle]));
-      modelObj.pressure = prefPressure;
-
-      // if nozzle is within radius
-      if (modelObj.inRadius) {
-        const modelMaxArc = modelObj.maxArc;
-        const modelMinArc = modelObj.minArc;
-
-        // out of the nozzles that work with the radius,
-        // make sure to set the maxArc for water to be the
-        // largest arc of one of the nozzles
-        if (modelMaxArc > maxArc){
-          maxArc = modelMaxArc;
-        }
-        const arcAngle = this.water.getArcAngle();
-        const modelOmittedAngles = modelObj.omittedAngles;
-        if(modelOmittedAngles.length > 0){
-          currentOmittedAngles.push(...modelObj.omittedAngles);
-        }
-        else if(this.omittedAngles){
-          currentOmittedAngles.push(...this.omittedAngles);
+      for(let currAngle in angles){
+        currAngle = angles[currAngle];
+        if (Object.keys(anglesInModel).length === 1){
+          currAngle = Object.keys(anglesInModel)[0];
         }
 
-        // Check if the current nozzle is selectable with the current arc
-        if (modelMinArc <= arcAngle && arcAngle <= modelMaxArc){
-          modelObj.text.set({stroke: 'black'});
-          modelObj.inArc = true;
-          modelObj.show = true;
-        }
-        else{
-          if(model === this.selectedNozzle){
-            this.deselectNozzle();
+        // Setting a new pressure in case the nozzle doesn't 
+        // have the same pressure available
+        let prefPressure = null;
+        prefPressure = this.roundPressure(Object.keys(anglesInModel[currAngle]));
+        modelObj.pressure = prefPressure;
+
+        // if nozzle is within radius
+        if (modelObj.inRadius) {
+          const modelMaxArc = modelObj.maxArc;
+          const modelMinArc = modelObj.minArc;
+
+          // out of the nozzles that work with the radius,
+          // make sure to set the maxArc for water to be the
+          // largest arc of one of the nozzles
+          if (modelMaxArc > maxArc){
+            maxArc = modelMaxArc;
           }
-          modelObj.text.set({stroke: 'orange'});
-          modelObj.inArc = false;
-          modelObj.show = false;
+          const arcAngle = this.water.getArcAngle();
+          const modelOmittedAngles = modelObj.omittedAngles;
+          if(modelOmittedAngles.length > 0){
+            currentOmittedAngles.push(...modelObj.omittedAngles);
+          }
+          else if(this.omittedAngles){
+            currentOmittedAngles.push(...this.omittedAngles);
+          }
+
+          // Check if the current nozzle is selectable with the current arc
+          if (modelMinArc <= arcAngle && arcAngle <= modelMaxArc){
+            modelObj.text.set({stroke: 'black'});
+            modelObj.inArc = true;
+            modelObj.show = true;
+          }
+          else{
+            if(model === this.selectedNozzle){
+              this.deselectNozzle();
+            }
+            modelObj.text.set({stroke: 'orange'});
+            modelObj.inArc = false;
+            modelObj.show = false;
+          }
         }
       }
+      this.water.setConstraints({
+        maxArc: maxArc
+      })
     }
 
     // If the selected nozzle doesn't have nozzles at a specific angle,
