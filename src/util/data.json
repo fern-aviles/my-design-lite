@@ -3341,7 +3341,7 @@
     "maxArc": 360,
     "minRadius": 22,
     "maxRadius": 52,
-    "recPressure": "30PSI",
+    "recPressure": "45PSI",
     "omittedAngles": [],
     "autoSelect": false,
     "nozzles": {

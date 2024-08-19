@@ -1,7 +1,7 @@
 <template>
   <div>
     <p> Enter PSI: </p>
-    <input v-model="pressure" placeholder="45">
+    <input v-model="pressure" placeholder="">
 
     <p> Select HunterProduct </p>
     <select v-model="product">
@@ -27,13 +27,13 @@
   import { Canvas, Circle, FabricText, Line } from 'fabric';
   import { Water } from '@/util/water'
   import { HunterProduct } from '@/util/product'
-import { Controller } from '@/util/controller';
+  import { Controller } from '@/util/controller';
   const canvas = ref();
   let c = null as Canvas | null;
   let waterScale = 20;
   let products = 0;
 
-  const pressure = ref('40');
+  const pressure = ref(null);
   const product = ref('695');
   const options = ref([
     { text: 'PGP Ultra', value: '862' },
