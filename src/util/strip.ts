@@ -20,12 +20,12 @@ import { type Products,
 import data from "./data.json";
 import { Controller } from './controller';
 
-const INCREASE_ONE_END = true;
+const INCREASE_ONE_END = false;
 
 export class MPStrip extends Circle{
   water: MPStripwater;
   waterScale: number = 20;
-  side: string = "right";
+  side: string = "left";
   nozzleOptions: any = [];
   canvas: Canvas;
   pressure: any;
@@ -53,7 +53,7 @@ export class MPStrip extends Circle{
     // Setting options for product water
     options.selectable = true;
     options.hasControls = true;
-    options.hasBorder = false;
+    options.hasBorders = false;
     options.lockMovementX = true;
     options.lockMovementY = true;
     options.centeredRotation = false;
@@ -125,6 +125,7 @@ export class MPStrip extends Circle{
       top: this.water.top,
     });
     this.setCoords();
+    this.water.changeControlCoords();
     this.canvas.renderAll();
   }
 
@@ -153,6 +154,7 @@ export class MPStripwater extends Rect{
   initial: boolean = true;
   maxScale: number = 1;
   minScale: number = 0.75;
+  controller: Controller;
 
   constructor(options: any){
     options.fill = 'rgba(0, 0, 255, .2)';
@@ -161,6 +163,25 @@ export class MPStripwater extends Rect{
     this.pressure = '';
     this.side = options.side;
     this.canvas = options.canvas;
+    console.log(this.getCoords())
+
+    this.controller = new Controller({
+      radius: 10,
+      fill: 'red',
+    });
+    let controllerCoords = {x:0, y:0};
+    const waterCoords = this.getCoords();
+    if(this.side === 'right'){
+      controllerCoords = waterCoords[0];
+    }
+    else if(this.side === 'left'){
+      controllerCoords = waterCoords[1];
+    }
+    else{
+      controllerCoords.x = (waterCoords[0].x + waterCoords[1].x)/2;
+      controllerCoords.y = (waterCoords[0].y + waterCoords[1].y)/2;
+    }
+    this.controller.set({left: controllerCoords.x, top: controllerCoords.y});
 
     this.setControls();
     this.on('scaling', (event) => {
@@ -191,8 +212,9 @@ export class MPStripwater extends Rect{
       });
     });
     this.product.on({
-      'moving': (e) => {this.set({left: this.product.left, top: this.product.top});   
+      'moving': (e) => {this.set({left: this.product.left, top: this.product.top});
                         this.setCoords();
+                        this.changeControlCoords();  
                        },
       "mousedblclick": (e) => {console.log(this.product)},
       'selected': () => {
@@ -212,6 +234,7 @@ export class MPStripwater extends Rect{
         this.canvas.renderAll(); // Re-render the canvas
       }
     });
+    this.canvas.add(this.controller);
   }
 
   setControls(){
@@ -356,5 +379,22 @@ export class MPStripwater extends Rect{
   
     this.setCoords(); // Update the rectangle's coordinates
     this.canvas.renderAll(); // Re-render the canvas
+  }
+
+  changeControlCoords(){
+    let controllerCoords = {x:0, y:0};
+    const waterCoords = this.getCoords();
+    if(this.side === 'right'){
+      controllerCoords = waterCoords[0];
+    }
+    else if(this.side === 'left'){
+      controllerCoords = waterCoords[1];
+    }
+    else{
+      controllerCoords.x = (waterCoords[0].x + waterCoords[1].x)/2;
+      controllerCoords.y = (waterCoords[0].y + waterCoords[1].y)/2;
+    }
+    this.controller.set({left: controllerCoords.x, top: controllerCoords.y});
+    this.controller.setCoords();
   }
 }
