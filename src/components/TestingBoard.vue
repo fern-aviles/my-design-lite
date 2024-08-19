@@ -33,7 +33,6 @@
   let c = null as Canvas | null;
   let waterScale = 20;
   let products = 0;
-  let rotorCreation = false;
 
   const pressure = ref('30');
   const product = ref('179291');
@@ -46,7 +45,6 @@
   interface NozzleDictionary {
   [key: number]: {
     show: boolean;
-    // other properties
   };
 }
   let newNozzles = [];
@@ -72,8 +70,14 @@
     }
       // It's a controller
     else if(e instanceof Controller){
-      let product = e.water.product as HunterProduct;
-      product.setNozzle(nozzle.value);
+      let product = e.water.product
+      if (e.water.product instanceof HunterProduct){
+        let product = e.water.product as HunterProduct;
+        product.setNozzle(nozzle.value);
+      }
+      else if (product instanceof MPStrip){
+        product.setSelectedNozzle(nozzle.value);
+      }
     }
     else if (e instanceof MPStrip){
       e.setSelectedNozzle(nozzle.value)
@@ -150,11 +154,19 @@
       }
       // Clicking on a controller
       else if(options.target instanceof Controller){
-        let product: HunterProduct = options.target.water.product as HunterProduct;
-        newNozzles = product.nozzleOptions;
-        nozzles.value = {...newNozzles};
-
-        nozzle.value = product.getSelectedNozzle();
+        let product = options.target.water.product;
+        if(product instanceof HunterProduct){
+          newNozzles = product.nozzleOptions;
+          nozzles.value = {...newNozzles};
+  
+          nozzle.value = product.getSelectedNozzle();
+        }
+        else if(product instanceof MPStrip){
+          newNozzles = product.nozzleOptions;
+          nozzles.value = {...newNozzles};
+  
+          nozzle.value = product.getSelectedNozzle();
+        }
       }
       // Clicking nowhere and object is not added
       else if(!options.target){
