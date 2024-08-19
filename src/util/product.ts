@@ -96,7 +96,7 @@ export class HunterProduct extends Circle {
       originX: 'center' as TOriginX,
       originY: 'center' as TOriginY,
       radius: 10,
-      fill: 'white',
+      fill: 'gray',
       hasControls: false,
     };
 
@@ -552,6 +552,7 @@ export class HunterProduct extends Circle {
     // If the selected nozzle doesn't have nozzles at a specific angle,
     // remove the option to select that angle
     currentOmittedAngles = Array.from(new Set(currentOmittedAngles));
+    console.log(currentOmittedAngles)
     this.water.setOmittedAngles(currentOmittedAngles);
 
     this.maxArc = maxArc;
@@ -572,7 +573,7 @@ export class HunterProduct extends Circle {
       minRadius: this.minRadius,
     });
     this.water.setOmittedAngles(this.omittedAngles);
-    this.set({ fill: "white"});
+    this.set({ fill: "gray"});
     this.nozzleInfo = "No nozzle selected";
   }
 
