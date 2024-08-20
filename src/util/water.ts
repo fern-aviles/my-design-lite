@@ -31,6 +31,7 @@ export class Water extends Path {
   lock: boolean = false; 
   lock2: boolean = false;
   prevSnap: number | null = null;
+  startingArc: number;
   minScaling: number = 0.25;
 
   declare canvas: Canvas;
@@ -88,6 +89,7 @@ export class Water extends Path {
     this.sweepAngle = this.getSweepAngle(startAngle, endAngle);
     this.omittedAngles = options.omittedAngles;
     this.minScaling = options.minScaling;
+    this.startingArc = options.startingArc;
     this.set({left: centerX, top: centerY});
     
     // Add control circles
@@ -204,6 +206,8 @@ export class Water extends Path {
       'selected': (e) => {this.showControls(true)},
       'deselected': (e) => {this.showControls(false)},
     });
+
+    this.setWaterArc(this.startAngle, this.startAngle + this.startingArc);
     this.canvas.renderAll();
   }
 

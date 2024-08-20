@@ -79,6 +79,7 @@ export class HunterProduct extends Circle {
   nozzleInfo: string;
   autoSelectable: any;
   omittedAngles: any;
+  startingArc: any;
   minScaling: number = 0.25;
   canvas: Canvas;
 
@@ -111,6 +112,7 @@ export class HunterProduct extends Circle {
     this.minArc = product.minArc;
     this.maxArc = product.maxArc;
     this.fixedArc = product.fixedArc;
+    this.startingArc = product.startingArc;
     this.autoSelectable = product.autoSelect;
     this.nozzleOptions = {};
     this.selectedNozzle = "";
@@ -143,6 +145,7 @@ export class HunterProduct extends Circle {
             minArc: this.minArc,
             maxArc: this.maxArc,
             fixedArc: this.fixedArc,
+            startingArc: this.startingArc || 270,
             omittedAngles: waterOptions.omittedAngles,
             minScaling: waterOptions.minScaling
     };

@@ -2829,6 +2829,7 @@
     "maxArc": 360,
     "minRadius": 4,
     "maxRadius": 19,
+    "startingArc": 180,
     "recPressure": "30PSI",
     "omittedAngles": [ 0, 90, 120, 180, 360 ],
     "autoSelect": true,
