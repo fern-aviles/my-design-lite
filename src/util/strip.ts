@@ -250,6 +250,8 @@ export class MPStripwater extends Rect{
                         this.updateInfo();
                        },
       "mousedblclick": (e) => {console.log(this.product)},
+      'deselected': () => { this.showControls(false); },
+      'selected': () => { this.showControls(true); }
     });
     this.controller.on({
       'moving': (e) => {
@@ -262,7 +264,9 @@ export class MPStripwater extends Rect{
       },
       'mouseup': () => {
         console.log(this.product.nozzleInfo);
-      }
+      },
+      'deselected': () => { this.showControls(false); },
+      'selected': () => { this.showControls(true); }
     })
 
     // Add elements
@@ -272,6 +276,14 @@ export class MPStripwater extends Rect{
     this.canvas.add(this.heightInfoText);
     this.canvas.add(this.controller);
 
+  }
+
+  showControls(show: boolean): void {
+    this.controller.set({visible: show});
+    this.widthInfoText.set({visible: show});
+    this.heightInfoText.set({visible: show});
+    this.widthInfoLine.set({visible: show});
+    this.heightInfoLine.set({visible: show});
   }
 
   /**
@@ -465,6 +477,11 @@ export class MPStripwater extends Rect{
     this.initialAngle = currentAngle;
   }
 
+  /**
+   * Initializes angles for left and right nozzles for proper rotation
+   * 
+   * @returns {null}
+   */
   initializeAngles(): void{
     const temp = this.side;
     
