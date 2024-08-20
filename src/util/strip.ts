@@ -18,6 +18,7 @@ export class MPStrip extends Circle{
   productID: string;
   data: any;
   selectedNozzle: string;
+  nozzleInfo!: string;
   nozzleLookUp: any =  {'left': 'Left Strip', 
                      'right': 'Right Strip',
                      'center': 'Side Strip'
@@ -67,7 +68,7 @@ export class MPStrip extends Circle{
     this.waterScale = options.waterScale;
     this.side = options.side;
     this.canvas = options.canvas;
-
+    this.setSelectedNozzle(this.nozzleLookUp[this.side]);
     this.canvas.insertAt(0, water);
   }
 
@@ -100,16 +101,26 @@ export class MPStrip extends Circle{
    * @returns {null}
    */
   setSelectedNozzle(nozzle: string): void{
+    console.log(nozzle)
     this.selectedNozzle = this.reverseNozzleLookUp[nozzle];
     this.side = this.reverseNozzleLookUp[nozzle];
     this.water.setSide(this.side);
 
     const pressures = Object.keys(this.nozzleOptions[nozzle].data);
     const pressure = this.roundPressure(pressures);
-    const {width, height} = this.nozzleOptions[nozzle].data[pressure];
+    const {width, height, gpm, precip_sq, precip_tri} = this.nozzleOptions[nozzle].data[pressure];
+    console.log
     this.water.setWaterDimensions(width, height);
 
+    this.nozzleInfo = 
+      `Nozzle selected: ${this.nozzleLookUp[this.selectedNozzle]}\n` +
+      `Flow: ${gpm} GPM, ` +
+      `Square Precip: ${(precip_sq).toFixed(2)} in/hr, ` +
+      `Triangle Precip: ${(precip_tri).toFixed(2)} in/hr`;
+
+
     this.setCoords();
+    console.log(this.nozzleInfo)
     
     this.water.updateControlCoords();
     this.water.updateInfo();
@@ -155,6 +166,8 @@ export class MPStripwater extends Rect{
   heightInfoLine: Line;
   widthInfoText: FabricText;
   heightInfoText: FabricText;
+  initialAngleRight!: number;
+  initialAngleLeft!: number;
 
   constructor(options: any){
     options.fill = 'rgba(0, 0, 255, .2)';
@@ -189,6 +202,8 @@ export class MPStripwater extends Rect{
     const distY = this.controller.top - this.top;
     this.initialDistanceDiagonal = Math.sqrt(distX * distX + distY * distY);
     this.initialDistanceHeight = this.height;
+
+    this.initializeAngles();
 
     // Adding Line and Info Text
     this.widthInfoLine = new Line(
@@ -242,6 +257,12 @@ export class MPStripwater extends Rect{
                          this.handleRotation(e);
                          this.updateInfo();
                        },
+      'mousedown': (e) => {
+        this.updateInitialAngle(e as BasicTransformEvent);
+      },
+      'mouseup': () => {
+        console.log(this.product.nozzleInfo);
+      }
     })
 
     // Add elements
@@ -368,16 +389,18 @@ export class MPStripwater extends Rect{
     // Calculate the angle based on the current pointer position relative to the center
     let currentAngle = Math.atan2(pointer.y - centerPoint.y, pointer.x - centerPoint.x);
     currentAngle = util.radiansToDegrees(currentAngle);
+    let offset = currentAngle - this.initialAngle;
   
+
     // Apply offsets
-    if(this.side === 'center'){
-      currentAngle += 90;
+    if(this.side === 'right'){
+      currentAngle = this.initialAngle + offset - this.initialAngleRight;
     }
-    else if(this.side === 'left'){
-      currentAngle += 18;
+    else if (this.side === 'left'){
+      currentAngle = this.initialAngle + offset - this.initialAngleLeft;
     }
     else{
-      currentAngle += 161;
+      currentAngle = this.initialAngle + offset + 90;
     }
 
     // Update changes
@@ -393,19 +416,82 @@ export class MPStripwater extends Rect{
    * @returns {null}
    */
   setControllerOnWater(): void{
+    let pointer;
+    const centerPoint = this.product.getCenterPoint();
+  
+    // Calculate the angle based on the current pointer position relative to the center
     let controllerCoords = {x:0, y:0};
     const waterCoords = this.getCoords();
     if(this.side === 'right'){
       controllerCoords = waterCoords[0];
+      pointer = controllerCoords;
+      let currentAngle = Math.atan2(pointer.y - centerPoint.y, pointer.x - centerPoint.x);
+      currentAngle = util.radiansToDegrees(currentAngle);
+      if(!this.initialAngleRight){
+        this.initialAngleRight = currentAngle;
+      }
     }
     else if(this.side === 'left'){
       controllerCoords = waterCoords[1];
+      pointer = controllerCoords;
+      let currentAngle = Math.atan2(pointer.y - centerPoint.y, pointer.x - centerPoint.x);
+      currentAngle = util.radiansToDegrees(currentAngle);
+      if(!this.initialAngleLeft){
+        this.initialAngleLeft = currentAngle;
+      }
     }
     else{
       controllerCoords.x = (waterCoords[0].x + waterCoords[1].x)/2;
       controllerCoords.y = (waterCoords[0].y + waterCoords[1].y)/2;
     }
+
+    
     this.controller.set({left: controllerCoords.x, top: controllerCoords.y});
     this.controller.setCoords();
+  }
+
+  /**
+   * Updates the inital angle for rotation
+   * @param {BasicTransformEvent} e 
+   * @returns {null}
+   */
+  updateInitialAngle(e: BasicTransformEvent): void{    
+    const pointer = e.transform.target.getCenterPoint();
+    const centerPoint = this.product.getCenterPoint();
+  
+    // Calculate the angle based on the current pointer position relative to the center
+    let currentAngle = Math.atan2(pointer.y - centerPoint.y, pointer.x - centerPoint.x);
+    currentAngle = util.radiansToDegrees(currentAngle);
+    this.initialAngle = currentAngle;
+  }
+
+  initializeAngles(): void{
+    const temp = this.side;
+    
+    // Change to left and get its inital angle
+    this.side = 'left';
+    this.updateControlCoords();
+    let pointer = this.controller.getCenterPoint();
+    let centerPoint = this.product.getCenterPoint();
+  
+    // Calculate the angle based on the current pointer position relative to the center
+    let currentAngle = Math.atan2(pointer.y - centerPoint.y, pointer.x - centerPoint.x);
+    currentAngle = util.radiansToDegrees(currentAngle);
+    this.initialAngleLeft = currentAngle;
+
+
+    // Change to right and get its inital angle
+    this.side = 'right';
+    this.updateControlCoords();
+    pointer = this.controller.getCenterPoint();
+    centerPoint = this.product.getCenterPoint();
+
+    // Calculate the angle based on the current pointer position relative to the center
+    currentAngle = Math.atan2(pointer.y - centerPoint.y, pointer.x - centerPoint.x);
+    currentAngle = util.radiansToDegrees(currentAngle);
+    this.initialAngleRight = currentAngle;
+
+    this.side = temp;
+    this.updateControlCoords();
   }
 }
