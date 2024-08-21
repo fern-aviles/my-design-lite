@@ -53,7 +53,7 @@ export class MPStrip extends Circle{
     const id = this.productID;
     const productData = this.data[id];
     const nozzlesData = productData.nozzles;
-    const pressures = nozzlesData[this.nozzleLookUp[this.side]];
+    const pressures = nozzlesData[this.nozzleLookUp[this.side]]['pressures'];
     const pressureData = pressures[this.roundPressure(Object.keys(pressures))];
     const height = pressureData['height'] * this.waterScale;
     const width = pressureData['width'] * this.waterScale;
@@ -73,6 +73,39 @@ export class MPStrip extends Circle{
   }
 
   /**
+   * Renders the MP Strip object with custom icon
+   * @param ctx 
+   * @returns 
+   */
+  render(ctx : CanvasRenderingContext2D): void{
+    super.render(ctx);
+    ctx.save();
+
+    ctx.translate(this.left, this.top);
+    ctx.rotate(this.angle * Math.PI / 180);
+
+    const centerX = 0;
+    const centerY = 0;
+
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, this.radius-6, 0, Math.PI * 2);
+    ctx.strokeStyle = "black";
+    ctx.stroke();
+    ctx.fill();
+    ctx.closePath();
+    
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, this.radius-1, 0, Math.PI * 2);
+    ctx.strokeStyle = "gray";
+    ctx.stroke();
+    ctx.closePath();
+
+    ctx.restore()
+  }
+
+  /**
    * Iterates through the data to make a nozzles dictionary
    * @param {any} data 
    * 
@@ -82,7 +115,8 @@ export class MPStrip extends Circle{
     for(let nozzleIdx in data.nozzles){
       let nozzle = data.nozzles[nozzleIdx];
       this.nozzleOptions[nozzleIdx] = {};
-      this.nozzleOptions[nozzleIdx].data = nozzle;
+      this.nozzleOptions[nozzleIdx].pressures = nozzle['pressures'];
+      this.nozzleOptions[nozzleIdx].color = nozzle['color'];
       this.nozzleOptions[nozzleIdx].show = true;
     }
   }
@@ -101,27 +135,26 @@ export class MPStrip extends Circle{
    * @returns {null}
    */
   setSelectedNozzle(nozzle: string): void{
-    console.log(nozzle)
     this.selectedNozzle = this.reverseNozzleLookUp[nozzle];
     this.side = this.reverseNozzleLookUp[nozzle];
     this.water.setSide(this.side);
-
-    const pressures = Object.keys(this.nozzleOptions[nozzle].data);
-    const pressure = this.roundPressure(pressures);
-    const {width, height, gpm, precip_sq, precip_tri} = this.nozzleOptions[nozzle].data[pressure];
-    console.log
+    const data = this.nozzleOptions[nozzle];
+    const pressuresKeys = Object.keys(data.pressures);
+    const pressure = this.roundPressure(pressuresKeys);
+    const {width, height, gpm, precip_sq, precip_tri} = data.pressures[pressure];
     this.water.setWaterDimensions(width, height);
+    this.set({fill: data.color});
 
     this.nozzleInfo = 
       `Nozzle selected: ${this.nozzleLookUp[this.selectedNozzle]}\n` +
       `Flow: ${gpm} GPM, ` +
       `Square Precip: ${(precip_sq).toFixed(2)} in/hr, ` +
       `Triangle Precip: ${(precip_tri).toFixed(2)} in/hr`;
+    console.log(this.nozzleInfo);
+      
 
-
-    this.setCoords();
-    console.log(this.nozzleInfo)
     
+    this.setCoords();
     this.water.updateControlCoords();
     this.water.updateInfo();
     this.canvas.renderAll();
