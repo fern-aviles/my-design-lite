@@ -495,7 +495,12 @@ export class Water extends Path {
    * @returns {number}
    */
   checkOmittedAngles(angle: number, control: string): number{
+    if(this.omittedAngles.length === 0){
+      return angle;
+    }
     let sweepAngle;
+
+    // Checking if we are over the max or under the min arc
     if (control === 'start'){
       sweepAngle = this.getSweepAngle(angle, this.endAngle) * (180/Math.PI);
       if(sweepAngle > this.maxArc){
@@ -549,7 +554,21 @@ export class Water extends Path {
           sweepAngle = prevSnapPoint;
         }
       }
-
+    }
+    else if (!snapped && this.prevSnap === null){
+      let closest = this.omittedAngles[0];
+      let minDiff = Math.abs(closest - sweepAngle);
+    
+      for (let i = 1; i < this.omittedAngles.length; i++) {
+        const currentDiff = Math.abs(this.omittedAngles[i] - sweepAngle);
+    
+        // If the current difference is smaller, update the closest number
+        if (currentDiff < minDiff) {
+          closest = this.omittedAngles[i];
+          minDiff = currentDiff;
+        }
+      }
+      sweepAngle = closest;
     }
     if (control === 'start'){
       angle = this.endAngle - (sweepAngle - .0001);

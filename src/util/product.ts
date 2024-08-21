@@ -195,7 +195,6 @@ export class HunterProduct extends Circle {
           maxRadius: this.maxRadius,
           minRadius: this.minRadius
         });
-        console.log(this.water.maxArc)
       },
     });
   }
