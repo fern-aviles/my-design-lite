@@ -1,7 +1,7 @@
 <template>
   <div>
     <p> Enter PSI: </p>
-    <input v-model="pressure" placeholder="45">
+    <input v-model="pressure" placeholder="">
 
     <p> Select Product </p>
     <select v-model="product">
@@ -34,12 +34,16 @@
   let waterScale = 20;
   let products = 0;
 
-  const pressure = ref('30');
-  const product = ref('179291');
+  const pressure = ref(null);
+  const product = ref('885');
   const options = ref([
     { text: 'PGP Ultra', value: '862' },
     { text: 'MP Rotator', value: '461006' },
     { text: 'Pro Adjustable Nozzles', value:'884' },
+    { text: 'Pro Fixed Nozzles', value: '885' },
+    { text: 'PGJ', value: '695' },
+    { text: 'PGP-ADJ', value: '861' },
+    { text: 'SRM', value: '860' },
     { text: 'MP Strip', value: '179291'}
   ]);
   interface NozzleDictionary {
@@ -141,7 +145,7 @@
   c.on({
     'mouse:up': (options) => {
       // Clicking on no objects/water object
-      if(options.isClick && (!options.target || options.target instanceof Water)){
+      if(options.isClick && (!options.target || options.target instanceof Water || options.target instanceof MPStripwater)){
         createRotor(options.e);
       }
       // Clicking on a product

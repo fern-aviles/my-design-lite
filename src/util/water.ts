@@ -31,6 +31,7 @@ export class Water extends Path {
   lock: boolean = false; 
   lock2: boolean = false;
   prevSnap: number | null = null;
+  startingArc: number;
   minScaling: number = 0.25;
 
   declare canvas: Canvas;
@@ -87,6 +88,8 @@ export class Water extends Path {
     this.midAngle = 0;
     this.sweepAngle = this.getSweepAngle(startAngle, endAngle);
     this.omittedAngles = options.omittedAngles;
+    this.minScaling = options.minScaling;
+    this.startingArc = options.startingArc;
     this.set({left: centerX, top: centerY});
     
     // Add control circles
@@ -188,12 +191,15 @@ export class Water extends Path {
 
     // Bind the event handlers to the control circles
     this.endController.on({'moving': (e) => {this.onControlCircleMoving(e)},
-                          'deselected': (e) => {this.showControls(false)},
+                           'selected': (e) => {this.showControls(true)},
+                           'deselected': (e) => {this.showControls(false)},
                           });
     this.startController.on({'moving': (e) => {this.onControlCircleMoving(e)},
-                            'deselected': (e) => {this.showControls(false)},
+                           'selected': (e) => {this.showControls(true)},
+                           'deselected': (e) => {this.showControls(false)},
                           });
     this.midController.on({'moving': (e) => {this.getRotation(e)},
+                           'selected': (e) => {this.showControls(true)},
                            'deselected': (e) => {this.showControls(false)},
                           });
     this.product.on({
@@ -203,6 +209,8 @@ export class Water extends Path {
       'selected': (e) => {this.showControls(true)},
       'deselected': (e) => {this.showControls(false)},
     });
+
+    this.setWaterArc(this.startAngle, this.startAngle + this.startingArc);
     this.canvas.renderAll();
   }
 
@@ -403,7 +411,7 @@ export class Water extends Path {
       top: mid.y,
       angle: textAngle,
     });
-    this.distance = parseFloat((distance/this.waterScale).toFixed(2));
+    this.distance = parseFloat((distance/this.waterScale).toFixed(5));
   }
 
   /**
@@ -490,7 +498,12 @@ export class Water extends Path {
    * @returns {number}
    */
   checkOmittedAngles(angle: number, control: string): number{
+    if(this.omittedAngles.length === 0){
+      return angle;
+    }
     let sweepAngle;
+
+    // Checking if we are over the max or under the min arc
     if (control === 'start'){
       sweepAngle = this.getSweepAngle(angle, this.endAngle) * (180/Math.PI);
       if(sweepAngle > this.maxArc){
@@ -544,7 +557,21 @@ export class Water extends Path {
           sweepAngle = prevSnapPoint;
         }
       }
-
+    }
+    else if (!snapped && this.prevSnap === null){
+      let closest = this.omittedAngles[0];
+      let minDiff = Math.abs(closest - sweepAngle);
+    
+      for (let i = 1; i < this.omittedAngles.length; i++) {
+        const currentDiff = Math.abs(this.omittedAngles[i] - sweepAngle);
+    
+        // If the current difference is smaller, update the closest number
+        if (currentDiff < minDiff) {
+          closest = this.omittedAngles[i];
+          minDiff = currentDiff;
+        }
+      }
+      sweepAngle = closest;
     }
     if (control === 'start'){
       angle = this.endAngle - (sweepAngle - .0001);
@@ -753,18 +780,18 @@ export class Water extends Path {
    * @returns {null}
    */
   setConstraints(constraints: any){
-    this.maxArc = constraints.maxArc;
-    this.minArc = constraints.minArc;
-    this.maxRadius = constraints.maxRadius;
-    this.minRadius = constraints.minRadius;
+    this.maxArc = constraints.maxArc || this.maxArc;
+    this.minArc = constraints.minArc || this.minArc;
+    this.maxRadius = constraints.maxRadius || this.maxRadius;
+    this.minRadius = constraints.minRadius || this.minRadius;
   }
 
   /**
-   * Sets the water object to a specific position
+   * Sets the water object to a specific arc
    * @param start 
    * @param end 
    */
-  setWater(start: number, end: number){
+  setWaterArc(start: number, end: number){
     this.startAngle = this.normalizeAngle(start, false);
     this.endAngle = this.normalizeAngle(end, false);
 
