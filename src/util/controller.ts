@@ -10,6 +10,9 @@ export class Controller extends Circle{
   controllerType: string;
 
   constructor(options: any){
+    options.originX = 'center';
+    options.originY = 'center';
+    options.hasControls = false;
     super(options)
     this.water = options.water;
     this.controllerType = options.controllerType

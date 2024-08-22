@@ -1,59 +1,14 @@
 import { Canvas, Circle, FabricText, type TOriginX, type TOriginY } from 'fabric';
 import { Water } from './water';
+import { type Products,
+         type ProductType,
+         type Nozzles,
+         type NozzleTypes,
+         type NozzleModel,
+         type Angles,
+         type AngleDetails
+        } from './huntertypes';
 import data from "./data.json";
-
-
-export interface AngleDetails {
-  radius: number;
-  gpm: number;
-  precip_sq: number;
-  precip_tri: number;
-  gph?: number;
-}
-
-export interface Angles {
-  [angle: string]: {
-    [pressure: string]: AngleDetails;
-  };
-}
-
-export interface NozzleModel {
-  minArc: number;
-  maxArc: number;
-  minRadius: number;
-  maxRadius: number;
-  arcSettings: { [arc: string]: number };
-  color?: string;
-  angles: Angles;
-}
-
-export interface NozzleTypes {
-  [model: string]: NozzleModel;
-}
-
-export interface Nozzles {
-  [type: string]: {
-    omittedAngles: any;
-    minScaling: any;
-    model: NozzleTypes;
-  };
-}
-
-export interface ProductType {
-  name: string;
-  fixedArc: boolean;
-  minArc: number;
-  maxArc: number;
-  minRadius: number;
-  maxRadius: number;
-  recPressure: string;
-  nozzles: Nozzles;
-}
-
-export interface Products {
-  [productID: string]: ProductType;
-}
-
 
 /**
  * Creates a HunterProduct object which filters data and
@@ -124,7 +79,7 @@ export class HunterProduct extends Circle {
     this.createNozzlesDictionary(this.data);
     this.setRadiusLimits(this.data);
     console.log(this.name);
-    console.log("Selected Pressure:", this.pressure)
+    console.log("Selected Pressure:", this.pressure);
     waterOptions.minRadius = this.minRadius;
     waterOptions.maxRadius = this.maxRadius;
     waterOptions.minArc = this.minArc;
@@ -195,6 +150,7 @@ export class HunterProduct extends Circle {
           maxRadius: this.maxRadius,
           minRadius: this.minRadius
         });
+        console.log(this.water.maxArc)
       },
     });
   }

@@ -3,7 +3,7 @@
     <p> Enter PSI: </p>
     <input v-model="pressure" placeholder="">
 
-    <p> Select HunterProduct </p>
+    <p> Select Product </p>
     <select v-model="product">
       <option v-for="option in options" :value="option.value">
         {{ option.text }}
@@ -24,10 +24,11 @@
 
 <script setup lang="ts">
   import { ref, onMounted, watch } from 'vue';
-  import { Canvas, Circle, FabricText, Line } from 'fabric';
+  import { Canvas, FabricText, Line } from 'fabric';
   import { Water } from '@/util/water'
   import { HunterProduct } from '@/util/product'
   import { Controller } from '@/util/controller';
+  import { MPStrip, MPStripwater } from '@/util/strip';
   const canvas = ref();
   let c = null as Canvas | null;
   let waterScale = 20;
@@ -43,11 +44,11 @@
     { text: 'PGJ', value: '695' },
     { text: 'PGP-ADJ', value: '861' },
     { text: 'SRM', value: '860' },
+    { text: 'MP Strip', value: '179291'}
   ]);
   interface NozzleDictionary {
   [key: number]: {
     show: boolean;
-    // other properties
   };
 }
   let newNozzles = [];
@@ -73,25 +74,56 @@
     }
       // It's a controller
     else if(e instanceof Controller){
-      let product = e.water.product as HunterProduct
-      product.setNozzle(nozzle.value);
+      let product = e.water.product
+      if (e.water.product instanceof HunterProduct){
+        let product = e.water.product as HunterProduct;
+        product.setNozzle(nozzle.value);
+      }
+      else if (product instanceof MPStrip){
+        product.setSelectedNozzle(nozzle.value);
+      }
+    }
+    else if (e instanceof MPStrip){
+      e.setSelectedNozzle(nozzle.value)
+    }
+      // It's a controller
+    else if(e instanceof MPStripwater){
+      let product = e.product as MPStrip;
+      product.setSelectedNozzle(nozzle.value);
     }
   }
 
   const createRotor = (e: any) => {
-    const rotor = new HunterProduct({
-      productID: product.value,
+    if(product.value != '179291'){
+      const rotor = new HunterProduct({
+        productID: product.value,
+        pressure: pressure.value + "PSI",
+        left: e.offsetX,
+        top: e.offsetY,
+        productIndex: products,
+        canvas: c,
+      });
+      c!.add(rotor);
+      nozzles.value = {...rotor.nozzleOptions};
+      c!.setActiveObject(rotor);
+    }
+    else{
+    const mpstrip = new MPStrip({
+      productID: 179291,
       pressure: pressure.value + "PSI",
       left: e.offsetX,
       top: e.offsetY,
       productIndex: products,
+      width: 20,
+      height: 10,
+      fill: 'black',
       canvas: c,
     });
-    c!.add(rotor);
-    nozzles.value = {...rotor.nozzleOptions};
-    c!.setActiveObject(rotor);
+    c!.add(mpstrip);
+    nozzles.value = {...mpstrip.nozzleOptions};
+    c!.setActiveObject(mpstrip);
+    }
   }
-
   onMounted(() => {
   const canvasValue = canvas.value;
   c = new Canvas(canvasValue, {
@@ -113,7 +145,7 @@
   c.on({
     'mouse:up': (options) => {
       // Clicking on no objects/water object
-      if(options.isClick && (!options.target || options.target instanceof Water)){
+      if(options.isClick && (!options.target || options.target instanceof Water || options.target instanceof MPStripwater)){
         createRotor(options.e);
       }
       // Clicking on a product
@@ -126,16 +158,31 @@
       }
       // Clicking on a controller
       else if(options.target instanceof Controller){
-        let product: HunterProduct = options.target.water.product as HunterProduct
-        newNozzles = product.nozzleOptions;
-        nozzles.value = {...newNozzles}
-
-        nozzle.value = product.getSelectedNozzle();
+        let product = options.target.water.product;
+        if(product instanceof HunterProduct){
+          newNozzles = product.nozzleOptions;
+          nozzles.value = {...newNozzles};
+  
+          nozzle.value = product.getSelectedNozzle();
+        }
+        else if(product instanceof MPStrip){
+          newNozzles = product.nozzleOptions;
+          nozzles.value = {...newNozzles};
+  
+          nozzle.value = product.getSelectedNozzle();
+        }
       }
       // Clicking nowhere and object is not added
       else if(!options.target){
         nozzles.value = {};
         nozzle.value = "";
+      }
+      else if (options.target instanceof MPStrip){
+        newNozzles = options.target.nozzleOptions;
+        nozzles.value = {...newNozzles};
+
+        const nozzleSelected = options.target.getSelectedNozzle();
+        nozzle.value = nozzleSelected;
       }
       // Other selection
       else{

@@ -191,12 +191,15 @@ export class Water extends Path {
 
     // Bind the event handlers to the control circles
     this.endController.on({'moving': (e) => {this.onControlCircleMoving(e)},
-                          'deselected': (e) => {this.showControls(false)},
+                           'selected': (e) => {this.showControls(true)},
+                           'deselected': (e) => {this.showControls(false)},
                           });
     this.startController.on({'moving': (e) => {this.onControlCircleMoving(e)},
-                            'deselected': (e) => {this.showControls(false)},
+                           'selected': (e) => {this.showControls(true)},
+                           'deselected': (e) => {this.showControls(false)},
                           });
     this.midController.on({'moving': (e) => {this.getRotation(e)},
+                           'selected': (e) => {this.showControls(true)},
                            'deselected': (e) => {this.showControls(false)},
                           });
     this.product.on({
