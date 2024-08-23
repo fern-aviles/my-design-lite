@@ -33,6 +33,7 @@ export class Water extends Path {
   prevSnap: number | null = null;
   startingArc: number;
   minScaling: number = 0.25;
+  prevDistance: number = 0;
 
   declare canvas: Canvas;
   /**
@@ -76,7 +77,7 @@ export class Water extends Path {
     this.centerY = product.getCenterPoint().y;
     this.waterScale = options.waterScale | waterScale;
     this.radius = radius * this.waterScale;
-    this.distance = this.radius;
+    this.distance = radius;
     this.canvas = canvas;
 
     // Added constraints
@@ -411,6 +412,7 @@ export class Water extends Path {
       top: mid.y,
       angle: textAngle,
     });
+    this.prevDistance = this.distance;
     this.distance = parseFloat((distance/this.waterScale).toFixed(5));
   }
 
@@ -558,18 +560,22 @@ export class Water extends Path {
         }
       }
     }
+    // Make sure to not snap to 
     else if (!snapped && this.prevSnap === null){
       let closest = this.omittedAngles[0];
-      let minDiff = Math.abs(closest - sweepAngle);
-    
+
       for (let i = 1; i < this.omittedAngles.length; i++) {
-        const currentDiff = Math.abs(this.omittedAngles[i] - sweepAngle);
-    
-        // If the current difference is smaller, update the closest number
-        if (currentDiff < minDiff) {
-          closest = this.omittedAngles[i];
-          minDiff = currentDiff;
-        }
+          const current = this.omittedAngles[i];
+  
+          if (sweepAngle >= closest && sweepAngle <= current) {
+              // Check if sweepAngle is closer to closest or current
+              closest = (sweepAngle - closest <= current - sweepAngle) ? closest : current;
+              break;
+          } else if (sweepAngle < closest) {
+              // If the sweepAngle is less than the first element, return sweepAngle
+              closest = sweepAngle;
+              break;
+          }
       }
       sweepAngle = closest;
     }
@@ -791,11 +797,13 @@ export class Water extends Path {
    * @param start 
    * @param end 
    */
-  setWaterArc(start: number, end: number){
+  setWaterArc(start: number, end: number, distance: number=this.distance){
     this.startAngle = this.normalizeAngle(start, false);
     this.endAngle = this.normalizeAngle(end, false);
 
     this.sweepAngle = this.getSweepAngle(this.startAngle, this.endAngle);
+    distance *= this.waterScale;
+    this.scale(distance/this.radius);
 
     // Redraw path
     const pathData = Water.generatePathData(this.centerX, this.centerY, this.radius, this.startAngle, this.endAngle);

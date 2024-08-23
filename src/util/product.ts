@@ -36,6 +36,8 @@ export class HunterProduct extends Circle {
   omittedAngles: any;
   startingArc: any;
   minScaling: number = 0.25;
+  change: boolean = false;
+  prevNozzleOptions: any = [];
   canvas: Canvas;
 
   /**
@@ -255,7 +257,7 @@ export class HunterProduct extends Circle {
           this.nozzleOptions[key].text.set({stroke: 'green'});
           console.log(this.selectedNozzle, this.nozzleInfo);
         });
-        this.canvas.add(this.nozzleOptions[key].text);
+        // this.canvas.add(this.nozzleOptions[key].text);
       }
     }
     this.minScaling = minScaling;
@@ -269,9 +271,30 @@ export class HunterProduct extends Circle {
    * @returns {null}
    */
   findNozzles(data: Products, targetRadius: number): void {
+    let prevDistance = this.water.prevDistance;
 
     // Helper function to find nozzles in radius
     this.findNozzlesRadius(data, targetRadius);
+    
+    // Check if there are no nozzles in the radius
+    // If true, don't update the radius
+    this.change = false;
+    let currMinRadius = this.maxRadius;
+    let currMaxRadius = 0;
+    for(let n in this.nozzleOptions){
+      let nozzle = this.nozzleOptions[n];
+      if(nozzle.inRadius){
+        this.change = true;
+        break;
+      }
+    }
+    if(!this.change){
+      this.findNozzlesRadius(data, prevDistance);
+      let {minRadius, maxRadius} = this.findCurrentMinandMaxRadii();
+
+      prevDistance = Math.abs(prevDistance - minRadius) < Math.abs(prevDistance - maxRadius) ? minRadius : maxRadius;
+      this.water.setWaterArc(this.water.startAngle, this.water.endAngle, prevDistance);
+    }
 
     // Helper function to find nozzles in arc
     this.findNozzlesArc();
@@ -280,7 +303,6 @@ export class HunterProduct extends Circle {
     if (this.autoSelectable){
       this.selectNozzle();
     }
-
   }
 
   /**
@@ -433,8 +455,9 @@ export class HunterProduct extends Circle {
           // Check if targetRadius is within the range of the current nozzle
           let roundedMinRadius = radius*(1-this.nozzleOptions[key].minScaling);
           if (targetRadius >= roundedMinRadius &&
-              targetRadius <= radius) {
+            parseFloat(targetRadius.toFixed(2)) <= radius) {
                 this.nozzleOptions[key].inRadius = true;
+                break;
           }
           else{
             if(key === this.selectedNozzle){
@@ -480,7 +503,6 @@ export class HunterProduct extends Circle {
         if (modelObj.inRadius) {
           const modelMaxArc = modelObj.maxArc;
           const modelMinArc = modelObj.minArc;
-
           // out of the nozzles that work with the radius,
           // make sure to set the maxArc for water to be the
           // largest arc of one of the nozzles
@@ -701,5 +723,20 @@ export class HunterProduct extends Circle {
     }
     this.maxRadius = maxRadius;
     this.minRadius = minRadius;
+  }
+
+  findCurrentMinandMaxRadii(): any{
+    let minRadius = this.maxRadius;
+    let maxRadius = 0;
+    for(let nozzleIdx in this.nozzleOptions){
+      let nozzle = this.nozzleOptions[nozzleIdx];
+      if(nozzle.inRadius){
+        for(let angleIdx in nozzle.data.angles){
+          minRadius = Math.min(nozzle.data.angles[angleIdx][nozzle.pressure].radius*(1-nozzle.minScaling), minRadius);
+          maxRadius = Math.max(nozzle.data.angles[angleIdx][nozzle.pressure].radius, maxRadius);
+        }
+      }
+    }
+    return {minRadius: minRadius, maxRadius: maxRadius};
   }
 }
