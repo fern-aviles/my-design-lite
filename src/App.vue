@@ -1,19 +1,20 @@
 
 <template>
   <div>
-    <TestingBoard/>
-    <Board/>
+    <PerformanceBoard/>
   </div>
 </template>
   
 <script>
   import Board from './components/Board.vue';
   import TestingBoard from './components/TestingBoard.vue';
+  import PerformanceBoard from './components/PerformanceBoard.vue';
 
   export default{
     components: {
       Board,
-      TestingBoard
+      TestingBoard,
+      PerformanceBoard
     }
   }
 

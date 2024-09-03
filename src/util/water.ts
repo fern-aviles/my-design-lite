@@ -31,7 +31,9 @@ export class Water extends Path {
   lock: boolean = false; 
   lock2: boolean = false;
   prevSnap: number | null = null;
+  startingArc: number;
   minScaling: number = 0.25;
+  prevDistance: number = 0;
 
   declare canvas: Canvas;
   /**
@@ -48,7 +50,7 @@ export class Water extends Path {
     const radius = options.radius;
     
     // Every 20 pixels = 1 ft
-    const waterScale = 20; 
+    const waterScale = 10; 
     
     const canvas = options.canvas;
     
@@ -75,7 +77,7 @@ export class Water extends Path {
     this.centerY = product.getCenterPoint().y;
     this.waterScale = options.waterScale | waterScale;
     this.radius = radius * this.waterScale;
-    this.distance = this.radius;
+    this.distance = radius;
     this.canvas = canvas;
 
     // Added constraints
@@ -87,6 +89,8 @@ export class Water extends Path {
     this.midAngle = 0;
     this.sweepAngle = this.getSweepAngle(startAngle, endAngle);
     this.omittedAngles = options.omittedAngles;
+    this.minScaling = options.minScaling;
+    this.startingArc = options.startingArc;
     this.set({left: centerX, top: centerY});
     
     // Add control circles
@@ -188,12 +192,15 @@ export class Water extends Path {
 
     // Bind the event handlers to the control circles
     this.endController.on({'moving': (e) => {this.onControlCircleMoving(e)},
-                          'deselected': (e) => {this.showControls(false)},
+                           'selected': (e) => {this.showControls(true)},
+                           'deselected': (e) => {this.showControls(false)},
                           });
     this.startController.on({'moving': (e) => {this.onControlCircleMoving(e)},
-                            'deselected': (e) => {this.showControls(false)},
+                           'selected': (e) => {this.showControls(true)},
+                           'deselected': (e) => {this.showControls(false)},
                           });
     this.midController.on({'moving': (e) => {this.getRotation(e)},
+                           'selected': (e) => {this.showControls(true)},
                            'deselected': (e) => {this.showControls(false)},
                           });
     this.product.on({
@@ -203,6 +210,8 @@ export class Water extends Path {
       'selected': (e) => {this.showControls(true)},
       'deselected': (e) => {this.showControls(false)},
     });
+
+    this.setWaterArc(this.startAngle, this.startAngle + this.startingArc);
     this.canvas.renderAll();
   }
 
@@ -403,7 +412,8 @@ export class Water extends Path {
       top: mid.y,
       angle: textAngle,
     });
-    this.distance = parseFloat((distance/this.waterScale).toFixed(2));
+    this.prevDistance = this.distance;
+    this.distance = parseFloat((distance/this.waterScale).toFixed(5));
   }
 
   /**
@@ -490,7 +500,12 @@ export class Water extends Path {
    * @returns {number}
    */
   checkOmittedAngles(angle: number, control: string): number{
+    if(this.omittedAngles.length === 0){
+      return angle;
+    }
     let sweepAngle;
+
+    // Checking if we are over the max or under the min arc
     if (control === 'start'){
       sweepAngle = this.getSweepAngle(angle, this.endAngle) * (180/Math.PI);
       if(sweepAngle > this.maxArc){
@@ -544,7 +559,25 @@ export class Water extends Path {
           sweepAngle = prevSnapPoint;
         }
       }
+    }
+    // Make sure to not snap to 
+    else if (!snapped && this.prevSnap === null){
+      let closest = this.omittedAngles[0];
 
+      for (let i = 1; i < this.omittedAngles.length; i++) {
+          const current = this.omittedAngles[i];
+  
+          if (sweepAngle >= closest && sweepAngle <= current) {
+              // Check if sweepAngle is closer to closest or current
+              closest = (sweepAngle - closest <= current - sweepAngle) ? closest : current;
+              break;
+          } else if (sweepAngle < closest) {
+              // If the sweepAngle is less than the first element, return sweepAngle
+              closest = sweepAngle;
+              break;
+          }
+      }
+      sweepAngle = closest;
     }
     if (control === 'start'){
       angle = this.endAngle - (sweepAngle - .0001);
@@ -753,22 +786,24 @@ export class Water extends Path {
    * @returns {null}
    */
   setConstraints(constraints: any){
-    this.maxArc = constraints.maxArc;
-    this.minArc = constraints.minArc;
-    this.maxRadius = constraints.maxRadius;
-    this.minRadius = constraints.minRadius;
+    this.maxArc = constraints.maxArc || this.maxArc;
+    this.minArc = constraints.minArc || this.minArc;
+    this.maxRadius = constraints.maxRadius || this.maxRadius;
+    this.minRadius = constraints.minRadius || this.minRadius;
   }
 
   /**
-   * Sets the water object to a specific position
+   * Sets the water object to a specific arc
    * @param start 
    * @param end 
    */
-  setWater(start: number, end: number){
+  setWaterArc(start: number, end: number, distance: number=this.distance){
     this.startAngle = this.normalizeAngle(start, false);
     this.endAngle = this.normalizeAngle(end, false);
 
     this.sweepAngle = this.getSweepAngle(this.startAngle, this.endAngle);
+    distance *= this.waterScale;
+    this.scale(distance/this.radius);
 
     // Redraw path
     const pathData = Water.generatePathData(this.centerX, this.centerY, this.radius, this.startAngle, this.endAngle);

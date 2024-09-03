@@ -18,13 +18,14 @@
         {{ key }}
       </option>
     </select>
+    <button @click="createGroup()"> Group </button>
     <canvas ref="canvas" width="1600" height="1200"></canvas>
   </div>
 </template>
 
 <script setup lang="ts">
   import { ref, onMounted, watch } from 'vue';
-  import { Canvas, FabricText, Line } from 'fabric';
+  import { Canvas, FabricText, Group, Line } from 'fabric';
   import { Water } from '@/util/water'
   import { HunterProduct } from '@/util/product'
   import { Controller } from '@/util/controller';
@@ -35,7 +36,7 @@
   let products = 0;
 
   const pressure = ref('30');
-  const product = ref('179291');
+  const product = ref('884');
   const options = ref([
     { text: 'PGP Ultra', value: '862' },
     { text: 'MP Rotator', value: '461006' },
@@ -61,6 +62,28 @@
     },
     { deep: true }
   );
+  
+  const createGroup = () => {
+    console.log(123)
+    const activeSelection = c!.getActiveObjects();
+    console.log(activeSelection)
+    const group = new Group(activeSelection, {
+      left: activeSelection.left,
+      top: activeSelection.top,
+    });
+    // Remove the active selection from the canvas
+    c!.remove(activeSelection);
+
+    // Add the new group to the canvas
+    c!.add(group);
+
+    // Set the group as the active object
+    c!.setActiveObject(group);
+
+    // Render the changes on the canvas
+    c!.renderAll();
+
+  }
 
   const onChange = (e: any) => {
     e = c!.getActiveObject();
