@@ -1,6 +1,8 @@
 <template>
   <div>
-    <button @click="createCircles(100)"> Add 100 </button>
+    <button @click="createCircles(100)"> Add 100 Circles </button>
+    <button @click="createPolygons(100)"> Add 100 Polygons</button>
+    <button @click="createPaths(100)"> Add 100 Paths</button>
     <button @click="createGroup()"> Group </button>
     <canvas ref="canvas" width="1600" height="1200"></canvas>
   </div>
@@ -8,7 +10,7 @@
 
 <script setup lang="ts">
   import { ref, onMounted, watch } from 'vue';
-  import { Canvas, Circle, FabricText, Group, Line } from 'fabric';
+  import { Canvas, Circle, FabricText, Group, Line, Path, Polygon } from 'fabric';
   const canvas = ref();
   let c = null as Canvas | null;
   let offsetX = 10;
@@ -16,7 +18,6 @@
   const radius = 5;
 
   const createGroup = () => {
-    console.log(123)
     const activeSelection = c!.getActiveObjects();
     console.log(activeSelection)
     const group = new Group(activeSelection, {
@@ -43,6 +44,17 @@
     }
   }
 
+  const createPolygons = (num: number) => {
+    for(let i = 0; i < num; i++){
+      createPolygon()
+    }
+  }
+  const createPaths = (num: number) => {
+    for(let i = 0; i < num; i++){
+      createPath()
+    }
+  }
+
   const createCircle = () => {
     const circle = new Circle({
       left: offsetX,
@@ -56,10 +68,54 @@
       offsetY += radius*2;
       offsetX = 0;
     } 
-    
+  }
+  const createPolygon = () => {  const points = [];
+    const sides = 720;
+    for (let i = 0; i < sides; i++) {
+      const angle = (i * 2 * Math.PI) / sides;
+      const x = radius * Math.cos(angle);
+      const y = radius * Math.sin(angle);
+      points.push({ x, y });
+    }
 
+    // Create the polygon with the generated points
+    const circlePolygon = new Polygon(points, {
+      left: offsetX,
+      top: offsetY,
+      strokeWidth: 2,
+      selectable: true,
+    });
+    c!.add(circlePolygon);
+    offsetX += radius*2;
+    if(offsetX > 500){
+      offsetY += radius*2;
+      offsetX = 0;
+    } 
   }
 
+  const createPath = () => {
+    const pathString = [
+      `M ${radius},0`,                // Move to the starting point on the circumference
+      `a ${radius},${radius} 0 1,0 ${2 * radius},0`,  // Draw the top half of the circle
+      `a ${radius},${radius} 0 1,0 -${2 * radius},0`  // Draw the bottom half of the circle
+    ].join(' ');
+
+    // Create the path object
+    const circlePath = new Path(pathString, {
+      left: offsetX,
+      top: offsetY,
+      strokeWidth: 2,
+      selectable: true,
+    });
+
+    c!.add(circlePath);
+    offsetX += radius*2;
+    if(offsetX > 500){
+      offsetY += radius*2;
+      offsetX = 0;
+    } 
+
+  }
   onMounted(() => {
   const canvasValue = canvas.value;
   c = new Canvas(canvasValue, {
@@ -69,7 +125,7 @@
     'mouse:up': (options) => {
       // Clicking on no objects/water object
       if(options.isClick){
-        createCircle();
+        createPolygon();
       }
     },
   });
