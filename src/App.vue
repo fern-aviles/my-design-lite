@@ -2,6 +2,7 @@
 <template>
   <div>
     <PerformanceBoard/>
+    <!-- <TestingBoard/> -->
   </div>
 </template>
   

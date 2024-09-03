@@ -18,7 +18,6 @@
         {{ key }}
       </option>
     </select>
-    <button @click="createGroup()"> Group </button>
     <canvas ref="canvas" width="1600" height="1200"></canvas>
   </div>
 </template>
@@ -62,28 +61,6 @@
     },
     { deep: true }
   );
-  
-  const createGroup = () => {
-    console.log(123)
-    const activeSelection = c!.getActiveObjects();
-    console.log(activeSelection)
-    const group = new Group(activeSelection, {
-      left: activeSelection.left,
-      top: activeSelection.top,
-    });
-    // Remove the active selection from the canvas
-    c!.remove(activeSelection);
-
-    // Add the new group to the canvas
-    c!.add(group);
-
-    // Set the group as the active object
-    c!.setActiveObject(group);
-
-    // Render the changes on the canvas
-    c!.renderAll();
-
-  }
 
   const onChange = (e: any) => {
     e = c!.getActiveObject();

@@ -1,9 +1,17 @@
 <template>
   <div>
-    <button @click="createCircles(100)"> Add 100 Circles </button>
-    <button @click="createPolygons(100)"> Add 100 Polygons</button>
-    <button @click="createPaths(100)"> Add 100 Paths</button>
-    <button @click="createGroup()"> Group </button>
+    <p> Add 
+      <input v-model="groups"> rows of 
+      <input v-model="singles">
+      <select v-model="type">
+        <option v-for="option in options" :value="option.value">
+          {{ option.text }}
+        </option>
+       </select>
+    </p>
+    <input type="checkbox" v-model="inGroup">
+    <label> Grouped </label>
+    <button @click="createGroups()"> Add </button>
     <canvas ref="canvas" width="1600" height="1200"></canvas>
   </div>
 </template>
@@ -13,17 +21,23 @@
   import { Canvas, Circle, FabricText, Group, Line, Path, Polygon } from 'fabric';
   const canvas = ref();
   let c = null as Canvas | null;
-  let offsetX = 10;
-  let offsetY = 10
-  const radius = 5;
+  let offsetX = 0;
+  let offsetY = 10;
+  const radius = 10;
+  const groups = ref(100);
+  const singles = ref(100);
+  const type = ref('2');
+  const inGroup = ref(true);
+  const options = ref([
+    {text: "circles", value: '1'},
+    {text: "paths", value: '2'},
+    {text: "polygons", value: '3'},
+  ]);
 
   const createGroup = () => {
     const activeSelection = c!.getActiveObjects();
     console.log(activeSelection)
-    const group = new Group(activeSelection, {
-      // left: activeSelection.left,
-      // top: activeSelection.top,
-    });
+    const group = new Group(activeSelection);
     // Remove the active selection from the canvas
     c!.remove(...activeSelection);
 
@@ -38,38 +52,83 @@
 
   }
 
-  const createCircles = (num: number) => {
-    for(let i = 0; i < num; i++){
-      createCircle()
+  const createGroups = () => {
+    console.time("forLoopTimer");
+    for(let i = 0; i < groups.value; i++){
+      if(type.value === '1'){
+        createCircles(singles.value);
+      }
+      else if(type.value === '2'){
+        createPaths(singles.value);
+      }
+      else if(type.value === '3'){
+        createPolygons(singles.value);
+      }
     }
+    console.timeEnd("forLoopTimer");
+  }
+
+  const createCircles = (num: number) => {
+    const group = new Group();
+    for(let i = 0; i < num; i++){
+      const circle = createCircle();
+      if(inGroup.value){
+        c?.remove(circle);
+        group.add(circle);
+      }
+    }
+    if(inGroup.value) c?.add(group);
+    offsetY += 10;
+    offsetX = 0;
   }
 
   const createPolygons = (num: number) => {
+    
+    const group = new Group();
     for(let i = 0; i < num; i++){
-      createPolygon()
+      const polygon = createPolygon();
+      if(inGroup.value){
+        c?.remove(polygon);
+        group.add(polygon);
+      }
     }
+    if(inGroup.value) c?.add(group);
+    offsetY += 10;
+    offsetX = 0;
   }
+
   const createPaths = (num: number) => {
+    const group = new Group();
     for(let i = 0; i < num; i++){
-      createPath()
+      const path = createPath();
+      if(inGroup.value){
+        c?.remove(path);
+        group.add(path);
+      }
     }
+    if(inGroup.value) c?.add(group);
+    offsetY += 10;
+    offsetX = 0;
   }
 
   const createCircle = () => {
     const circle = new Circle({
       left: offsetX,
       top: offsetY,
+      fill: 'rgba(255, 0, 0, .2)',
       radius: radius,
     });
 
     c!.add(circle);
-    offsetX += radius*2;
+    offsetX += radius/2;
     if(offsetX > 500){
-      offsetY += radius*2;
+      offsetY += radius/2;
       offsetX = 0;
     } 
+    return circle;
   }
-  const createPolygon = () => {  const points = [];
+  const createPolygon = () => {  
+    const points = [];
     const sides = 720;
     for (let i = 0; i < sides; i++) {
       const angle = (i * 2 * Math.PI) / sides;
@@ -83,14 +142,16 @@
       left: offsetX,
       top: offsetY,
       strokeWidth: 2,
+      fill: 'rgba(0, 0, 255, .2)',
       selectable: true,
     });
     c!.add(circlePolygon);
-    offsetX += radius*2;
+    offsetX += radius/2;
     if(offsetX > 500){
-      offsetY += radius*2;
+      offsetY += radius;
       offsetX = 0;
     } 
+    return circlePolygon;
   }
 
   const createPath = () => {
@@ -105,15 +166,18 @@
       left: offsetX,
       top: offsetY,
       strokeWidth: 2,
+      fill: 'rgba(0, 0, 0, .2)',
       selectable: true,
     });
 
     c!.add(circlePath);
-    offsetX += radius*2;
+    offsetX += radius/2;
     if(offsetX > 500){
-      offsetY += radius*2;
+      offsetY += radius/2;
       offsetX = 0;
     } 
+
+    return circlePath;
 
   }
   onMounted(() => {
@@ -125,7 +189,15 @@
     'mouse:up': (options) => {
       // Clicking on no objects/water object
       if(options.isClick){
-        createPolygon();
+        if(type.value === '1'){
+          createCircle();
+        }
+        else if(type.value === '2'){
+          createPath();
+        }
+        else if(type.value === '3'){
+          createPolygon();
+      }
       }
     },
   });
