@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
   import { ref, onMounted, watch } from 'vue';
-  import { Canvas, FabricText, Line } from 'fabric';
+  import { Canvas, FabricText, Line, Path } from 'fabric';
   import { Water } from '@/util/water'
   import { HunterProduct } from '@/util/product'
   import { Controller } from '@/util/controller';
@@ -33,9 +33,10 @@
   let c = null as Canvas | null;
   let waterScale = 20;
   let products = 0;
+  let i = 0;
 
   const pressure = ref('30');
-  const product = ref('179291');
+  const product = ref('461006');
   const options = ref([
     { text: 'PGP Ultra', value: '862' },
     { text: 'MP Rotator', value: '461006' },
@@ -141,7 +142,9 @@
   c.on({
     'mouse:up': (options) => {
       // Clicking on no objects/water object
-      if(options.isClick && (!options.target || options.target instanceof Water)){
+      console.log(options)
+      if(options.isClick && (!options.target || options.target instanceof Water || options.target instanceof MPStripwater)){        i++;
+        console.log(i)
         createRotor(options.e);
       }
       // Clicking on a product
@@ -179,6 +182,9 @@
 
         const nozzleSelected = options.target.getSelectedNozzle();
         nozzle.value = nozzleSelected;
+      }
+      else if(options.target instanceof Path){
+        console.log('selected water')
       }
       // Other selection
       else{

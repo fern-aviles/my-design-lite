@@ -1,7 +1,7 @@
 
 <template>
   <div>
-    <ProductBoard/>
+    <TestingBoard/>
   </div>
 </template>
   

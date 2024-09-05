@@ -1,42 +1,38 @@
-import {Path, Circle, Canvas, util, Line, FabricText} from 'fabric'
+import { Canvas, Circle, FabricText, Group, Line, Path, util } from "fabric";
 import { Controller } from './controller';
+import type { HunterProduct } from "./product";
 
-/**
- * Water and water controls of a product
- * 
- * @extends Path
- */
-export class Water extends Path {
+export class WaterGroup extends Group {
   startController: Circle;
   endController: Circle;
   midController: Circle;
+  waterPath: Path;
   product: Circle;
   infoLine: Line;
   infoText: FabricText;
   startAngle: number;
   endAngle: number;
-  midAngle: number;
   sweepAngle: number;
-  selected: boolean;
-  centerX: number;
-  centerY: number;
-  radius: number;
-  minArc: number;
-  maxArc: number;
-  minRadius: number;
-  maxRadius: number;
-  fixedArc: boolean;
-  waterScale: number;
+  centerX: number = 100;
+  centerY: number = 100;
+  radius: number = 5;
+  minArc: number = 0;
+  maxArc: number = 360;
+  minRadius: number = 4;
+  maxRadius: number = 30;
+  fixedArc: boolean = false;
+  waterScale: number = 20;
   distance: number;
-  omittedAngles: any;
+  omittedAngles: any = [];
   lock: boolean = false; 
   lock2: boolean = false;
   prevSnap: number | null = null;
-  startingArc: number;
   minScaling: number = 0.25;
+  skipMovement: number = 0;
   prevDistance: number = 0;
-
+  startingArc: any = 270;
   declare canvas: Canvas;
+
   /**
    * Constructs a Water object with it's controllers
    * 
@@ -44,61 +40,69 @@ export class Water extends Path {
    * @param {Circle} product 
    */
   constructor(options: any, product: Circle) {
+    super([], options);
     const startAngle = options.startAngle;
     const endAngle = options.endAngle;
-    const centerX = options.centerX;
-    const centerY = options.centerY;
-    const radius = options.radius;
-    
+    const radius = options.radius || this.radius;
+
     // Every 20 pixels = 1 ft
     const waterScale = 20; 
+
+    this.startAngle = startAngle || 0;
+    this.endAngle = endAngle || 270;
+    this.sweepAngle = this.endAngle - this.startAngle;
+
     
-    const canvas = options.canvas;
-    
-    let selected = true;
-    options.hasBorder = false;
-    options.hasControls = false;
-    options.perPixelTargetFind = true;
-    options.originX = 'center';
-    options.originY = 'center';
-    options.centeredScaling = true;
-    options.selectable = false;
-    
-    // Generate the path data for the pie slice
-    const pathData = Water.generatePathData(centerX, centerY, radius*waterScale, startAngle, endAngle);
-    super(pathData, options);
+    // Added constraints
+    this.minArc = options.minArc || this.minArc; 
+    this.maxArc = options.maxArc || this.maxArc;
+    this.minRadius = options.minRadius || this.minRadius;
+    this.maxRadius = options.maxRadius || this.maxRadius;
+    this.fixedArc = options.fixedArc || this.fixedArc;
+    this.sweepAngle = this.getSweepAngle(this.startAngle, this.endAngle);
+    this.omittedAngles = options.omittedAngles || this.omittedAngles;
+    this.startingArc = options.startingArc || this.startingArc;
     
     // Set instance variables
     this.product = product;
-    this.product = product;
-    this.selected = selected;
-    this.startAngle = startAngle;
-    this.endAngle = endAngle;
-    this.centerX = product.getCenterPoint().x;
-    this.centerY = product.getCenterPoint().y;
+    this.centerX = this.product.getCenterPoint().x;
+    this.centerY = this.product.getCenterPoint().y;
     this.waterScale = options.waterScale | waterScale;
     this.radius = radius * this.waterScale;
-    this.distance = radius;
-    this.canvas = canvas;
+    this.distance = this.radius;
 
-    // Added constraints
-    this.minArc = options.minArc;
-    this.maxArc = options.maxArc;
-    this.minRadius = options.minRadius;
-    this.maxRadius = options.maxRadius;
-    this.fixedArc = options.fixedArc;
-    this.midAngle = 0;
-    this.sweepAngle = this.getSweepAngle(startAngle, endAngle);
-    this.omittedAngles = options.omittedAngles;
-    this.minScaling = options.minScaling;
-    this.startingArc = options.startingArc;
-    this.set({left: centerX, top: centerY});
-    
+    // Set the canvas
+    this.canvas = options.canvas;
+
+    this.subTargetCheck = true;
+    this.hasControls = false;
+    this.interactive = true;
+    this.hasBorders = false;
+    this.perPixelTargetFind = true;
+
+    // Create Water Path
+    const pathData = WaterGroup.generatePathData(this.centerX, this.centerY, this.radius, this.startAngle, this.endAngle);
+    this.waterPath = new Path(
+      pathData, {
+        left: this.product.left,
+        top: this.product.top,
+        fill: 'rgba(0, 0, 255, .2)',
+        originX: 'center',
+        originY: 'center',
+        hasControls: false,
+        hasBorders: false,
+        selectable: false,
+        perPixelTargetFind: true,
+        lockMovementX: true,
+        lockMovementY: true,
+      }
+    );
+
     // Add control circles
-    const endControlXY = this.getPointOnCircumference(this.radius, util.degreesToRadians(endAngle));
+    const endControlXY = this.getPointOnCircumference(this.radius, util.degreesToRadians(this.endAngle));
     this.endController = new Controller({
-      left: endControlXY.x + centerX,
-      top: endControlXY.y + centerY,
+      left: endControlXY.x + this.centerX,
+      top: endControlXY.y + this.centerY,
       radius: 7,
       fill: 'red',
       originX: 'center',
@@ -110,10 +114,10 @@ export class Water extends Path {
       water: this,
     });
 
-    const startControlXY = this.getPointOnCircumference(this.radius, util.degreesToRadians(startAngle));
+    const startControlXY = this.getPointOnCircumference(this.radius, util.degreesToRadians(this.startAngle));
     this.startController = new Controller({
-      left: startControlXY.x + centerX,
-      top: startControlXY.y + centerY,
+      left: startControlXY.x + this.centerX,
+      top: startControlXY.y + this.centerY,
       radius: 7,
       fill: 'red',
       originX: 'center',
@@ -125,14 +129,13 @@ export class Water extends Path {
       water: this,
     });
 
-    const midAngle = this.computeMidAngle(startAngle, endAngle);
-    this.midAngle = util.radiansToDegrees(midAngle);
+    let midAngle = this.computeMidAngle(this.startAngle, this.endAngle);
     const midControllerXY = this.getPointOnCircumference(this.radius, util.degreesToRadians(midAngle));
     this.midController = new Controller({
-      left: midControllerXY.x + centerX,
-      top: midControllerXY.y + centerY,
+      left: midControllerXY.x + this.centerX,
+      top: midControllerXY.y + this.centerY,
       radius: 7,
-      fill: 'red',
+      fill: 'yellow',
       originX: 'center',
       originY: 'center',
       hasControls: false,
@@ -168,9 +171,9 @@ export class Water extends Path {
       textAngle += 180;
     }
     const distance = this.findDistancefromPoint(this.infoLine.x1,
-                                                this.infoLine.y1,
-                                                this.infoLine.x2,
-                                                this.infoLine.y2);
+      this.infoLine.y1,
+      this.infoLine.x2,
+      this.infoLine.y2);
     this.infoText = new FabricText(
       `${Math.round(distance/20).toFixed(2)} ft, ${Math.round(util.radiansToDegrees(this.sweepAngle))}°`, {
       left: mid.x,
@@ -182,54 +185,83 @@ export class Water extends Path {
       selectable: false,
     });
 
-    // Add water and the control circles to the canvas
-    // This line is used to put the water in the back - used to make products always clickable
-    this.canvas.insertAt(0, this); 
-    this.canvas.add(this.infoLine);
-    this.canvas.add(this.infoText);
-    this.canvas.add(this.endController);
-    this.canvas.add(this.startController);
-    this.canvas.add(this.midController);
 
-    // Bind the event handlers to the control circles
-    this.endController.on({'moving': (e) => {this.onControlCircleMoving(e)},
-                           'selected': (e) => {this.showControls(true)},
-                           'deselected': (e) => {this.showControls(false)},
-                          });
-    this.startController.on({'moving': (e) => {this.onControlCircleMoving(e)},
-                           'selected': (e) => {this.showControls(true)},
-                           'deselected': (e) => {this.showControls(false)},
-                          });
-    this.midController.on({'moving': (e) => {this.getRotation(e)},
-                           'selected': (e) => {this.showControls(true)},
-                           'deselected': (e) => {this.showControls(false)},
-                          });
-    this.product.on({
-      'moving': (e) => {this.set({left: this.product.left, top: this.product.top}), 
-                                  this.handleWaterMoving(e), 
-                                  this.updateBoundingBox()},
+    // Add circles to the group
+    this.add(
+             this.waterPath,
+             this.infoLine,
+             this.infoText,
+             this.startController,
+             this.endController,
+             this.midController,
+             this.product,
+    );
+    this.sendObjectToBack(this.waterPath)
+    this.bringObjectToFront(this.product);
+
+
+
+    this.on({
+      'mousedown': (e) => {console.log(this.getCoords());}
+    });
+
+    this.startController.on({
+      'moving': (e) => {
+        this.onControlCircleMoving(e);
+      },
       'selected': (e) => {this.showControls(true)},
       'deselected': (e) => {this.showControls(false)},
     });
 
-    this.setWaterArc(this.startAngle, this.startAngle + this.startingArc);
-    this.canvas.renderAll();
-  }
+    this.endController.on({
+      'moving': (e) => {
+        this.onControlCircleMoving(e);
+      },
+      'selected': (e) => {this.showControls(true)},
+      'deselected': (e) => {this.showControls(false)},
+    });
 
-/**
- * Generates the path data used to create the Water object
- * @param {number} centerX 
- * @param {number} centerY 
- * @param {number} radius 
- * @param {number} startAngle 
- * @param {number} endAngle 
- * @returns {string}
- */
+    this.midController.on({
+      'moving': (e) => {
+        this.getRotation(e);
+      },
+      'selected': (e) => {this.showControls(true)},
+      'deselected': (e) => {this.showControls(false)},
+    });
+
+    this.product.on({
+      'moving': (e) => {
+        this.handleProductMoving(e);
+      },
+      'selected': (e) => {this.showControls(true)},
+      'deselected': (e) => {this.showControls(false)},
+      'mouseup': () => {
+        // this.canvas.moveObjectTo(this.waterPath, 0);
+        // this.canvas.moveObjectTo(this.product, 100);
+      }
+    });
+
+    // Add the group to the canvas
+    console.log(this.startingArc)
+    this.setWaterArc(this.startAngle, this.startAngle + this.startingArc);
+
+    this.canvas.add(this);
+  }
+  
+  /**
+   * Generates the path data used to create the Water object
+   * @param {number} centerX 
+   * @param {number} centerY 
+   * @param {number} radius 
+   * @param {number} startAngle 
+   * @param {number} endAngle 
+   * @returns {string}
+   */
   static generatePathData(centerX: number,
-                          centerY: number,
-                          radius: number,
-                          startAngle: number, 
-                          endAngle: number ) {
+    centerY: number,
+    radius: number,
+    startAngle: number, 
+    endAngle: number ) {
     const startX = centerX + radius * Math.cos(util.degreesToRadians(startAngle));
     const startY = centerY + radius * Math.sin(util.degreesToRadians(startAngle));
     const endX = centerX + radius * Math.cos(util.degreesToRadians(endAngle));
@@ -246,10 +278,10 @@ export class Water extends Path {
 
     const largeArcFlag = sweep <= Math.PI ? 0 : 1;
     return [
-      `M ${centerX} ${centerY}`,
-      `L ${startX} ${startY}`,
-      `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${endX} ${endY}`,
-      'Z'
+    `M ${centerX} ${centerY}`,
+    `L ${startX} ${startY}`,
+    `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${endX} ${endY}`,
+    'Z'
     ].join(' ');
   }
 
@@ -259,10 +291,11 @@ export class Water extends Path {
    */
   onControlCircleMoving(e: any) {
     const control = e.transform.target;
-    const { x, y } = e.pointer;
-    const centerX = this.getCenterPoint().x,
-          centerY = this.getCenterPoint().y;
-    let angle = Math.atan2(y - centerY, x - centerX) * (180 / Math.PI);
+    let bigCircleCenterX = this.product.left;
+    let bigCircleCenterY = this.product.top;
+    let pointerX = control.left;
+    let pointerY = control.top;
+    let angle = Math.atan2(pointerY - bigCircleCenterY, pointerX - bigCircleCenterX) * (180 / Math.PI);
 
     // Normalize angle
     angle = this.normalizeAngle(angle, false);
@@ -276,19 +309,19 @@ export class Water extends Path {
     // Check what controller is being used based on the controllerType
     // and make sure it's within the specifications
     if (control.controllerType === 'end'){
-        this.endAngle = this.normalizeAngle(angle, false);
+      this.endAngle = this.normalizeAngle(angle, false);
     }
     else if (control.controllerType === 'start'){
-        this.startAngle = this.normalizeAngle(angle, false);
+      this.startAngle = this.normalizeAngle(angle, false);
     }
 
     // Calculate sweep angle
     this.sweepAngle = this.getSweepAngle(this.startAngle, this.endAngle);
 
     // Redraw path
-    const pathData = Water.generatePathData(this.centerX, this.centerY, this.radius, this.startAngle, this.endAngle);
-    this.set({ path: new Path(pathData).path });
-    
+    const pathData = WaterGroup.generatePathData(this.centerX, this.centerY, this.radius, this.startAngle, this.endAngle);
+    this.waterPath.set({ path: new Path(pathData).path });
+
     // Update element positions to be on the arc
     this.setPointOnCircumference(control, angle);
     this.changeMidControllerPos(this.midController);
@@ -297,9 +330,9 @@ export class Water extends Path {
     // Re-render the canvas
     this.setCoords();
     this.showControls(true);
-    this.canvas.renderAll();
+    this.canvas.requestRenderAll();
   }
-
+  
   /**
    * Calculates the rotation of the radius in turn, changes control 
    * angles so it reflects the changes properly anytime the radius
@@ -308,7 +341,7 @@ export class Water extends Path {
    * @returns {null}
    */
   getRotation(midController: any){
-    this.showControls(true);
+    // this.showControls(true);
     const startControl = this.startController,
           endControl = this.endController;
 
@@ -331,25 +364,25 @@ export class Water extends Path {
     this.endAngle = this.normalizeAngle(util.radiansToDegrees(newEndAngle), false);
     
     // Create the new pathData object to use as the new arc
-    const pathData = Water.generatePathData(this.centerX, this.centerY, this.radius, this.startAngle, this.endAngle);
-    this.set({ path: new Path(pathData).path });
+    const pathData = WaterGroup.generatePathData(this.centerX, this.centerY, this.radius, this.startAngle, this.endAngle);
+    this.waterPath.set({ path: new Path(pathData).path });
 
     // Handling scaling and min/max radius constraints
     const midControllerCoords = this.midController.getCenterPoint();
-    const waterCoords = this.getCenterPoint();
+    const waterCoords = this.waterPath.getCenterPoint();
     let distanceApart = this.findDistancefromPoint(midControllerCoords.x, 
                                                    midControllerCoords.y, 
                                                    waterCoords.x, 
                                                    waterCoords.y);
-    this.scale(distanceApart/this.radius);
+    this.waterPath.scale(distanceApart/this.radius);
     distanceApart = distanceApart/this.waterScale;
     let radiusScale = (this.radius/this.waterScale);
     if(distanceApart < this.minRadius * (1-this.minScaling)){
-      this.scale(((1-this.minScaling)*this.minRadius)/radiusScale);
+      this.waterPath.scale(((1-this.minScaling)*this.minRadius)/radiusScale);
       this.changeMidControllerPos(this.midController);
     } 
     else if(distanceApart > this.maxRadius){
-      this.scale(this.maxRadius/radiusScale);
+      this.waterPath.scale(this.maxRadius/radiusScale);
       this.changeMidControllerPos(this.midController);
     }
     
@@ -357,24 +390,44 @@ export class Water extends Path {
     this.setPointOnCircumference(startControl, util.radiansToDegrees(newStartAngle));
     this.setPointOnCircumference(endControl, util.radiansToDegrees(newEndAngle));
     this.handleInfo();
-    this.canvas.renderAll();
-  };
+    this.canvas.requestRenderAll();
+  }
 
-/**
- * Handles the water movement which allows the controllers to be in the correct coordinates
- * @param {event} e 
- * @returns {null}
- */
-  handleWaterMoving(e: any) { 
+  /**
+   * The function is used for setting the points on the circumference
+   * of the circle
+   * @param {any} controller: the radius of the product
+   * @param {number} angle: the angle (in radians) of where the point is at
+   * 
+   * @returns {null}
+   */
+  setPointOnCircumference(controller: any, angle: number){
+    angle = util.degreesToRadians(angle);
+    const centerX = this.product.left,
+          centerY = this.product.top;
+    
+    const x = ((this.waterPath.scaleX * this.radius) * Math.cos(angle)) + centerX;
+    const y = ((this.waterPath.scaleX * this.radius) * Math.sin(angle)) + centerY;
+    controller.set({ left: x, top: y });
+    controller.setCoords();
+  }
+
+  /**
+   * Handles the water movement which allows the controllers to be in the correct coordinates
+   * @param {event} e 
+   * @returns {null}
+   */
+  handleProductMoving(e: any){
+    this.waterPath.set({
+      left: this.product.left,
+      top: this.product.top,
+    });
     this.setPointOnCircumference(this.startController, this.startAngle);
     this.setPointOnCircumference(this.endController, this.endAngle);
     this.changeMidControllerPos(this.midController);
     this.handleInfo();
-    const pathData = Water.generatePathData(this.centerX, this.centerY, this.radius, this.startAngle, this.endAngle);
-    this.set({ path: new Path(pathData).path });
-    this.canvas.renderAll();
   }
-
+  
   /**
    * Changes position of the info line to be on the midController and product
    * 
@@ -382,8 +435,14 @@ export class Water extends Path {
    */
   handleInfo() {
     // Changing infoLine position
-    const productCoords = this.product.getCenterPoint();
-    const midControllerCoords = this.midController.getCenterPoint();
+    const productCoords = {
+      x: this.product.left,
+      y: this.product.top
+    };
+    const midControllerCoords = {
+      x: this.midController.left,
+      y: this.midController.top
+    };    
     this.infoLine.set({
       x1: productCoords.x,
       y1: productCoords.y,
@@ -418,28 +477,80 @@ export class Water extends Path {
   }
 
   /**
-   * Updates the bounding box for the water
-   * @returns {null}
+   * The function is used for getting the points on the circumference of the 
+   * @param {number} radius: the radius of the product
+   * @param {number} angle: the angle (in radians) of where the point is at
+   * 
+   * @returns {x: number, y: number} x and y coordinate of the point
    */
-  updateBoundingBox() {
-    this.setCoords();
-    this.startController.setCoords();
-    this.endController.setCoords();
-    this.midController.setCoords();
+  getPointOnCircumference(radius: number, angle: number){
+    const x = radius * Math.cos(angle);
+    const y = radius * Math.sin(angle);
+    return {x, y};
   }
 
-/**
- * Toggle for showing the Water controls
- * @param {boolean} show 
+  /**
+   * Used for getting the angle of the middle controller
+   * @param {number} startAngle: in radians
+   * @param {number} endAngle: in radians
+   * 
+   * @returns {number} midAngle: in radians
+   */
+  computeMidAngle(startAngle: number, endAngle: number){
+    startAngle = startAngle >= 0 ? startAngle : 360 + startAngle;
+    endAngle = endAngle >= 0 ? endAngle : 360 + endAngle;
+    let midAngle;
+    if (endAngle < startAngle) {
+      midAngle = (startAngle + endAngle + Math.PI * 2) / 2;
+    } else {
+      midAngle = (startAngle + endAngle) / 2;
+    }
+    return midAngle >= 0 ? midAngle : 360 + midAngle;
+  }
+
+  /**
+ * Changes the position of the middle controller whenever one of the arc
+ * controllers change positions
+ * @param {Circle} midController: controller that changes the arc's radius
+ * 
+ * @returns {null}
  */
-  showControls(show: boolean){
-    this.startController.set({visible: show});
-    this.endController.set({visible: show});
-    this.midController.set({visible: show});
-    this.infoLine.set({visible: show});
-    this.infoText.set({visible: show});
+  changeMidControllerPos(midController: Circle){
+    const startAngle = util.degreesToRadians(this.startAngle); 
+    const endAngle = util.degreesToRadians(this.endAngle);
+    let angle = this.computeMidAngle(startAngle, endAngle);
+    angle *= (180/Math.PI);
+    this.setPointOnCircumference(midController, angle);
   }
 
+  /**
+   * Used for setting the angle between 0 and Math.PI * 2
+   * or 0 and 360 depending if the angle is in radians
+   * @param {number} angle: in radians
+   * @param {boolean} radians: true if radians, false if not
+   * 
+   * @returns {number} an angle between 0 and 2* PI or 0 and 360
+   */
+  normalizeAngle(angle: number, radians=true){
+    if (radians){
+      while (angle < 0) {
+        angle += Math.PI * 2;
+      }
+      while (angle >= Math.PI * 2) {
+        angle -= Math.PI * 2;
+      }
+    }
+    else{
+      while (angle < 0) {
+        angle += 360;
+      }
+      while (angle >= 360) {
+        angle -= 360;
+      }
+    }
+    return angle;
+  }
+    
   /**
    * Gets the sweep angle beteween 2 points
    * @param startAngle: radians
@@ -457,6 +568,23 @@ export class Water extends Path {
     return sweep;
   }
 
+  /**
+   * Used for calculating the angle for the selected controller
+   * @param {Circle} controller: One of the circles that control the arc
+   * 
+   * @returns {number}
+   */
+  calculateAngle(controller: Circle){
+    let px = controller.getCenterPoint().x,
+        py = controller.getCenterPoint().y,
+        cx = this.waterPath.getCenterPoint().x,
+        cy = this.waterPath.getCenterPoint().y;
+    const dx = px - cx;
+    const dy = py - cy;
+    const angle = Math.atan2(dy, dx);
+    return angle;
+  }
+  
   /**
    * Checks the water object is not under the minimum or 
    * over the maximum arc angle
@@ -591,127 +719,6 @@ export class Water extends Path {
   }
 
   /**
-   * The function is used for getting the points on the circumference of the 
-   * @param {number} radius: the radius of the product
-   * @param {number} angle: the angle (in radians) of where the point is at
-   * 
-   * @returns {x: number, y: number} x and y coordinate of the point
-   */
-  getPointOnCircumference(radius: number, angle: number){
-    const x = radius * Math.cos(angle);
-    const y = radius * Math.sin(angle);
-    return {x, y};
-  }
-
-  /**
-   * The function is used for setting the points on the circumference
-   * of the circle
-   * @param {any} controller: the radius of the product
-   * @param {number} angle: the angle (in radians) of where the point is at
-   * 
-   * @returns {null}
-   */
-  setPointOnCircumference(controller: any, angle: number){
-    angle = util.degreesToRadians(angle);
-    const centerX = this.getCenterPoint().x,
-          centerY = this.getCenterPoint().y;
-    
-    const x = centerX + ((this.scaleX * this.radius) * Math.cos(angle));
-    const y = centerY + ((this.scaleX * this.radius) * Math.sin(angle));
-    controller.set({ left: x, top: y });
-    controller.setCoords();
-  }
-
-  /**
-   * Used for getting the angle of the middle controller
-   * @param {number} startAngle: in radians
-   * @param {number} endAngle: in radians
-   * 
-   * @returns {number} midAngle: in radians
-   */
-  computeMidAngle(startAngle: number, endAngle: number){
-    startAngle = startAngle >= 0 ? startAngle : 360 + startAngle;
-    endAngle = endAngle >= 0 ? endAngle : 360 + endAngle;
-    let midAngle;
-    if (endAngle < startAngle) {
-      midAngle = (startAngle + endAngle + Math.PI * 2) / 2;
-    } else {
-      midAngle = (startAngle + endAngle) / 2;
-    }
-    return midAngle >= 0 ? midAngle : 360 + midAngle;
-  };
-
-   /**
-   * Changes the position of the middle controller whenever one of the arc
-   * controllers change positions
-   * @param {Circle} midController: controller that changes the arc's radius
-   * 
-   * @returns {null}
-   */
-  changeMidControllerPos(midController: Circle){
-    const startAngle = util.degreesToRadians(this.startAngle); 
-    const endAngle = util.degreesToRadians(this.endAngle);
-    const angle = this.computeMidAngle(startAngle, endAngle);
-    this.midAngle = util.radiansToDegrees(angle);
-    const cx = this.getCenterPoint().x;
-    const cy = this.getCenterPoint().y;
-    const x = ((this.scaleX * this.radius) * Math.cos(angle)) + cx;
-    const y = ((this.scaleX * this.radius) * Math.sin(angle)) + cy;
-    midController.set({
-      left: x,
-      top: y,
-      angleInRadians: angle,
-      angleInDegrees: angle * (180/Math.PI),
-    });
-    midController.setCoords();
-  };
-
-  /**
-   * Used for calculating the angle for the selected controller
-   * @param {Circle} controller: One of the circles that control the arc
-   * 
-   * @returns {number}
-   */
-  calculateAngle(controller: Circle){
-    let px = controller.getCenterPoint().x,
-        py = controller.getCenterPoint().y,
-        cx = this.getCenterPoint().x,
-        cy = this.getCenterPoint().y;
-    const dx = px - cx;
-    const dy = py - cy;
-    const angle = Math.atan2(dy, dx);
-    return angle;
-  };
-
-  /**
-   * Used for setting the angle between 0 and Math.PI * 2
-   * or 0 and 360 depending if the angle is in radians
-   * @param {number} angle: in radians
-   * @param {boolean} radians: true if radians, false if not
-   * 
-   * @returns {number} an angle between 0 and 2* PI or 0 and 360
-   */
-   normalizeAngle(angle: number, radians=true){
-    if (radians){
-      while (angle < 0) {
-        angle += Math.PI * 2;
-      }
-      while (angle >= Math.PI * 2) {
-        angle -= Math.PI * 2;
-      }
-    }
-    else{
-      while (angle < 0) {
-        angle += 360;
-      }
-      while (angle >= 360) {
-        angle -= 360;
-      }
-    }
-    return angle;
-  };
-
-  /**
    * Finds the distance from (x1, y2) and (x2, y2).
    * @param {number} x1 
    * @param {number} y1 
@@ -725,8 +732,8 @@ export class Water extends Path {
     const y_dif = y2 - y1;
     const distance = Math.sqrt(Math.pow(x_dif, 2) + Math.pow(y_dif, 2));
     return distance;
-  };
-
+  }
+  
   /**
    * Finds the point between (x1, y2) and (x2, y2).
    * @param {number} x1 
@@ -803,12 +810,12 @@ export class Water extends Path {
     this.endAngle = this.normalizeAngle(end, false);
 
     this.sweepAngle = this.getSweepAngle(this.startAngle, this.endAngle);
-    distance *= this.waterScale;
-    this.scale(distance/this.radius);
+    // distance *= this.waterScale;
+    // this.waterPath.scale(distance/this.radius);
 
     // Redraw path
-    const pathData = Water.generatePathData(this.centerX, this.centerY, this.radius, this.startAngle, this.endAngle);
-    this.set({ path: new Path(pathData).path });
+    const pathData = WaterGroup.generatePathData(this.centerX, this.centerY, this.radius, this.startAngle, this.endAngle);
+    this.waterPath.set({ path: new Path(pathData).path });
     
     // Update element positions to be on the arc
     this.setPointOnCircumference(this.startController, this.startAngle);
@@ -819,7 +826,7 @@ export class Water extends Path {
     // Re-render the canvas
     this.setCoords();
     this.showControls(true);
-    this.canvas.renderAll();
+    this.canvas.requestRenderAll();
   }
 
   /**
@@ -845,6 +852,16 @@ export class Water extends Path {
   setOmittedAngles(angles: any): void {
     this.omittedAngles = angles;
   }
-}
 
-export default Water;
+  /**
+   * Toggle for showing the Water controls
+   * @param {boolean} show 
+   */
+  showControls(show: boolean){
+    this.startController.set({visible: show});
+    this.endController.set({visible: show});
+    this.midController.set({visible: show});
+    this.infoLine.set({visible: show});
+    this.infoText.set({visible: show});
+  }
+}

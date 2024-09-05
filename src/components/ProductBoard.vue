@@ -7,9 +7,12 @@
 <script setup lnag="ts">
   import { Canvas, Circle, Group } from 'fabric';
   import { ref, onMounted } from 'vue';
-  import {ProductGroup} from '@/util/productGroup.ts'
+  import {WaterGroup} from '@/util/waterGroup.ts'
+  // import Water from '@/util/water';
+  import { HunterProduct } from '@/util/product';
   const canvas = ref(null);
   let c = null;
+  let i = 0;
   const RADIUS = 100,
         START_ANGLE = 0,
         END_ANGLE = 270;
@@ -42,12 +45,17 @@
 
   }
 
-  const addProductGroup = () => {
-    const s = new ProductGroup({canvas: c});
-  }
-
-  const makeGroup = () => {
-
+  const addWaterGroup = (e) => {
+    const rotor = new HunterProduct({
+      productID: "461006" || product.value,
+      pressure: "45PSI" || pressure.value + "PSI",
+      left: e.offsetX,
+      top: e.offsetY,
+      canvas: c,
+    });
+    // const productGroup = new WaterGroup({
+    //     canvas: c
+    //   });
   }
 
   onMounted(() => {
@@ -59,7 +67,9 @@
       'mouse:up': (options) => {
         if(options.isClick && (!options.target)){
           // createRotor(options.e);
-          addProductGroup();
+          addWaterGroup(options.e);
+          i++;
+          console.log(i)
       }},
       'selection:created': (e) => {
       }
