@@ -162,17 +162,14 @@ export class HunterProduct extends Circle {
    * @param ctx 
    * @returns 
    */
-  render(ctx : CanvasRenderingContext2D): void{
+  override render(ctx : CanvasRenderingContext2D): void{
     super.render(ctx);
     if(this.name !== "Standard MP Rotator"){
       return;
     }
     ctx.save();
-    // console.log(this.calcTransformMatrix())
-    // const left = this.calcTransformMatrix()[4];
-    // const top = this.calcTransformMatrix()[5];
-    ctx.translate(this.left, this.top);
-    ctx.rotate(this.angle * Math.PI / 180);
+    const matrix = this.calcTransformMatrix();
+    ctx.transform(matrix[0], matrix[1], matrix[2], matrix[3], matrix[4], matrix[5]);
 
     const centerX = 0;
     const centerY = 0;
@@ -294,7 +291,8 @@ export class HunterProduct extends Circle {
       this.findNozzlesRadius(data, prevDistance);
       let {minRadius, maxRadius} = this.findCurrentMinandMaxRadii();
 
-      prevDistance = Math.abs(prevDistance - minRadius) < Math.abs(prevDistance - maxRadius) ? minRadius : maxRadius;
+      prevDistance = Math.abs(prevDistance - minRadius) < Math.abs(prevDistance - maxRadius)
+                     ? minRadius : maxRadius;
       this.water.setWaterArc(this.water.startAngle, this.water.endAngle, prevDistance);
     }
 
@@ -655,7 +653,6 @@ export class HunterProduct extends Circle {
         `Triangle Precip: ${(precip_tri).toFixed(2)} in/hr`;
     }
     this.set({ fill: nozzle.data.color || 'black'});
-    this.canvas.requestRenderAll();
   }
 
   /**
