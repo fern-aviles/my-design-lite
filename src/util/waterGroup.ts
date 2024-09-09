@@ -40,6 +40,7 @@ export class WaterGroup extends Group {
    * @param {Circle} product 
    */
   constructor(options: any, product: Circle) {
+    options.objectCaching = true;
     super([], options);
     const startAngle = options.startAngle;
     const endAngle = options.endAngle;
@@ -77,8 +78,10 @@ export class WaterGroup extends Group {
     this.subTargetCheck = true;
     this.hasControls = false;
     this.interactive = true;
-    this.hasBorders = false;
+    // this.hasBorders = false;
     this.perPixelTargetFind = true;
+    this.originX = 'center';
+    this.originY = 'center';
 
     // Create Water Path
     const pathData = WaterGroup.generatePathData(this.centerX, this.centerY, this.radius, this.startAngle, this.endAngle);
@@ -95,6 +98,7 @@ export class WaterGroup extends Group {
         perPixelTargetFind: true,
         lockMovementX: true,
         lockMovementY: true,
+        objectCaching: true,
       }
     );
 
@@ -184,23 +188,36 @@ export class WaterGroup extends Group {
       originX: 'center',
       selectable: false,
     });
-
-
+    
+    this.canvas.add(
+      this.waterPath,
+      this.infoLine,
+      this.infoText,
+      this.startController,
+      this.endController,
+      this.midController,
+    );
+    
     // Add circles to the group
     this.add(
-             this.waterPath,
-             this.infoLine,
-             this.infoText,
-             this.startController,
-             this.endController,
-             this.midController,
-             this.product,
+      this.waterPath,
+      this.infoLine,
+      this.infoText,
+      this.startController,
+      this.endController,
+      this.midController,
     );
-    this.sendObjectToBack(this.waterPath)
-    this.bringObjectToFront(this.product);
-
-
-
+    
+    this.canvas.remove(
+      this.waterPath,
+      this.infoLine,
+      this.infoText,
+      this.startController,
+      this.endController,
+      this.midController,
+    );
+    this.canvas.add(this);
+    
     this.on({
       'mousedown': (e) => {console.log(this.getCoords());}
     });
@@ -209,7 +226,10 @@ export class WaterGroup extends Group {
       'moving': (e) => {
         this.onControlCircleMoving(e);
       },
-      'selected': (e) => {this.showControls(true)},
+      'selected': (e) => {
+        this.showControls(true)
+        this.canvas.moveObjectTo(this.product, -1);
+      },
       'deselected': (e) => {this.showControls(false)},
     });
 
@@ -230,22 +250,49 @@ export class WaterGroup extends Group {
     });
 
     this.product.on({
+      'mousedown': () => {
+        // this.canvas.sendObjectToBack(this);
+        // this.canvas.bringObjectToFront(this.product);
+        // this.canvas.bringObjectToFront(this.endController);
+        // this.canvas.bringObjectToFront(this.midController);
+        // this.canvas.bringObjectToFront(this.startController);
+        // this.canvas.requestRenderAll();
+      },
       'moving': (e) => {
         this.handleProductMoving(e);
       },
-      'selected': (e) => {this.showControls(true)},
-      'deselected': (e) => {this.showControls(false)},
+      'selected': (e) => {
+        this.showControls(true)
+        // this.canvas.moveObjectTo(this, 0)
+        // this.canvas.moveObjectTo(this.startController, -1);
+        // this.canvas.requestRenderAll();
+      },
+      'deselected': (e) => {this.showControls(false)
+          this.canvas.moveObjectTo(this, 0)
+          console.log(this.canvas.getObjects())
+
+        },
       'mouseup': () => {
-        // this.canvas.moveObjectTo(this.waterPath, 0);
-        // this.canvas.moveObjectTo(this.product, 100);
+        // this.canvas.sendObjectToBack(this);
+        // this.canvas.bringObjectToFront(this.product);
+        // this.canvas.bringObjectToFront(this.endController);
+        // this.canvas.bringObjectToFront(this.midController);
+        // this.canvas.bringObjectToFront(this.startController);
+        // this.canvas.requestRenderAll();
       }
     });
 
     // Add the group to the canvas
-    console.log(this.startingArc)
-    this.setWaterArc(this.startAngle, this.startAngle + this.startingArc);
+    this.setWaterArc(
+      this.startAngle, 
+      this.startAngle + this.startingArc,
+      radius);
+    this.setCoords();
 
-    this.canvas.add(this);
+    
+    this.canvas.moveObjectTo(this, 0);
+
+    console.log(this.canvas.getObjects()); // Check where the object is in the stacking order
   }
   
   /**
@@ -285,14 +332,17 @@ export class WaterGroup extends Group {
     ].join(' ');
   }
 
+
   /**
    * Handles the movement of the start and end controllers
    * @param {evemt} e 
    */
-  onControlCircleMoving(e: any) {
+  onControlCircleMoving(e: any){
+    const t1 = performance.now()
+    // console.time('start')
     const control = e.transform.target;
-    let bigCircleCenterX = this.product.left;
-    let bigCircleCenterY = this.product.top;
+    let bigCircleCenterX = this.waterPath.left;
+    let bigCircleCenterY = this.waterPath.top;
     let pointerX = control.left;
     let pointerY = control.top;
     let angle = Math.atan2(pointerY - bigCircleCenterY, pointerX - bigCircleCenterX) * (180 / Math.PI);
@@ -331,6 +381,9 @@ export class WaterGroup extends Group {
     this.setCoords();
     this.showControls(true);
     this.canvas.requestRenderAll();
+    const t2 = performance.now()
+    // console.log('performance',(t2-t1) )
+    // console.timeEnd("start")
   }
   
   /**
@@ -403,8 +456,8 @@ export class WaterGroup extends Group {
    */
   setPointOnCircumference(controller: any, angle: number){
     angle = util.degreesToRadians(angle);
-    const centerX = this.product.left,
-          centerY = this.product.top;
+    const centerX = this.waterPath.left,
+          centerY = this.waterPath.top;
     
     const x = ((this.waterPath.scaleX * this.radius) * Math.cos(angle)) + centerX;
     const y = ((this.waterPath.scaleX * this.radius) * Math.sin(angle)) + centerY;
@@ -418,10 +471,12 @@ export class WaterGroup extends Group {
    * @returns {null}
    */
   handleProductMoving(e: any){
-    this.waterPath.set({
+    this.set({
       left: this.product.left,
       top: this.product.top,
     });
+    this.setCoords();
+    this.waterPath.setCoords();
     this.setPointOnCircumference(this.startController, this.startAngle);
     this.setPointOnCircumference(this.endController, this.endAngle);
     this.changeMidControllerPos(this.midController);
@@ -435,17 +490,17 @@ export class WaterGroup extends Group {
    */
   handleInfo() {
     // Changing infoLine position
-    const productCoords = {
-      x: this.product.left,
-      y: this.product.top
+    const waterCoords = {
+      x: this.waterPath.left,
+      y: this.waterPath.top
     };
     const midControllerCoords = {
       x: this.midController.left,
       y: this.midController.top
     };    
     this.infoLine.set({
-      x1: productCoords.x,
-      y1: productCoords.y,
+      x1: waterCoords.x,
+      y1: waterCoords.y,
       x2: midControllerCoords.x,
       y2: midControllerCoords.y,
     });
@@ -810,8 +865,8 @@ export class WaterGroup extends Group {
     this.endAngle = this.normalizeAngle(end, false);
 
     this.sweepAngle = this.getSweepAngle(this.startAngle, this.endAngle);
-    // distance *= this.waterScale;
-    // this.waterPath.scale(distance/this.radius);
+    distance *= this.waterScale;
+    this.waterPath.scale(distance/this.radius);
 
     // Redraw path
     const pathData = WaterGroup.generatePathData(this.centerX, this.centerY, this.radius, this.startAngle, this.endAngle);
@@ -863,5 +918,12 @@ export class WaterGroup extends Group {
     this.midController.set({visible: show});
     this.infoLine.set({visible: show});
     this.infoText.set({visible: show});
+
+    if(show){
+      this.canvas.moveObjectTo(this, -2);
+    }
+    else{
+      this.canvas.moveObjectTo(this, 0)
+    }
   }
 }
