@@ -41,6 +41,10 @@
     { text: 'PGP Ultra', value: '862' },
     { text: 'MP Rotator', value: '461006' },
     { text: 'Pro Adjustable Nozzles', value:'884' },
+    { text: 'Pro Fixed Nozzles', value: '885' },
+    { text: 'PGJ', value: '695' },
+    { text: 'PGP-ADJ', value: '861' },
+    { text: 'SRM', value: '860' },
     { text: 'MP Strip', value: '179291'}
   ]);
   interface NozzleDictionary {
@@ -143,9 +147,10 @@
     'mouse:up': (options) => {
       // Clicking on no objects/water object
       console.log(options)
-      if(options.isClick && (!options.target || options.target instanceof Water || options.target instanceof MPStripwater)){        i++;
-        console.log(i)
+      if(options.isClick){
+        i++;
         createRotor(options.e);
+        console.log(i)
       }
       // Clicking on a product
       else if(options.target instanceof HunterProduct){
