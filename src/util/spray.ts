@@ -6,9 +6,13 @@ export class Spray extends Circle {
   radius: number;
   sweepAngle: number;
   midAngle: number;
+  minArc: number = 50;
+  maxArc: number = 360;
   declare product: Mover;
   declare canvas: Canvas;
   selected: boolean = false;
+  omittedAngles: any = [270, 360];
+  prevSnap!: number | null;
   constructor(options: any) {
     options.radius = 300;
     options.startAngle = 0;
@@ -21,18 +25,9 @@ export class Spray extends Circle {
     options.perPixelTargetFind = true;
     options.hasBorders = false;
     super(options);
-    this.selectable = true;
-    // this.lockMovementX = true;
-    // this.lockMovementY= true;
-    this.containsPoint = function(point) {
-      const distanceFromCenter = Math.sqrt(
-        Math.pow(point.x - this.left, 2) + Math.pow(point.y - this.top, 2)
-      );
-    
-      // Consider a larger radius for interaction
-      const interactionRadius = this.radius + 20;
-      return distanceFromCenter <= interactionRadius;
-    };
+    this.selectable = false;
+    this.lockMovementX = true;
+    this.lockMovementY= true;
 
     this.startAngle = options.startAngle;
     this.endAngle = options.endAngle;
@@ -61,9 +56,7 @@ export class Spray extends Circle {
         this.selected = false;
       },
       'modified': (e) => {
-        // console.log(this.canvas.getObjects())
         this.canvas.bringObjectToFront(this.product);
-        // console.log(this.canvas.getObjects())
         this.canvas.requestRenderAll();
       }
     })
@@ -108,7 +101,7 @@ export class Spray extends Circle {
       withConnection: true,
       actionHandler: (eventData, transform, x, y) => {
         this.handleMidControl(eventData);
-        this.handleMidControlScale(eventData, transform, x, y)
+        this.handleMidControlScale(eventData, transform, x, y);
         return true;
       },
       render: this.renderControllerIcon,
@@ -117,23 +110,40 @@ export class Spray extends Circle {
 
   handleControls(eventData: TPointerEvent, control: string): void {
     const pointer = this.canvas.getPointer(eventData);
-    const angle = Math.atan2(pointer.y - this.top  , pointer.x - this.left) * (180/Math.PI);
+    let angle = Math.atan2(pointer.y - this.top  , pointer.x - this.left) * (180/Math.PI);
     
-    if(control === 'start'){
-      this.startAngle = angle >= 0 ? angle : 360 + angle;
-      this.controls.start.x = this.getControllerX(this.startAngle);
-      this.controls.start.y = this.getControllerY(this.startAngle);
-      
-    }
-    else{
-      this.endAngle = angle >= 0 ? angle : 360 + angle;
-      this.controls.end.x = this.getControllerX(this.endAngle);
-      this.controls.end.y = this.getControllerY(this.endAngle);
+    // If it's grouped
+    if (this.parent){
+      angle = Math.atan2(pointer.y - this.parent.top  , pointer.x - this.parent.left) * (180/Math.PI);
     }
 
-    let sweepAngle = this.endAngle - this.startAngle;
-    sweepAngle = sweepAngle >= 0 ? sweepAngle : 360 + sweepAngle;
-    this.sweepAngle = sweepAngle;
+    if(control === 'start'){
+      this.startAngle = angle >= 0 ? angle : 360 + angle;
+      this.sweepAngle = this.endAngle - this.startAngle;
+
+      // Prevents sweepAngle from going to -80deg
+      this.sweepAngle = this.sweepAngle >= 0 ? this.sweepAngle : 360 + this.sweepAngle;
+
+      this.startAngle = this.checkMinAndMaxArcs(this.sweepAngle, 'start');
+      this.startAngle = this.checkOmittedAngles(this.startAngle, 'start');
+
+      this.controls.start.x = this.getControllerX(this.startAngle);
+      this.controls.start.y = this.getControllerY(this.startAngle);
+    }
+
+    else{
+      this.endAngle = angle >= 0 ? angle : 360 + angle;
+      this.sweepAngle = this.endAngle - this.startAngle;
+
+      // Prevents sweepAngle from going to -80deg
+      this.sweepAngle = this.sweepAngle >= 0 ? this.sweepAngle : 360 + this.sweepAngle;
+
+      this.endAngle = this.checkMinAndMaxArcs(this.sweepAngle, 'end');
+
+      this.controls.end.x = this.getControllerX(this.endAngle);
+      this.controls.end.y = this.getControllerY(this.endAngle);
+      
+    }
     this.controls.middle.x = this.getControllerX((this.sweepAngle / 2) + this.startAngle);
     this.controls.middle.y = this.getControllerY((this.sweepAngle / 2) + this.startAngle);
 
@@ -143,20 +153,24 @@ export class Spray extends Circle {
 
   handleMidControl(eventData: TPointerEvent){
     const pointer = this.canvas.getPointer(eventData);
-    const angle = Math.atan2(pointer.y - this.top  , pointer.x - this.left) * (180/Math.PI);
+    let angle = Math.atan2(pointer.y - this.top  , pointer.x - this.left) * (180/Math.PI);
     
+    if (this.parent){
+      angle = Math.atan2(pointer.y - this.parent.top  , pointer.x - this.parent.left) * (180/Math.PI);
+    }
+
     // Update middle controller position
     this.controls.middle.x = this.getControllerX(angle);
     this.controls.middle.y = this.getControllerY(angle);
 
     // Update start control position
-    this.startAngle = angle - this.sweepAngle/2
+    this.startAngle = angle - this.sweepAngle/2;
     this.startAngle = this.startAngle >= 0 ? this.startAngle : 360 + this.startAngle;
     this.controls.start.x = this.getControllerX(this.startAngle);
     this.controls.start.y = this.getControllerY(this.startAngle);
     
     // Update end control position
-    this.endAngle = angle + this.sweepAngle/2
+    this.endAngle = angle + this.sweepAngle/2;
     this.endAngle = this.endAngle >= 0 ? this.endAngle : 360 + this.endAngle;
     this.controls.end.x = this.getControllerX(this.endAngle);
     this.controls.end.y = this.getControllerY(this.endAngle);
@@ -169,22 +183,121 @@ export class Spray extends Circle {
   handleMidControlScale(eventData: TPointerEvent, transform: any, x: any, y: any){
     const target = transform.target;
     const canvasPointer = target.canvas.getPointer(eventData);
-    const distance = Math.sqrt(
+    let distance = Math.sqrt(
       Math.pow(canvasPointer.x - target.left, 2) +
       Math.pow(canvasPointer.y - target.top, 2)
-    )
+    );
 
+    if (this.parent){
+      distance = Math.sqrt(
+        Math.pow(canvasPointer.x - this.parent.left, 2) +
+        Math.pow(canvasPointer.y - this.parent.top, 2)
+      );
+    }
     // Update radius of Water
     target.set('radius', distance / target.scaleX);
     target.setCoords();
   }
   
   getControllerX(angle: number){
-    return (this.radius * Math.cos(util.degreesToRadians(angle))) / this.width
+    return (this.radius * Math.cos(util.degreesToRadians(angle))) / this.width;
   }
 
   getControllerY(angle: number){
-    return (this.radius * Math.sin(util.degreesToRadians(angle))) / this.width
+    return (this.radius * Math.sin(util.degreesToRadians(angle))) / this.width;
+  }
+
+  checkMinAndMaxArcs(sweepAngle: number, control: string): number{
+    let angle = control === 'start' ? this.startAngle : this.endAngle;
+    if(sweepAngle <= this.minArc){
+      if(control === 'start'){
+        angle = this.endAngle - this.minArc;
+      }
+      else{
+        angle = this.startAngle + this.minArc;
+      }
+      this.sweepAngle = this.minArc;
+    }
+
+    if(sweepAngle >= this.maxArc){
+      if(control === 'start'){
+        angle = this.endAngle - this.maxArc;
+      }
+      else{
+        angle = this.startAngle + this.maxArc;
+      }
+        this.sweepAngle = this.maxArc;
+    }
+
+    // Normalize
+    angle = angle >= 0 ? angle : 360 + angle;
+    return angle;
+  }
+
+  checkOmittedAngles(angle: number, control: string): number{
+    if(this.omittedAngles.length === 0){
+      return angle;
+    }
+    let sweepAngle = this.sweepAngle;
+
+    // Look for angle to snap to
+    let snapped = false;
+    for (let snapPoint of this.omittedAngles) {
+      if (Math.abs(sweepAngle - snapPoint) <= 5) {
+        sweepAngle = snapPoint;
+        this.prevSnap = snapPoint;
+        snapped = true;
+        break;
+      }
+    }
+
+    if (!snapped && this.prevSnap !== null) {
+      const lastSnapIndex = this.omittedAngles.indexOf(this.prevSnap);
+
+      // Check if we should snap to the next snap point
+      // Moving forwards
+      if (sweepAngle > this.prevSnap + 5) {
+        const nextSnapPoint = this.omittedAngles[lastSnapIndex + 1];
+        if (lastSnapIndex < this.omittedAngles.length - 1) {
+          sweepAngle = nextSnapPoint;
+        }
+      }
+
+      // Moving backwards
+      else if (sweepAngle < this.prevSnap - 5) {
+        if (lastSnapIndex > 0) {
+          const prevSnapPoint = this.omittedAngles[lastSnapIndex - 1];
+          sweepAngle = prevSnapPoint;
+        }
+      }
+    }
+    // Make sure to not snap to 
+    else if (!snapped && this.prevSnap === null){
+      let closest = this.omittedAngles[0];
+
+      for (let i = 1; i < this.omittedAngles.length; i++) {
+          const current = this.omittedAngles[i];
+  
+          if (sweepAngle >= closest && sweepAngle <= current) {
+              // Check if sweepAngle is closer to closest or current
+              closest = (sweepAngle - closest <= current - sweepAngle) ? closest : current;
+              break;
+          } else if (sweepAngle < closest) {
+              // If the sweepAngle is less than the first element, return sweepAngle
+              closest = sweepAngle;
+              break;
+          }
+      }
+      sweepAngle = closest;
+    }
+    if (control === 'start'){
+      angle = this.endAngle - (sweepAngle - .0001);
+    }
+    else{
+      angle = this.startAngle + (sweepAngle - .0001);
+    }
+    console.log(this.sweepAngle, this.prevSnap);
+    return angle;
   }
 
   renderControllerIcon(ctx: CanvasRenderingContext2D, left: number, top: number) {
@@ -195,13 +308,17 @@ export class Spray extends Circle {
   }
 
   override render(ctx: CanvasRenderingContext2D) {
+    // Save the current canvas state
+    ctx.save();
+    // Apply transformation (translation, scaling, rotation)
+    if(this.parent || this.group){
+      this.transform(ctx);
+    }
+  
+    // Custom rendering logic
     let left = this.left;
-    let top = this.top;
-    // if(this.parent){
-    //   left =  this.parent.left;
-    //   top = this.parent.top;
-    // }
-
+    let top = this.top ;
+  
     ctx.beginPath();
     ctx.moveTo(left, top);
     ctx.arc(
@@ -216,11 +333,13 @@ export class Spray extends Circle {
     ctx.closePath();
     ctx.fillStyle = 'rgba(0, 0, 255, .2)';
     ctx.fill();
-
+  
+    // Restore the previous canvas state
+    ctx.restore();
     // If not selected,
     // do not render information
     if (!this.selected){
-      return
+      return;
     }
 
     // Add line
@@ -246,10 +365,10 @@ export class Spray extends Circle {
     // Calculate the angle of the line
     let angle = Math.atan2(y2 - y1, x2 - x1);
 
-    // Save current context before rotating
+    // // Save current context before rotating
     ctx.save();
 
-    // Translate to the midpoint of the line and rotate
+    // // Translate to the midpoint of the line and rotate
     ctx.translate(textX, textY);
 
     angle = angle >= 0 ? angle : Math.PI*2 + angle;
@@ -264,9 +383,9 @@ export class Spray extends Circle {
     const text = `${(this.radius / 20).toFixed(2)} ft, ${(this.sweepAngle).toFixed(0)}°`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(text, 0, -10)
+    ctx.fillText(text, 0, -10);
 
-    // Restore the context after drawing the text
+    // // Restore the context after drawing the text
     ctx.restore();
     
   }
@@ -274,10 +393,39 @@ export class Spray extends Circle {
 
 export class Mover extends Circle {
   canvas: Canvas;
+  water: Spray;
   constructor(options: any) {
-    super(options);
+    const defValue: any = {
+      radius: 10,
+      fill: 'gray',
+      originX: 'center',
+      originY: 'center',
+      left: options.left,
+      top: options.top,
+      hasControls: false,
+      hasBorders: false,
+      canvas: options.canvas,
+      strokeWidth: 50,
+      stroke: 'transparent',
+    };
+    super(defValue);
     this.canvas = options.canvas;
+    this.water = new Spray(options);
+
+    this.canvas.insertAt(0, this.water);
+    this.on({
+      'moving': (e) => {
+        this.water.set({
+          left: this.left,
+          top: this.top,
+        });
+      },
+      'mouseup': (e) => {
+        this.canvas.setActiveObject(this.water);
+      }
+    })
   }
+
 }
 
 export class ProductGroup extends Group{
@@ -309,32 +457,39 @@ export class ProductGroup extends Group{
 
     this.water = new Spray(options);
 
-    this.canvas.add(this.water, this.mover)
-
     this.add(this.water, this.mover);
-    
-    this.canvas.remove(this.water, this.mover)
 
     this.canvas.add(this);
     this.mover.on({
       'mouseup': (e) => {
-
-        // this.water.handleControls(e, 'start');
-        // this.water.handleControls(e, 'end');
-        // this.water.handleMidControl(e);
-        this.canvas.setActiveObject(this.water)
+        this.canvas.setActiveObject(this.water);
       },
       'moving': (e) => {
-        this.water.set({
-          left: this.mover.left,
-          top: this.mover.top,
+        this.set({
+          left: this.mover.left + this.left,
+          top: this.mover.top + this.top
         });
-        this.water.setCoords();
+
+        this.water.set({
+          left: 0,
+          top: 0,
+        });
+
+        this.mover.set({
+          left: 0,
+          top: 0,
+        });
+
         this.mover.setCoords();
+        this.water.setCoords()
         this.setCoords();
-        // console.log(this.water.left + this.left, this.water.top + this.top)
-        this.canvas.requestRenderAll();
       },
+    })
+
+    this.water.on({
+      'deselected': (e) => {
+        this.canvas.moveObjectTo(this.mover, -1);
+      }
     })
   }
 }
