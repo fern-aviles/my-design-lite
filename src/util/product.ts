@@ -8,7 +8,8 @@ import { type Products,
          type AngleDetails
         } from './huntertypes';
 import data from "./data.json";
-import { WaterGroup } from './waterGroup';
+import { Spray } from './spray';
+
 
 /**
  * Creates a HunterProduct object which filters data and
@@ -20,7 +21,7 @@ import { WaterGroup } from './waterGroup';
 export class HunterProduct extends Circle {
   text: FabricText;
   data: any;
-  water: WaterGroup;
+  water: Spray;
   name: string;
   productID: string;
   minRadius: number;
@@ -56,6 +57,9 @@ export class HunterProduct extends Circle {
       radius: 10,
       fill: 'gray',
       hasControls: false,
+      hasBorders: false,
+      strokeWidth: 50,
+      stroke: 'transparent',
     };
 
     super(options);
@@ -92,11 +96,8 @@ export class HunterProduct extends Circle {
     const temp = {
             startAngle: 0,
             endAngle: 270,
-            centerX: waterOptions.left,
-            centerY: waterOptions.top,
             radius: waterOptions.minRadius,
             canvas: waterOptions.canvas,
-            fill: 'rgba(0, 0, 255, .2)',
             minRadius: this.minRadius,
             maxRadius: this.maxRadius,
             minArc: this.minArc,
@@ -104,11 +105,14 @@ export class HunterProduct extends Circle {
             fixedArc: this.fixedArc,
             startingArc: this.startingArc || 270,
             omittedAngles: waterOptions.omittedAngles,
-            minScaling: waterOptions.minScaling
+            minScaling: waterOptions.minScaling,
+            left: waterOptions.left,
+            top: waterOptions.top,
     };
 
     // Create the Water instance
-    this.water = new WaterGroup(temp, this);
+    this.water = new Spray(temp);
+    this.canvas.insertAt(0, this.water);
 
     this.text = new FabricText("Nozzle Options: \n", {
       left: 30,
@@ -116,33 +120,6 @@ export class HunterProduct extends Circle {
       fontSize: 25,
     });
     this.findNozzles(this.data, this.minRadius);
-    this.water.midController.on({
-      'moving': () => {
-        this.findNozzles(this.data, this.water.getRadius());
-      },
-      'modified': () => {
-        this.setNozzle(this.selectedNozzle);
-        console.log(this.nozzleInfo);
-      },
-    });
-    this.water.startController.on({
-      'moving': () => {
-        this.findNozzles(this.data, this.water.getRadius());
-        },
-      'modified': () => {
-        this.setNozzle(this.selectedNozzle);
-        console.log(this.nozzleInfo);
-      },
-    });
-    this.water.endController.on({
-      'moving': () => {
-        this.findNozzles(this.data, this.water.getRadius());
-        },
-      'modified': () => {
-        this.setNozzle(this.selectedNozzle);
-        console.log(this.nozzleInfo);
-      },
-    });
     this.on({
       'mousedblclick': () => {
         console.log(this)
@@ -154,7 +131,32 @@ export class HunterProduct extends Circle {
         });
         console.log(this.water.maxArc)
       },
+      'moving': (e) => {
+        this.water.set({
+          left: this.left,
+          top: this.top,
+        });
+      },
+      'mouseup': (e) => {
+        this.canvas.setActiveObject(this.water);
+      },
+
     });
+
+    // Added 'as any' to avoid custom events error
+    (this.water as any).on({
+      'adjustAngle': () => {
+        // console.log(this.water.getRadius())
+        this.findNozzles(this.data, this.water.getRadius());
+      },
+      'changeRadius': () => {
+        this.findNozzles(this.data, this.water.getRadius());
+      }
+    });
+    console.log(this.water.on({}))
+    // this.water.controls.start.on({
+
+    // })
   }
 
   /**
@@ -270,6 +272,7 @@ export class HunterProduct extends Circle {
    * @returns {null}
    */
   findNozzles(data: Products, targetRadius: number): void {
+    console.log(targetRadius)
     let prevDistance = this.water.prevDistance;
 
     // Helper function to find nozzles in radius
@@ -277,24 +280,24 @@ export class HunterProduct extends Circle {
     
     // Check if there are no nozzles in the radius
     // If true, don't update the radius
-    this.change = false;
-    let currMinRadius = this.maxRadius;
-    let currMaxRadius = 0;
-    for(let n in this.nozzleOptions){
-      let nozzle = this.nozzleOptions[n];
-      if(nozzle.inRadius){
-        this.change = true;
-        break;
-      }
-    }
-    if(!this.change){
-      this.findNozzlesRadius(data, prevDistance);
-      let {minRadius, maxRadius} = this.findCurrentMinandMaxRadii();
+    // this.change = false;
+    // let currMinRadius = this.maxRadius;
+    // let currMaxRadius = 0;
+    // for(let n in this.nozzleOptions){
+    //   let nozzle = this.nozzleOptions[n];
+    //   if(nozzle.inRadius){
+    //     this.change = true;
+    //     break;
+    //   }
+    // }
+    // if(!this.change){
+    //   this.findNozzlesRadius(data, prevDistance);
+    //   let {minRadius, maxRadius} = this.findCurrentMinandMaxRadii();
 
-      prevDistance = Math.abs(prevDistance - minRadius) < Math.abs(prevDistance - maxRadius)
-                     ? minRadius : maxRadius;
-      this.water.setWaterArc(this.water.startAngle, this.water.endAngle, prevDistance);
-    }
+    //   prevDistance = Math.abs(prevDistance - minRadius) < Math.abs(prevDistance - maxRadius)
+    //                  ? minRadius : maxRadius;
+    //   this.water.setWaterArc(this.water.startAngle, this.water.endAngle, prevDistance);
+    // }
 
     // Helper function to find nozzles in arc
     this.findNozzlesArc();

@@ -1,14 +1,20 @@
-import { Canvas, util, Control, Circle, type TPointerEvent, Group } from "fabric";
+import { Canvas, util, Control, Circle, type TPointerEvent, Group, type ObjectEvents } from "fabric";
+import type { HunterProduct } from "./product";
 
+/**
+ * Water and water controls of a product
+ * 
+ * @extends Circle
+ */
 export class Spray extends Circle {
-  startAngle: number;
-  endAngle: number;
-  radius: number;
+  startAngle: number = 0;
+  endAngle: number = 270;
+  radius: number = 10;
   sweepAngle: number;
   midAngle: number;
   minArc: number = 90;
   maxArc: number = 360;
-  declare product: Mover;
+  declare product: any;
   declare canvas: Canvas;
   selected: boolean = false;
   omittedAngles: any = [270, 360];
@@ -18,8 +24,15 @@ export class Spray extends Circle {
   fixedArc: boolean = true;
   maxRadius: number = 20;
   minRadius: number = 5;
+  minScaling: number = 0.25
 
-  constructor(options: any) {
+  /**
+   * Constructs a Water object with it's controllers
+   * 
+   * @param {any} options - The options object for Water.
+   * @param {Circle} product 
+   */
+  constructor(options: any, product?: HunterProduct) {
     options.radius = 300;
     options.startAngle = 0;
     options.endAngle = 270;
@@ -35,11 +48,23 @@ export class Spray extends Circle {
     this.lockMovementX = true;
     this.lockMovementY= true;
 
-    this.startAngle = options.startAngle;
-    this.endAngle = options.endAngle;
-    this.radius = options.radius;
+    this.startAngle = options.startAngle || this.startAngle;
+    this.endAngle = options.endAngle || this.endAngle;
+    this.radius = options.radius*this.waterScale || this.radius;
     this.midAngle = (this.endAngle + this.startAngle) / 2;
     this.sweepAngle = this.endAngle - this.startAngle;
+    // this.product = product
+
+    // Added constraints
+    this.minArc = options.minArc || this.minArc;
+    this.maxArc = options.maxArc || this.maxArc;
+    this.minRadius = options.minRadius || this.minRadius;
+    this.maxRadius = options.maxRadius || this.maxRadius;
+    // this.fixedArc = options.fixedArc | this.fixedArc;
+    this.omittedAngles = options.omittedAngles || this.omittedAngles;
+    console.log(this)
+    this.minScaling = options.minScaling || this.minScaling;
+    
 
     this.canvas = options.canvas;
     this.setControlsVisibility({
@@ -53,7 +78,7 @@ export class Spray extends Circle {
       br: false, 
       bl: false, 
     });
-    this.setWaterArc(this.startAngle, this.endAngle, 10);
+    this.setWaterArc(this.startAngle, this.endAngle, this.minRadius);
     this.setUpCustomControls();
 
     this.on({
@@ -85,6 +110,7 @@ export class Spray extends Circle {
       withConnection: true,
       actionHandler: (eventData, transform) => {
         this.handleControls(eventData, 'start');
+        transform.target.fire("adjustAngle" as keyof ObjectEvents);
         return true;
       },
       render: this.renderControllerIcon,
@@ -98,6 +124,7 @@ export class Spray extends Circle {
       withConnection: true,
       actionHandler: (eventData, transform) => {
         this.handleControls(eventData, 'end');
+        transform.target.fire("adjustAngle" as keyof ObjectEvents);
         return true;
       },
       render: this.renderControllerIcon,
@@ -112,9 +139,11 @@ export class Spray extends Circle {
       actionHandler: (eventData, transform, x, y) => {
         this.handleMidControl(eventData);
         this.handleMidControlScale(eventData, transform, x, y);
+        transform.target.fire("changeRadius" as keyof ObjectEvents);
         return true;
       },
       render: this.renderControllerIcon,
+
     });
   }
 
@@ -231,8 +260,10 @@ export class Spray extends Circle {
         Math.pow(canvasPointer.y - this.parent.top, 2)
       );
     }
+    // Check if new distance is between min and max radius
+    distance = this.checkMinandMaxRadius(distance);
     // Update radius of Water
-    target.set('radius', distance / target.scaleX);
+    target.set('radius', distance);
     target.setCoords();
   }
   
@@ -368,6 +399,24 @@ export class Spray extends Circle {
   }
 
   /**
+   * Checks the water object is not under the minimum or 
+   * over the maximum arc radius
+   * @param {number} radius 
+   * @returns {number} radius (px)
+   */
+  checkMinandMaxRadius(radius: number): number{
+    radius /= this.waterScale;
+
+    if(radius > this.maxRadius){
+      radius = this.maxRadius;
+    }
+    else if (radius < this.minRadius * (1-this.minScaling)){
+      radius = this.minRadius * (1-this.minScaling);
+    }
+    return radius * this.waterScale;
+  }
+
+  /**
    * Renders how the controls look
    * @param {CanvasRenderingContext2D} ctx 
    * @param {number} left 
@@ -387,18 +436,19 @@ export class Spray extends Circle {
    */
   setWaterArc(start: number, end: number, distance: number=this.radius / this.waterScale){
     // Normalize
+    console.log('hello')
     this.startAngle = start >= 0 ? start : 360 + start;
     this.endAngle = end >= 0 ? end : 360 + end;
 
     this.radius = distance * this.waterScale;
     this.midAngle = (this.endAngle + this.startAngle) / 2;
     this.sweepAngle = this.endAngle - this.startAngle;
+    this.sweepAngle = this.sweepAngle >= 0 ? this.sweepAngle : 360 + this.sweepAngle;
 
     // Re-render the canvas
     this.setCoords();
     this.canvas.requestRenderAll();
   }
-
 
   /**
    * Renders the circle, info line and text of the object
@@ -505,7 +555,7 @@ export class Spray extends Circle {
    * @returns {number} angle (in degrees)
    */
   getRadius(): number {
-    return this.radius * this.waterScale;
+    return this.radius / this.waterScale;
   }
   
   /**

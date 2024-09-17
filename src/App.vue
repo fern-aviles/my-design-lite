@@ -2,7 +2,7 @@
 <template>
   <div>
     <!-- <TestBoard/> -->
-    <TestBoard/>
+    <TestingBoard/>
   </div>
 </template>
   

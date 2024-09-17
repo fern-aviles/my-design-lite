@@ -18,14 +18,13 @@
         {{ key }}
       </option>
     </select>
-    <canvas ref="canvas" width="1600" height="1200"></canvas>
+    <canvas ref="canvas" width="5000" height="5000"></canvas>
   </div>
 </template>
 
 <script setup lang="ts">
   import { ref, onMounted, watch } from 'vue';
   import { Canvas, FabricText, Line, Path } from 'fabric';
-  import { Water } from '@/util/water'
   import { HunterProduct } from '@/util/product'
   import { Controller } from '@/util/controller';
   import { MPStrip, MPStripwater } from '@/util/strip';
@@ -128,7 +127,7 @@
   onMounted(() => {
   const canvasValue = canvas.value;
   c = new Canvas(canvasValue, {
-    preserveObjectStacking: false,
+    preserveObjectStacking: true,
   });
   const feetScale = 5*waterScale
   const line = new Line([10, 10, feetScale, 10],{
@@ -149,7 +148,9 @@
       console.log(options)
       if(options.isClick){
         i++;
-        createRotor(options.e);
+        // for(let j = 0; j < 100; j++){
+          createRotor(options.e);
+        // }
         console.log(i)
       }
       // Clicking on a product
@@ -197,7 +198,13 @@
       }
     },
   });
-  c.renderAll();
+
+  
+  c.off({
+    'mouse:up': (options) => {
+    },
+  })
+  c.requestRenderAll();
   })
 </script>
 
