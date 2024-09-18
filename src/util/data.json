@@ -2289,7 +2289,7 @@
         "maxRadius": 35,
         "minArc": 90,
         "maxArc": 210,
-        "minScaling": 0.114,
+        "minScaling": 0.0882,
         "arcSettings": {"90": 90, "180": 180, "210": 210, "270": 270, "360": 360},
         "model": {
           "90": {
