@@ -28,11 +28,12 @@
   import { HunterProduct } from '@/util/product'
   import { Controller } from '@/util/controller';
   import { MPStrip, MPStripwater } from '@/util/strip';
+import { Spray } from '@/util/spray';
   const canvas = ref();
   let c = null as Canvas | null;
   let waterScale = 20;
   let products = 0;
-  let i = 0;
+  let startPointer: any = null;
 
   const pressure = ref('30');
   const product = ref('461006');
@@ -143,59 +144,71 @@
   });
   c.add(line, scaleText);
   c.on({
+    'mouse:down': (options) => {
+      if (options.viewportPoint) {
+        startPointer = options.viewportPoint;
+        startPointer.target = options.target;
+      }
+    },
     'mouse:up': (options) => {
+      const distance = Math.sqrt(
+        Math.pow(options.viewportPoint.x - startPointer.x, 2) +
+        Math.pow(options.viewportPoint.y - startPointer.y, 2)
+      );
+
       // Clicking on no objects/water object
-      console.log(options)
-      if(options.isClick){
-        i++;
-        // for(let j = 0; j < 100; j++){
-          createRotor(options.e);
-        // }
-        console.log(i)
-      }
-      // Clicking on a product
-      else if(options.target instanceof HunterProduct){
-        newNozzles = options.target.nozzleOptions;
-        nozzles.value = {...newNozzles};
+        if((distance < 30 && !startPointer.target) && (!options.target || options.target instanceof Spray)){
+          for(let j = 0; j < 1; j++){
+            createRotor(options.e);
+          }
+        }
+        // Clicking on a product
+        else if(options.target instanceof HunterProduct){
+          newNozzles = options.target.nozzleOptions;
+          nozzles.value = {...newNozzles};
 
-        const nozzleSelected = options.target.getSelectedNozzle();
-        nozzle.value = nozzleSelected;
-      }
-      // Clicking on a controller
-      else if(options.target instanceof Controller){
-        let product = options.target.water.product;
-        if(product instanceof HunterProduct){
+          const nozzleSelected = options.target.getSelectedNozzle();
+          nozzle.value = nozzleSelected;
+        }
+        // Clicking on a controller
+        else if(options.target instanceof Controller){
+          let product = options.target.water.product;
+          if(product instanceof HunterProduct){
+            newNozzles = product.nozzleOptions;
+            nozzles.value = {...newNozzles};
+    
+            nozzle.value = product.getSelectedNozzle();
+          }
+          else if(product instanceof MPStrip){
+            newNozzles = product.nozzleOptions;
+            nozzles.value = {...newNozzles};
+    
+            nozzle.value = product.getSelectedNozzle();
+          }
+        }
+        // Clicking nowhere and object is not added
+        else if(!options.target){
+          nozzles.value = {};
+          nozzle.value = "";
+        }
+        else if (options.target instanceof MPStrip){
+          newNozzles = options.target.nozzleOptions;
+          nozzles.value = {...newNozzles};
+
+          const nozzleSelected = options.target.getSelectedNozzle();
+          nozzle.value = nozzleSelected;
+        }
+        else if(options.target instanceof Spray){        
+          let product = options.target.product;
           newNozzles = product.nozzleOptions;
           nozzles.value = {...newNozzles};
-  
-          nozzle.value = product.getSelectedNozzle();
-        }
-        else if(product instanceof MPStrip){
-          newNozzles = product.nozzleOptions;
-          nozzles.value = {...newNozzles};
-  
-          nozzle.value = product.getSelectedNozzle();
-        }
-      }
-      // Clicking nowhere and object is not added
-      else if(!options.target){
-        nozzles.value = {};
-        nozzle.value = "";
-      }
-      else if (options.target instanceof MPStrip){
-        newNozzles = options.target.nozzleOptions;
-        nozzles.value = {...newNozzles};
 
-        const nozzleSelected = options.target.getSelectedNozzle();
-        nozzle.value = nozzleSelected;
-      }
-      else if(options.target instanceof Path){
-        console.log('selected water')
-      }
-      // Other selection
-      else{
-        console.log("Select a product or control.");
-      }
+          nozzle.value = product.getSelectedNozzle();
+        }
+        // Other selection
+        else{
+          console.log("Select a product or control.");
+        }
     },
   });
 
