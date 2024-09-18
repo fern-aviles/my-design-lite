@@ -1,7 +1,6 @@
 
 <template>
   <div>
-    <!-- <TestBoard/> -->
     <TestingBoard/>
   </div>
 </template>
@@ -9,7 +8,6 @@
 <script>
   import Board from './components/Board.vue';
   import ProductBoard from './components/ProductBoard.vue';
-import TestBoard from './components/TestBoard.vue';
   import TestingBoard from './components/TestingBoard.vue';
 
   export default{
@@ -17,7 +15,6 @@ import TestBoard from './components/TestBoard.vue';
       Board,
       TestingBoard,
       ProductBoard,
-      TestBoard
     }
   }
 
