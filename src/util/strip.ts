@@ -48,10 +48,11 @@ export class MPStrip extends Circle{
 
     // Gather information from data
     this.data = data;
-    this.pressure = options.pressure;
     this.productID = options.productID;
     const id = this.productID;
     const productData = this.data[id];
+    this.pressure = options.pressure === "nullPSI" ?
+                    productData.recPressure: options.pressure;
     const nozzlesData = productData.nozzles;
     const pressures = nozzlesData[this.nozzleLookUp[this.side]]['pressures'];
     const pressureData = pressures[this.roundPressure(Object.keys(pressures))];

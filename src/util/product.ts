@@ -10,7 +10,6 @@ import { type Products,
 import data from "./data.json";
 import { Spray } from './spray';
 
-
 /**
  * Creates a HunterProduct object which filters data and
  * allows users to customize the object's water radius
