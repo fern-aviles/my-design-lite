@@ -212,12 +212,6 @@
         }
     },
   });
-
-  
-  c.off({
-    'mouse:up': (options) => {
-    },
-  })
   c.requestRenderAll();
   })
 </script>
