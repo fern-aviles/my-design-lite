@@ -28,7 +28,7 @@
   import { HunterProduct } from '@/util/product'
   import { Controller } from '@/util/controller';
   import { MPStrip, MPStripwater } from '@/util/strip';
-import { Spray } from '@/util/spray';
+  import { Spray } from '@/util/spray';
   const canvas = ref();
   let c = null as Canvas | null;
   let waterScale = 20;
@@ -74,10 +74,10 @@ import { Spray } from '@/util/spray';
       e.setNozzle(nozzle.value);
     }
       // It's a controller
-    else if(e instanceof Controller){
-      let product = e.water.product
-      if (e.water.product instanceof HunterProduct){
-        let product = e.water.product as HunterProduct;
+    else if(e instanceof Spray){
+      let product = e.product
+      if (e.product instanceof HunterProduct){
+        let product = e.product as HunterProduct;
         product.setNozzle(nozzle.value);
       }
       else if (product instanceof MPStrip){
