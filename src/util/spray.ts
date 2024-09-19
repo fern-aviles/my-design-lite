@@ -23,7 +23,8 @@ export class Spray extends Circle {
   prevDistance: number;
   maxRadius: number = 20;
   minRadius: number = 5;
-  minScaling: number = 0.25
+  minScaling: number = 0.25;
+  startingArc: number = 270;
 
   /**
    * Constructs a Water object with it's controllers
@@ -62,6 +63,7 @@ export class Spray extends Circle {
     this.prevDistance = this.minRadius * (1-this.minScaling);
     this.omittedAngles = options.omittedAngles || this.omittedAngles;
     this.minScaling = options.minScaling || this.minScaling;
+    this.startingArc = options.startingArc || this.startingArc;
     
 
     this.canvas = options.canvas;
@@ -76,7 +78,7 @@ export class Spray extends Circle {
       br: false, 
       bl: false, 
     });
-    this.setWaterArc(this.startAngle, this.endAngle, this.minRadius);
+    this.setWaterArc(this.startAngle, this.startAngle + this.startingArc, this.minRadius);
     this.setUpCustomControls();
 
     this.on({
@@ -99,20 +101,6 @@ export class Spray extends Circle {
    * @returns {null}
    */
   setUpCustomControls(): void{
-    this.controls.start = new Control({
-      x: this.getControllerX(this.startAngle),
-      y: this.getControllerY(this.startAngle),
-      sizeX: 50,
-      sizeY: 50,
-      cursorStyle: 'pointer',
-      withConnection: true,
-      actionHandler: (eventData, transform) => {
-        this.handleControls(eventData, 'start');
-        transform.target.fire("adjustAngle" as keyof ObjectEvents);
-        return true;
-      },
-      render: this.renderControllerIcon,
-    });
     this.controls.end = new Control({
       x: this.getControllerX(this.endAngle),
       y: this.getControllerY(this.endAngle),
@@ -122,6 +110,20 @@ export class Spray extends Circle {
       withConnection: true,
       actionHandler: (eventData, transform) => {
         this.handleControls(eventData, 'end');
+        transform.target.fire("adjustAngle" as keyof ObjectEvents);
+        return true;
+      },
+      render: this.renderControllerIcon,
+    });
+    this.controls.start = new Control({
+      x: this.getControllerX(this.startAngle),
+      y: this.getControllerY(this.startAngle),
+      sizeX: 50,
+      sizeY: 50,
+      cursorStyle: 'pointer',
+      withConnection: true,
+      actionHandler: (eventData, transform) => {
+        this.handleControls(eventData, 'start');
         transform.target.fire("adjustAngle" as keyof ObjectEvents);
         return true;
       },
@@ -160,10 +162,12 @@ export class Spray extends Circle {
     if (this.parent){
       angle = Math.atan2(pointer.y - this.parent.top  , pointer.x - this.parent.left) * (180/Math.PI);
     }
+    // Normalize
+    angle = angle >= 0 ? angle : 360 + angle;
 
     if(control === 'start'){
       // Normalize
-      this.startAngle = angle >= 0 ? angle : 360 + angle;
+      this.startAngle = angle;
       this.sweepAngle = this.endAngle - this.startAngle;
 
       // Prevents sweepAngle from going to -80deg
@@ -178,7 +182,7 @@ export class Spray extends Circle {
 
     else{
       // Normalize
-      this.endAngle = angle >= 0 ? angle : 360 + angle;
+      this.endAngle = angle;
       this.sweepAngle = this.endAngle - this.startAngle;
 
       // Prevents sweepAngle from going to -80deg
@@ -191,6 +195,7 @@ export class Spray extends Circle {
       this.controls.end.y = this.getControllerY(this.endAngle);
       
     }
+    this.sweepAngle = parseFloat(this.sweepAngle.toFixed(0));
     this.controls.middle.x = this.getControllerX((this.sweepAngle / 2) + this.startAngle);
     this.controls.middle.y = this.getControllerY((this.sweepAngle / 2) + this.startAngle);
 
@@ -403,6 +408,7 @@ export class Spray extends Circle {
     }
     if (control === 'start'){
       angle = this.endAngle - (sweepAngle - .0001);
+      angle = angle >= 0 ? angle : 360 + angle;
     }
     else{
       angle = this.startAngle + (sweepAngle - .0001);
@@ -458,8 +464,9 @@ export class Spray extends Circle {
     this.midAngle = (this.endAngle + this.startAngle) / 2;
     this.sweepAngle = this.endAngle - this.startAngle;
     this.sweepAngle = this.sweepAngle > 0 ? this.sweepAngle : 360 + this.sweepAngle;
+    this.sweepAngle = parseFloat(this.sweepAngle.toFixed(0));
 
-    this.radius = distance * this.waterScale;
+    this.set({ radius: distance * this.waterScale})
     this.prevDistance = this.radius / this.waterScale;
 
     // Re-render the canvas
@@ -557,7 +564,7 @@ export class Spray extends Circle {
     if(sweepAngle === 0){
       sweepAngle = 360;
     }
-    const text = `${(this.radius / this.waterScale).toFixed(2)} ft, ${(sweepAngle).toFixed(0)}°`;
+    const text = `${(this.radius / this.waterScale).toFixed(2)} ft, ${(sweepAngle)}°`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(text, 0, -10);

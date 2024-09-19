@@ -298,6 +298,7 @@ export class HunterProduct extends Circle {
     // Helper function to find nozzles in arc
     this.findNozzlesArc();
 
+
     // Select a nozzle
     if (this.autoSelectable){
       this.selectNozzle();
@@ -652,6 +653,7 @@ export class HunterProduct extends Circle {
         `Triangle Precip: ${(precip_tri).toFixed(2)} in/hr`;
     }
     this.set({ fill: nozzle.data.color || 'black'});
+    this.canvas.requestRenderAll()
   }
 
   /**
