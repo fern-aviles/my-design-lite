@@ -130,6 +130,7 @@ export class HunterProduct extends Circle {
         this.canvas.setActiveObject(this.water);
       },
       'modified': () => {
+        this.setNozzle(this.selectedNozzle);
         console.log(this.nozzleInfo);
       },
     });
@@ -143,6 +144,7 @@ export class HunterProduct extends Circle {
         this.findNozzles(this.data, this.water.getRadius());
       },
       'modified': () => {
+        this.setNozzle(this.selectedNozzle);
         console.log(this.nozzleInfo);
       },
     });
