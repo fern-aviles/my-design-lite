@@ -1,7 +1,7 @@
 <template>
   <div>
     <p> Enter PSI: </p>
-    <input v-model="pressure" placeholder="45">
+    <input v-model="pressure" placeholder="">
 
     <p> Select Product </p>
     <select v-model="product">
@@ -35,7 +35,7 @@
   let products = 0;
   let startPointer: any = null;
 
-  const pressure = ref('30');
+  const pressure = ref("");
   const product = ref('461006');
   const options = ref([
     { text: 'PGP Ultra', value: '862' },
@@ -125,6 +125,7 @@
     c!.setActiveObject(mpstrip);
     }
   }
+  
   onMounted(() => {
   const canvasValue = canvas.value;
   c = new Canvas(canvasValue, {

@@ -78,7 +78,7 @@ export class HunterProduct extends Circle {
     this.nozzleOptions = {};
     this.selectedNozzle = "";
     this.nozzleInfo = "No nozzle selected";
-    this.pressure = waterOptions.pressure === "nullPSI" ?
+    this.pressure = waterOptions.pressure === "PSI" ?
                     product.recPressure: waterOptions.pressure;
     this.omittedAngles = product.omittedAngles;
     this.canvas = waterOptions.canvas;
