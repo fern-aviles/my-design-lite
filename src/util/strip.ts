@@ -1,12 +1,10 @@
 import { Circle,
          Canvas, 
          Rect,
-         FabricText,
-         Line,
          util,
-         type BasicTransformEvent} from 'fabric';
+         type BasicTransformEvent,
+         Control } from 'fabric';
 import data from "./data.json";
-import { Controller } from './controller';
 
 export class MPStrip extends Circle{
   water: MPStripwater;
@@ -19,14 +17,16 @@ export class MPStrip extends Circle{
   data: any;
   selectedNozzle: string;
   nozzleInfo!: string;
-  nozzleLookUp: any =  {'left': 'Left Strip', 
-                     'right': 'Right Strip',
-                     'center': 'Side Strip'
-                    };
-  reverseNozzleLookUp: any =  {'Left Strip': 'left',
-                      'Right Strip': 'right',
-                      'Side Strip': 'center'
-                    };
+  nozzleLookUp: any =  {
+    'left': 'Left Strip', 
+    'right': 'Right Strip',
+    'center': 'Side Strip'
+    };
+  reverseNozzleLookUp: any =  {
+    'Left Strip': 'left',
+    'Right Strip': 'right',
+    'Side Strip': 'center'
+    };
                     
   constructor(options: any){
     // Setting options for product
@@ -34,16 +34,17 @@ export class MPStrip extends Circle{
     options.originX = 'center';
     options.originY = 'center';
     options.hasControls = false;
+    options.hasBorders = false;
     options.fill = 'gray';
     super(options);
+    this.strokeWidth = 50;
+    this.stroke = 'transparent';
 
     // Setting options for product water
-    options.selectable = false;
+    options.selectable = true;
     options.side = this.side;
     options.originX = this.side;
     options.originY = 'bottom';
-    options.width *= this.waterScale;
-    options.height *= this.waterScale;
     options.product = this;
 
     // Gather information from data
@@ -51,7 +52,7 @@ export class MPStrip extends Circle{
     this.productID = options.productID;
     const id = this.productID;
     const productData = this.data[id];
-    this.pressure = options.pressure === "nullPSI" ?
+    this.pressure = options.pressure === "PSI" ?
                     productData.recPressure: options.pressure;
     const nozzlesData = productData.nozzles;
     const pressures = nozzlesData[this.nozzleLookUp[this.side]]['pressures'];
@@ -71,6 +72,23 @@ export class MPStrip extends Circle{
     this.canvas = options.canvas;
     this.setSelectedNozzle(this.nozzleLookUp[this.side]);
     this.canvas.insertAt(0, water);
+
+    
+    this.on({
+      'mouseup': (e) => {
+        this.canvas.setActiveObject(this.water);
+        this.canvas.requestRenderAll();
+      },
+      'moving': (e) => {
+        this.water.set({left: this.left, top: this.top});
+        this.water.setCoords();
+      },
+    });
+    this.water.on({
+      'modified': () => {
+        console.log(this.nozzleInfo);
+      }
+    })
   }
 
   /**
@@ -82,8 +100,8 @@ export class MPStrip extends Circle{
     super.render(ctx);
     ctx.save();
 
-    ctx.translate(this.left, this.top);
-    ctx.rotate(this.angle * Math.PI / 180);
+    const matrix = this.calcTransformMatrix();
+    ctx.transform(matrix[0], matrix[1], matrix[2], matrix[3], matrix[4], matrix[5]);
 
     const centerX = 0;
     const centerY = 0;
@@ -152,12 +170,8 @@ export class MPStrip extends Circle{
       `Square Precip: ${(precip_sq).toFixed(2)} in/hr, ` +
       `Triangle Precip: ${(precip_tri).toFixed(2)} in/hr`;
     console.log(this.nozzleInfo);
-      
-
-    
+  
     this.setCoords();
-    this.water.updateControlCoords();
-    this.water.updateInfo();
     this.canvas.renderAll();
   }
 
@@ -184,7 +198,7 @@ export class MPStrip extends Circle{
 }
 
 export class MPStripwater extends Rect{
-  product: MPStrip; 
+  product: MPStrip;
   pressure: string;
   side: string;
   canvas: Canvas;
@@ -192,16 +206,13 @@ export class MPStripwater extends Rect{
   initial: boolean = true;
   maxScale: number = 1;
   minScale: number = 0.75;
-  controller: Controller;
+  initialCoords: any;
   initialDistanceDiagonal: number;
   initialDistanceHeight!: number;
   initialAngle: number = 0;
-  widthInfoLine: Line;
-  heightInfoLine: Line;
-  widthInfoText: FabricText;
-  heightInfoText: FabricText;
   initialAngleRight!: number;
   initialAngleLeft!: number;
+  selected: boolean = false;
 
   constructor(options: any){
     options.fill = 'rgba(0, 0, 255, .2)';
@@ -210,13 +221,12 @@ export class MPStripwater extends Rect{
     this.pressure = '';
     this.side = options.side;
     this.canvas = options.canvas;
+    this.objectCaching = true;
+    this.lockMovementX = true;
+    this.lockScalingY = true;
+    this.selectable = false;
 
     // Adding controller to proper coordinates
-    this.controller = new Controller({
-      radius: 10,
-      fill: 'red',
-      water: this,
-    });
     let controllerCoords = {x:0, y:0};
     const waterCoords = this.getCoords();
     if(this.side === 'right'){
@@ -229,95 +239,217 @@ export class MPStripwater extends Rect{
       controllerCoords.x = (waterCoords[0].x + waterCoords[1].x)/2;
       controllerCoords.y = (waterCoords[0].y + waterCoords[1].y)/2;
     }
-    this.controller.set({left: controllerCoords.x, top: controllerCoords.y});
+    this.initialCoords = controllerCoords;
     
     // Setting initial distance for scaling
-    const distX = this.controller.left - this.left;
-    const distY = this.controller.top - this.top;
+    const distX = this.initialCoords.x - this.left;
+    const distY = this.initialCoords.y - this.top;
     this.initialDistanceDiagonal = Math.sqrt(distX * distX + distY * distY);
     this.initialDistanceHeight = this.height;
+    this.setControlsVisibility({
+      mt: this.side === 'center',
+      mb: false,
+      ml: false,
+      mr: false,
+      tl: this.side === 'right',
+      tr: this.side === 'left',
+      bl: false,
+      br: false,
+      mtr: false,
+    });
+    
 
     this.initializeAngles();
-
-    // Adding Line and Info Text
-    this.widthInfoLine = new Line(
-      [waterCoords[2].x, waterCoords[2].y, waterCoords[3].x, waterCoords[3].y],
-      {
-        stroke: 'red',
-        hasBorders: false,
-        selectable: false,
-      });
-    this.heightInfoLine = new Line(
-      [waterCoords[0].x, waterCoords[0].y, waterCoords[3].x, waterCoords[3].y],
-      {
-        stroke: 'red',
-        hasBorders: false,
-        selectable: false,
-      });
-
-    this.widthInfoText = new FabricText(
-      `${Math.round(this.width*this.scaleX/20).toFixed(2)} ft`, {
-      left: this.widthInfoLine.getCenterPoint().x,
-      top: this.widthInfoLine.getCenterPoint().y,
-      angle: 0,
-      fontSize: 15,
-      fill: 'red',
-      originX: 'center',
-      selectable: false,
-    });
-    this.heightInfoText = new FabricText(
-      `${Math.round(this.height*this.scaleX/20).toFixed(2)} ft`, {
-      left: this.heightInfoLine.getCenterPoint().x,
-      top: this.heightInfoLine.getCenterPoint().y,
-      angle: 0,
-      fontSize: 15,
-      fill: 'red',
-      originX: 'center',
-      selectable: false,
-    });
-
-    // Adding event listeners
-    this.product.on({
-      'moving': (e) => {this.set({left: this.product.left, top: this.product.top});
-                        this.setCoords();
-                        this.updateControlCoords();  
-                        this.updateInfo();
-                       },
-      "mousedblclick": (e) => {console.log(this.product)},
-      'deselected': () => { this.showControls(false); },
-      'selected': () => { this.showControls(true); }
-    });
-    this.controller.on({
-      'moving': (e) => {
-                         this.handleScaling();
-                         this.handleRotation(e);
-                         this.updateInfo();
-                       },
-      'mousedown': (e) => {
-        this.updateInitialAngle(e as BasicTransformEvent);
+    this.setUpCustomControls();
+    this.on({
+      'selected': (e) => {
+        this.selected = true;
       },
-      'mouseup': () => {
-        console.log(this.product.nozzleInfo);
+      'deselected': (e) => {
+        this.selected = false;
       },
-      'deselected': () => { this.showControls(false); },
-      'selected': () => { this.showControls(true); }
     })
-
-    // Add elements
-    this.canvas.add(this.widthInfoLine);
-    this.canvas.add(this.heightInfoLine);
-    this.canvas.add(this.widthInfoText);
-    this.canvas.add(this.heightInfoText);
-    this.canvas.add(this.controller);
-
   }
 
-  showControls(show: boolean): void {
-    this.controller.set({visible: show});
-    this.widthInfoText.set({visible: show});
-    this.heightInfoText.set({visible: show});
-    this.widthInfoLine.set({visible: show});
-    this.heightInfoLine.set({visible: show});
+  /**
+   * Renders the circle, info line and text of the object
+   * @param ctx 
+   * @returns {null}
+   */
+  render(ctx: CanvasRenderingContext2D) {
+    // Call the default render method to draw the rectangle
+    super.render(ctx);
+
+    if(!this.selected){
+      return;
+    }
+
+    // Save the current context state (to apply transformations correctly)
+    const waterCoords = this.getCoords();
+    let widthCoords = { x1: 0, y1: 0, x2: 0, y2: 0 };
+    let heightCoords = { x1: 0, y1: 0, x2: 0, y2: 0 };
+  
+    if (this.side === "left") {
+      widthCoords = {
+        x1: waterCoords[2].x,
+        y1: waterCoords[2].y,
+        x2: waterCoords[3].x,
+        y2: waterCoords[3].y
+      };
+      heightCoords = {
+        x1: waterCoords[0].x,
+        y1: waterCoords[0].y,
+        x2: waterCoords[3].x,
+        y2: waterCoords[3].y
+      };
+    } else if (this.side === "right") {
+      widthCoords = {
+        x1: waterCoords[2].x,
+        y1: waterCoords[2].y,
+        x2: waterCoords[3].x,
+        y2: waterCoords[3].y
+      };
+      heightCoords = {
+        x1: waterCoords[1].x,
+        y1: waterCoords[1].y,
+        x2: waterCoords[2].x,
+        y2: waterCoords[2].y
+      };
+    } else if (this.side === "center") {
+      widthCoords = {
+        x1: waterCoords[2].x,
+        y1: waterCoords[2].y,
+        x2: waterCoords[3].x,
+        y2: waterCoords[3].y
+      };
+      heightCoords = {
+        x1: waterCoords[1].x,
+        y1: waterCoords[1].y,
+        x2: waterCoords[2].x,
+        y2: waterCoords[2].y
+      };
+    }
+  
+    ctx.save();
+  
+    // Move to the center of the object, since Fabric.js objects are drawn from their origin
+    ctx.translate(0, 0);
+  
+    // Set line color and width
+    ctx.strokeStyle = 'red';
+    ctx.lineWidth = 2;
+  
+    // Draw a line on the bottom of the rectangle
+    ctx.beginPath();
+    ctx.moveTo(widthCoords.x1, widthCoords.y1);
+    ctx.lineTo(widthCoords.x2, widthCoords.y2);
+    ctx.stroke();
+  
+    // Draw a line on the left side of the rectangle
+    ctx.beginPath();
+    ctx.moveTo(heightCoords.x1, heightCoords.y1);
+    ctx.lineTo(heightCoords.x2, heightCoords.y2);
+    ctx.stroke();
+  
+    // Calculate midpoints for both lines
+    const midWidthX = (widthCoords.x1 + widthCoords.x2) / 2;
+    const midWidthY = (widthCoords.y1 + widthCoords.y2) / 2;
+  
+    const midHeightX = (heightCoords.x1 + heightCoords.x2) / 2;
+    const midHeightY = (heightCoords.y1 + heightCoords.y2) / 2;
+  
+    // Set font for the text
+    ctx.font = '16px Arial';
+    ctx.fillStyle = 'red';
+  
+    // Centering the text for width line
+    const widthText = `${(this.width*this.scaleX/20).toFixed(2)} ft`;
+    const widthTextMeasurement = ctx.measureText(widthText);
+    const widthTextX = midWidthX - widthTextMeasurement.width / 2;
+    const widthTextY = midWidthY - 3;
+  
+    // Centering the text for height line
+    const heightText = `${(this.height*this.scaleX/20).toFixed(2)} ft`
+    const heightTextMeasurement = ctx.measureText(heightText);
+    const heightTextX = midHeightX - heightTextMeasurement.width / 2;
+    const heightTextY = midHeightY;
+  
+    // Draw text in the middle of the width line
+    ctx.fillText(widthText, widthTextX, widthTextY);
+  
+    // Draw text in the middle of the height line
+    ctx.fillText(heightText, heightTextX, heightTextY);
+  
+    // Restore the context to its previous state
+    ctx.restore();
+  }
+
+  
+  /**
+   * Sets up creation of custom controls
+   * @returns {null}
+   */
+  setUpCustomControls(){
+    this.controls.tr = new Control({
+      x: 0.5,
+      y: -0.5,
+      cursorStyle: 'pointer',
+      actionName: 'rotateAndScale',
+      sizeX: 50,
+      sizeY: 50,
+      actionHandler: (eventData, transform, x, y) => {
+        this.handleRotation(x, y);
+        this.handleScaling(x, y);
+        return true;
+      },
+      // Customize control rendering
+      render: this.renderControllerIcon,
+    });
+
+    this.controls.tl = new Control({
+      x: -0.5,
+      y: -0.5,
+      cursorStyle: 'pointer',
+      actionName: 'rotateAndScale',
+      sizeX: 50,
+      sizeY: 50,
+      actionHandler: (eventData, transform, x, y) => {
+        this.handleRotation(x, y);
+        this.handleScaling(x, y);
+        return true;
+      },
+      // Customize control rendering
+      render: this.renderControllerIcon,
+    });
+
+    this.controls.mt = new Control({
+      x: 0,
+      y: -0.5,
+      cursorStyle: 'pointer',
+      actionName: 'rotateAndScale',
+      sizeX: 50,
+      sizeY: 50,
+      actionHandler: (eventData, transform, x, y) => {
+        this.handleRotation(x, y);
+        this.handleScaling(x, y);
+        return true;
+      },
+      // Customize control rendering
+      render: this.renderControllerIcon,
+    });
+  }
+  
+  /**
+   * Renders how the controls look
+   * @param {CanvasRenderingContext2D} ctx 
+   * @param {number} left 
+   * @param {number} top 
+   */
+  renderControllerIcon(ctx: CanvasRenderingContext2D, left: number, top: number) {
+    ctx.beginPath();
+    ctx.arc(left, top, 7, 0, Math.PI * 2, false);
+    ctx.fillStyle = 'red';
+    ctx.fill();
   }
 
   /**
@@ -327,6 +459,19 @@ export class MPStripwater extends Rect{
    */
   setSide(side: string): void{
     this.side = side;
+    this.set({originX: this.side});
+    this.setControlsVisibility({
+      mt: this.side === 'center',
+      mb: false,
+      ml: false,
+      mr: false,
+      tl: this.side === 'right',
+      tr: this.side === 'left',
+      bl: false,
+      br: false,
+      mtr: false,
+    });
+    this.setCoords();
   }
 
   /**
@@ -345,61 +490,14 @@ export class MPStripwater extends Rect{
   }
 
   /**
-   * Updates the control coordinates
-   * @returns {null}
-   */
-  updateControlCoords(): void{
-    this.set({originX: this.side});
-    this.setCoords();
-    this.setControllerOnWater();
-  }
-
-  updateInfo(){
-    const waterCoords = this.getCoords()
-    if(this.side === "left"){
-      this.widthInfoLine.set({ x1: waterCoords[2].x, y1:waterCoords[2].y,
-                               x2: waterCoords[3].x, y2: waterCoords[3].y
-                             })
-      this.heightInfoLine.set({ x1: waterCoords[0].x, y1:waterCoords[0].y,
-                                x2: waterCoords[3].x, y2: waterCoords[3].y
-      })
-    }
-    else if(this.side === "right"){
-      this.widthInfoLine.set({ x1: waterCoords[2].x, y1:waterCoords[2].y,
-                               x2: waterCoords[3].x, y2: waterCoords[3].y
-                             })
-      this.heightInfoLine.set({ x1: waterCoords[1].x, y1:waterCoords[1].y,
-                                x2: waterCoords[2].x, y2: waterCoords[2].y
-      })
-    }
-    else if(this.side === 'center'){
-      this.widthInfoLine.set({ x1: waterCoords[2].x, y1:waterCoords[2].y,
-                               x2: waterCoords[3].x, y2: waterCoords[3].y
-                             })
-      this.heightInfoLine.set({ x1: waterCoords[1].x, y1:waterCoords[1].y,
-                                x2: waterCoords[2].x, y2: waterCoords[2].y
-      })
-    }
-    this.widthInfoText.set({
-      text: `${(this.width*this.scaleX/20).toFixed(2)} ft`,
-      left: this.widthInfoLine.getCenterPoint().x,
-      top: this.widthInfoLine.getCenterPoint().y,
-    })
-    this.heightInfoText.set({
-      text: `${(this.height*this.scaleX/20).toFixed(2)} ft`,
-      left: this.heightInfoLine.getCenterPoint().x,
-      top: this.heightInfoLine.getCenterPoint().y,
-    })
-
-  }
-
-  /**
    * Handle scaling of the water
+   * @param {number} x
+   * @param {number} y
    * @returns {null}
    */
-  handleScaling(): void{
-    const distX = this.controller.left - this.left;
-    const distY = this.controller.top - this.top;
+  handleScaling(x: number, y: number): void{
+    const distX = x - this.left;
+    const distY = y - this.top;
     const distance = Math.sqrt(distX * distX + distY * distY);
     
     // initialDistance depends on the side
@@ -407,33 +505,31 @@ export class MPStripwater extends Rect{
     if (this.side === 'center'){
       initialDistance = this.initialDistanceHeight;
     }
-
     // Use distance as a scale factor
     let scaleFactor = distance / initialDistance;
-    if(scaleFactor > 1){
-      scaleFactor = 1;
+    if(this.minScale > scaleFactor){
+      this.scale(this.minScale);
     }
-    else if(scaleFactor < this.minScale){
-      scaleFactor = this.minScale;
+    else if (scaleFactor > 1){
+      this.scale(1);
     }
-    this.scale(scaleFactor);
-    this.setControllerOnWater();
-    
+    else{
+      this.scale(scaleFactor);
+    }
     this.setCoords();
-    this.canvas.renderAll();
   }
 
   /**
    * Handles rotation of the water
-   * @param {BasicTransformEvent} e
+   * @param {number} x
+   * @param {number} y
    * @returns {null} 
    */
-  handleRotation(e: BasicTransformEvent):void {
-    const pointer = e.pointer;
+  handleRotation(x: number, y: number): void {
     const centerPoint = this.product.getCenterPoint();
   
     // Calculate the angle based on the current pointer position relative to the center
-    let currentAngle = Math.atan2(pointer.y - centerPoint.y, pointer.x - centerPoint.x);
+    let currentAngle = Math.atan2(y - centerPoint.y, x - centerPoint.x);
     currentAngle = util.radiansToDegrees(currentAngle);
     let offset = currentAngle - this.initialAngle;
   
@@ -452,48 +548,6 @@ export class MPStripwater extends Rect{
     // Update changes
     this.set({angle: currentAngle});
     this.setCoords();
-    this.setControllerOnWater();
-    this.canvas.renderAll();
-  }
-
-  /**
-   * Sets the controller on the water
-   * depending on what side it is on
-   * @returns {null}
-   */
-  setControllerOnWater(): void{
-    let pointer;
-    const centerPoint = this.product.getCenterPoint();
-  
-    // Calculate the angle based on the current pointer position relative to the center
-    let controllerCoords = {x:0, y:0};
-    const waterCoords = this.getCoords();
-    if(this.side === 'right'){
-      controllerCoords = waterCoords[0];
-      pointer = controllerCoords;
-      let currentAngle = Math.atan2(pointer.y - centerPoint.y, pointer.x - centerPoint.x);
-      currentAngle = util.radiansToDegrees(currentAngle);
-      if(!this.initialAngleRight){
-        this.initialAngleRight = currentAngle;
-      }
-    }
-    else if(this.side === 'left'){
-      controllerCoords = waterCoords[1];
-      pointer = controllerCoords;
-      let currentAngle = Math.atan2(pointer.y - centerPoint.y, pointer.x - centerPoint.x);
-      currentAngle = util.radiansToDegrees(currentAngle);
-      if(!this.initialAngleLeft){
-        this.initialAngleLeft = currentAngle;
-      }
-    }
-    else{
-      controllerCoords.x = (waterCoords[0].x + waterCoords[1].x)/2;
-      controllerCoords.y = (waterCoords[0].y + waterCoords[1].y)/2;
-    }
-
-    
-    this.controller.set({left: controllerCoords.x, top: controllerCoords.y});
-    this.controller.setCoords();
   }
 
   /**
@@ -517,12 +571,11 @@ export class MPStripwater extends Rect{
    * @returns {null}
    */
   initializeAngles(): void{
-    const temp = this.side;
+    const originalSide = this.side;
     
     // Change to left and get its inital angle
-    this.side = 'left';
-    this.updateControlCoords();
-    let pointer = this.controller.getCenterPoint();
+    this.setSide('left');
+    let pointer = this.initialCoords;
     let centerPoint = this.product.getCenterPoint();
   
     // Calculate the angle based on the current pointer position relative to the center
@@ -532,9 +585,9 @@ export class MPStripwater extends Rect{
 
 
     // Change to right and get its inital angle
-    this.side = 'right';
-    this.updateControlCoords();
-    pointer = this.controller.getCenterPoint();
+    this.setSide('right');
+    this.initialCoords.x -= (this.width * 2);
+    pointer = this.initialCoords;
     centerPoint = this.product.getCenterPoint();
 
     // Calculate the angle based on the current pointer position relative to the center
@@ -542,7 +595,7 @@ export class MPStripwater extends Rect{
     currentAngle = util.radiansToDegrees(currentAngle);
     this.initialAngleRight = currentAngle;
 
-    this.side = temp;
-    this.updateControlCoords();
+    // Set back to original side
+    this.setSide(originalSide);
   }
 }
