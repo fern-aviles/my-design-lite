@@ -18,24 +18,25 @@
         {{ key }}
       </option>
     </select>
-    <canvas ref="canvas" width="1600" height="1200"></canvas>
+    <canvas ref="canvas" width="5000" height="5000"></canvas>
   </div>
 </template>
 
 <script setup lang="ts">
   import { ref, onMounted, watch } from 'vue';
-  import { Canvas, FabricText, Line } from 'fabric';
-  import { Water } from '@/util/water'
+  import { Canvas, FabricText, Line, Path } from 'fabric';
   import { HunterProduct } from '@/util/product'
   import { Controller } from '@/util/controller';
   import { MPStrip, MPStripwater } from '@/util/strip';
+  import { Spray } from '@/util/spray';
   const canvas = ref();
   let c = null as Canvas | null;
   let waterScale = 20;
   let products = 0;
+  let startPointer: any = null;
 
-  const pressure = ref(null);
-  const product = ref('885');
+  const pressure = ref("");
+  const product = ref('461006');
   const options = ref([
     { text: 'PGP Ultra', value: '862' },
     { text: 'MP Rotator', value: '461006' },
@@ -73,10 +74,10 @@
       e.setNozzle(nozzle.value);
     }
       // It's a controller
-    else if(e instanceof Controller){
-      let product = e.water.product
-      if (e.water.product instanceof HunterProduct){
-        let product = e.water.product as HunterProduct;
+    else if(e instanceof Spray){
+      let product = e.product
+      if (e.product instanceof HunterProduct){
+        let product = e.product as HunterProduct;
         product.setNozzle(nozzle.value);
       }
       else if (product instanceof MPStrip){
@@ -124,10 +125,11 @@
     c!.setActiveObject(mpstrip);
     }
   }
+  
   onMounted(() => {
   const canvasValue = canvas.value;
   c = new Canvas(canvasValue, {
-    preserveObjectStacking: false,
+    preserveObjectStacking: true,
   });
   const feetScale = 5*waterScale
   const line = new Line([10, 10, feetScale, 10],{
@@ -143,54 +145,74 @@
   });
   c.add(line, scaleText);
   c.on({
-    'mouse:up': (options) => {
-      // Clicking on no objects/water object
-      if(options.isClick && (!options.target || options.target instanceof Water || options.target instanceof MPStripwater)){
-        createRotor(options.e);
-      }
-      // Clicking on a product
-      else if(options.target instanceof HunterProduct){
-        newNozzles = options.target.nozzleOptions;
-        nozzles.value = {...newNozzles};
-
-        const nozzleSelected = options.target.getSelectedNozzle();
-        nozzle.value = nozzleSelected;
-      }
-      // Clicking on a controller
-      else if(options.target instanceof Controller){
-        let product = options.target.water.product;
-        if(product instanceof HunterProduct){
-          newNozzles = product.nozzleOptions;
-          nozzles.value = {...newNozzles};
-  
-          nozzle.value = product.getSelectedNozzle();
-        }
-        else if(product instanceof MPStrip){
-          newNozzles = product.nozzleOptions;
-          nozzles.value = {...newNozzles};
-  
-          nozzle.value = product.getSelectedNozzle();
-        }
-      }
-      // Clicking nowhere and object is not added
-      else if(!options.target){
-        nozzles.value = {};
-        nozzle.value = "";
-      }
-      else if (options.target instanceof MPStrip){
-        newNozzles = options.target.nozzleOptions;
-        nozzles.value = {...newNozzles};
-
-        const nozzleSelected = options.target.getSelectedNozzle();
-        nozzle.value = nozzleSelected;
-      }
-      // Other selection
-      else{
-        console.log("Select a product or control.");
+    'mouse:down': (options) => {
+      if (options.viewportPoint) {
+        startPointer = options.viewportPoint;
+        startPointer.target = options.target;
       }
     },
+    'mouse:up': (options) => {
+      const distance = Math.sqrt(
+        Math.pow(options.viewportPoint.x - startPointer.x, 2) +
+        Math.pow(options.viewportPoint.y - startPointer.y, 2)
+      );
+
+      // Clicking on no objects/water object
+        if((distance < 30 && !startPointer.target) && (!options.target || options.target instanceof Spray)){
+          for(let j = 0; j < 1; j++){
+            createRotor(options.e);
+          }
+        }
+        // Clicking on a product
+        else if(options.target instanceof HunterProduct){
+          newNozzles = options.target.nozzleOptions;
+          nozzles.value = {...newNozzles};
+
+          const nozzleSelected = options.target.getSelectedNozzle();
+          nozzle.value = nozzleSelected;
+        }
+        // Clicking on a controller
+        else if(options.target instanceof Controller){
+          let product = options.target.water.product;
+          if(product instanceof HunterProduct){
+            newNozzles = product.nozzleOptions;
+            nozzles.value = {...newNozzles};
+    
+            nozzle.value = product.getSelectedNozzle();
+          }
+          else if(product instanceof MPStrip){
+            newNozzles = product.nozzleOptions;
+            nozzles.value = {...newNozzles};
+    
+            nozzle.value = product.getSelectedNozzle();
+          }
+        }
+        // Clicking nowhere and object is not added
+        else if(!options.target){
+          nozzles.value = {};
+          nozzle.value = "";
+        }
+        else if (options.target instanceof MPStrip){
+          newNozzles = options.target.nozzleOptions;
+          nozzles.value = {...newNozzles};
+
+          const nozzleSelected = options.target.getSelectedNozzle();
+          nozzle.value = nozzleSelected;
+        }
+        else if(options.target instanceof Spray){        
+          let product = options.target.product;
+          newNozzles = product.nozzleOptions;
+          nozzles.value = {...newNozzles};
+
+          nozzle.value = product.getSelectedNozzle();
+        }
+        // Other selection
+        else{
+          console.log("Select a product or control.");
+        }
+    },
   });
-  c.renderAll();
+  c.requestRenderAll();
   })
 </script>
 
