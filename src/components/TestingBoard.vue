@@ -18,7 +18,7 @@
         {{ key }}
       </option>
     </select>
-    <canvas ref="canvas" width="5000" height="5000"></canvas>
+    <canvas ref="canvas" width="1500" height="1500"></canvas>
   </div>
 </template>
 
@@ -26,7 +26,6 @@
   import { ref, onMounted, watch } from 'vue';
   import { Canvas, FabricText, Line, Path } from 'fabric';
   import { HunterProduct } from '@/util/product'
-  import { Controller } from '@/util/controller';
   import { MPStrip, MPStripwater } from '@/util/strip';
   import { Spray } from '@/util/spray';
   const canvas = ref();
@@ -36,7 +35,7 @@
   let startPointer: any = null;
 
   const pressure = ref("");
-  const product = ref('461006');
+  const product = ref('179291');
   const options = ref([
     { text: 'PGP Ultra', value: '862' },
     { text: 'MP Rotator', value: '461006' },
@@ -171,22 +170,6 @@
           const nozzleSelected = options.target.getSelectedNozzle();
           nozzle.value = nozzleSelected;
         }
-        // Clicking on a controller
-        else if(options.target instanceof Controller){
-          let product = options.target.water.product;
-          if(product instanceof HunterProduct){
-            newNozzles = product.nozzleOptions;
-            nozzles.value = {...newNozzles};
-    
-            nozzle.value = product.getSelectedNozzle();
-          }
-          else if(product instanceof MPStrip){
-            newNozzles = product.nozzleOptions;
-            nozzles.value = {...newNozzles};
-    
-            nozzle.value = product.getSelectedNozzle();
-          }
-        }
         // Clicking nowhere and object is not added
         else if(!options.target){
           nozzles.value = {};
@@ -205,6 +188,9 @@
           nozzles.value = {...newNozzles};
 
           nozzle.value = product.getSelectedNozzle();
+        }
+        else if(options.target instanceof MPStripwater){        
+          
         }
         // Other selection
         else{
